@@ -59,32 +59,6 @@ function alrenas_customize_register( $wp_customize ) {
 	);
 
 	$wp_customize->add_section(
-		'alrenas_footer_options',
-		array(
-			'title'    => esc_html__( 'Footer Options', 'alrenas' ),
-			'priority' => 36,
-		)
-	);
-
-	$wp_customize->add_setting(
-		'alrenas_footer_description',
-		array(
-			'default'           => get_bloginfo( 'description' ),
-			'sanitize_callback' => 'sanitize_textarea_field',
-		)
-	);
-
-	$wp_customize->add_control(
-		'alrenas_footer_description',
-		array(
-			'label'       => esc_html__( 'Footer description', 'alrenas' ),
-			'description' => esc_html__( 'The short description shown beneath the footer logo.', 'alrenas' ),
-			'section'     => 'alrenas_footer_options',
-			'type'        => 'textarea',
-		)
-	);
-
-	$wp_customize->add_section(
 		'alrenas_home_options',
 		array(
 			'title'    => esc_html__( 'Homepage Options', 'alrenas' ),

@@ -9,7 +9,7 @@
 $site_name         = get_bloginfo( 'name' );
 $logo_id           = (int) get_theme_mod( 'custom_logo' );
 $site_icon         = get_site_icon_url( 260 );
-$footer_description = get_theme_mod( 'alrenas_footer_description', get_bloginfo( 'description' ) );
+$footer_description = alrenas_get_site_content( 'footer_description', get_bloginfo( 'description' ) );
 ?>
 <div class="footer-brand">
 	<?php if ( $logo_id || $site_icon ) : ?>
