@@ -1,0 +1,5 @@
+<?php
+/** Featured archive article. @package Alrenas */
+$permalink = get_permalink(); $categories = get_the_category(); $category = $categories ? $categories[0] : null; $slugs = wp_list_pluck( $categories, 'slug' );
+?>
+<article <?php post_class( 'feature-article reveal' ); ?> data-category="<?php echo esc_attr( implode( ' ', $slugs ) ); ?>"><a class="feature-article-media" href="<?php echo esc_url( $permalink ); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'large' ); } ?></a><div class="feature-article-copy"><div class="article-meta"><?php if ( $category ) : ?><span class="category"><?php echo esc_html( $category->name ); ?></span><?php endif; ?><time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'd M' ) ); ?></time></div><h2><?php the_title(); ?></h2><p><?php echo esc_html( wp_strip_all_tags( get_the_excerpt() ) ); ?></p><a class="text-link" href="<?php echo esc_url( $permalink ); ?>"><?php esc_html_e( 'Read article', 'alrenas' ); ?> <span aria-hidden="true">→</span></a></div></article>

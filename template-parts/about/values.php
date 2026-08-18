@@ -1,0 +1,7 @@
+<?php /** About values. @package Alrenas */ ?>
+<section class="section care-values"><div class="container"><div class="care-values-head reveal"><span class="eyebrow"><?php esc_html_e( 'What guides our work', 'alrenas' ); ?></span><h2><?php esc_html_e( 'Clinical value before technical spectacle.', 'alrenas' ); ?></h2><p><?php esc_html_e( 'The best rehabilitation technology should quietly make care better. These principles shape how we think about products, software and support.', 'alrenas' ); ?></p></div><div class="value-grid">
+	<article class="value-card reveal"><span class="value-number">01</span><h3><?php esc_html_e( 'Safety and confidence', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Patients may be working at the edge of their current ability. Equipment should create a controlled environment where progress can happen without unnecessary fear.', 'alrenas' ); ?></p></article>
+	<article class="value-card reveal"><span class="value-number">02</span><h3><?php esc_html_e( 'Personalized rehabilitation', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Recovery differs from patient to patient. Adjustable difficulty and individualized programs help clinicians meet people where they are.', 'alrenas' ); ?></p></article>
+	<article class="value-card reveal"><span class="value-number">03</span><h3><?php esc_html_e( 'Measurable progress', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Repeatable assessment and reporting make change easier to understand, communicate and use in treatment planning.', 'alrenas' ); ?></p></article>
+</div></div></section>
+
