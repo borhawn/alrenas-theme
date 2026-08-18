@@ -15,6 +15,7 @@ require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/template-functions.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/site-content.php';
+require_once get_template_directory() . '/inc/github-updater.php';
 require_once get_template_directory() . '/inc/woocommerce.php';
 
 /**
