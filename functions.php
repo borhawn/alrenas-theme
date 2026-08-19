@@ -18,6 +18,7 @@ require_once get_template_directory() . '/inc/site-content.php';
 require_once get_template_directory() . '/inc/github-updater.php';
 require_once get_template_directory() . '/inc/woocommerce.php';
 require_once get_template_directory() . '/inc/related-product.php';
+require_once get_template_directory() . '/inc/featured-post.php';
 
 /**
  * Register editable theme menu locations.
