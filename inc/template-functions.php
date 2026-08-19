@@ -86,26 +86,112 @@ function alrenas_reading_time( $post_id = 0 ) {
 }
 
 /**
- * Collect anchored core Heading blocks for the visual article TOC.
+ * Build the article's rendered content with H2/H3 anchors injected, plus a
+ * flat list of those headings for the table of contents. Computed once per
+ * post per request and shared between table-of-contents.php (which needs
+ * the list) and article/content.php (which needs the anchor-tagged HTML) so
+ * both agree on the same anchor slugs.
  *
- * @param array $blocks Parsed blocks.
- * @return array
+ * Works against the final rendered HTML (not Gutenberg blocks), so it picks
+ * up headings regardless of whether the post was written in the block
+ * editor, the classic editor, or has raw HTML pasted in.
+ *
+ * @param int $post_id Post ID.
+ * @return array{content:string,items:array<int,array{level:int,label:string,anchor:string}>}
  */
-function alrenas_collect_toc_items( $blocks ) {
+function alrenas_get_article_toc_data( $post_id ) {
+	static $cache = array();
+
+	if ( isset( $cache[ $post_id ] ) ) {
+		return $cache[ $post_id ];
+	}
+
+	$html  = get_the_content( null, false, $post_id );
+	$html  = apply_filters( 'the_content', $html );
 	$items = array();
 
-	foreach ( $blocks as $block ) {
-		if ( 'core/heading' === $block['blockName'] && ! empty( $block['attrs']['anchor'] ) ) {
+	if ( $html && class_exists( 'DOMDocument' ) ) {
+		$dom = new DOMDocument();
+		libxml_use_internal_errors( true );
+		$dom->loadHTML(
+			'<?xml encoding="utf-8"?><div id="alrenas-toc-root">' . $html . '</div>',
+			LIBXML_NOERROR | LIBXML_NOWARNING
+		);
+		libxml_clear_errors();
+
+		$xpath    = new DOMXPath( $dom );
+		$root     = $xpath->query( '//*[@id="alrenas-toc-root"]' )->item( 0 );
+		$headings = $xpath->query( '//h2 | //h3' );
+		$slugs    = array();
+
+		foreach ( $headings as $heading ) {
+			$label = trim( $heading->textContent );
+
+			if ( '' === $label ) {
+				continue;
+			}
+
+			$anchor = $heading->getAttribute( 'id' );
+
+			if ( ! $anchor ) {
+				$base   = sanitize_title( $label );
+				$anchor = $base;
+				$i      = 2;
+
+				while ( isset( $slugs[ $anchor ] ) ) {
+					$anchor = $base . '-' . $i++;
+				}
+
+				$heading->setAttribute( 'id', $anchor );
+			}
+
+			$slugs[ $anchor ] = true;
+
 			$items[] = array(
-				'anchor' => sanitize_title( $block['attrs']['anchor'] ),
-				'label'  => wp_strip_all_tags( render_block( $block ) ),
+				'level'  => 'h3' === strtolower( $heading->nodeName ) ? 3 : 2,
+				'label'  => $label,
+				'anchor' => $anchor,
 			);
 		}
 
-		if ( ! empty( $block['innerBlocks'] ) ) {
-			$items = array_merge( $items, alrenas_collect_toc_items( $block['innerBlocks'] ) );
+		if ( $root ) {
+			$html = '';
+
+			foreach ( iterator_to_array( $root->childNodes ) as $child ) {
+				$html .= $dom->saveHTML( $child );
+			}
 		}
 	}
 
-	return $items;
+	$cache[ $post_id ] = array(
+		'content' => $html,
+		'items'   => $items,
+	);
+
+	return $cache[ $post_id ];
+}
+
+/**
+ * The list of H2/H3 headings in a post, for the article table of contents.
+ *
+ * @param int $post_id Post ID.
+ * @return array
+ */
+function alrenas_get_article_toc_items( $post_id = 0 ) {
+	$post_id = $post_id ?: get_the_ID();
+
+	return alrenas_get_article_toc_data( $post_id )['items'];
+}
+
+/**
+ * A post's rendered content, with id="" attributes injected on H2/H3
+ * headings that don't already have one, matching alrenas_get_article_toc_items().
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function alrenas_get_article_content_with_anchors( $post_id = 0 ) {
+	$post_id = $post_id ?: get_the_ID();
+
+	return alrenas_get_article_toc_data( $post_id )['content'];
 }
