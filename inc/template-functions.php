@@ -52,6 +52,27 @@ function alrenas_primary_menu_link_attributes( $attributes, $menu_item, $args ) 
 add_filter( 'nav_menu_link_attributes', 'alrenas_primary_menu_link_attributes', 10, 3 );
 
 /**
+ * Keep auto-generated excerpts short — blog cards clamp to 2-3 lines with
+ * CSS, so a long default 55-word excerpt just wastes markup.
+ *
+ * @return int
+ */
+function alrenas_excerpt_length() {
+	return 24;
+}
+add_filter( 'excerpt_length', 'alrenas_excerpt_length', 999 );
+
+/**
+ * Replace the default "[...]" excerpt trailer.
+ *
+ * @return string
+ */
+function alrenas_excerpt_more() {
+	return '…';
+}
+add_filter( 'excerpt_more', 'alrenas_excerpt_more' );
+
+/**
  * Estimate a post's reading time.
  *
  * @param int $post_id Post ID.
