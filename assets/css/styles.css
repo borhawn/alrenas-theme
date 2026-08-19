@@ -299,7 +299,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
   .site-nav .sub-menu li{margin:0;width:auto;max-width:none}
   .site-nav .sub-menu a{padding:9px 12px;border-radius:10px;font-size:14px;font-family:inherit;font-weight:500}
   .site-nav .sub-menu a:hover,.site-nav .sub-menu a:focus-visible{background:#fff}
-  .site-nav .sub-menu:has(.menu-item-product){display:flex;flex-direction:column;align-items:center;gap:6px}
+  .site-nav .sub-menu:has(.menu-item-product){min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px}
   .site-nav .sub-menu:has(.menu-item-product) a{flex-direction:column;align-items:center;justify-content:center;width:100%;padding:10px;background:transparent;border-radius:14px;box-shadow:none;gap:8px;text-align:center;white-space:normal;transition:background .2s ease,transform .2s ease}
   .site-nav .sub-menu:has(.menu-item-product) a:hover,.site-nav .sub-menu:has(.menu-item-product) a:focus-visible{background:var(--blue-050);transform:translateY(-2px)}
   .site-nav .menu-product-thumb{width:56px;height:56px;margin:0;border-radius:12px;aspect-ratio:auto}
