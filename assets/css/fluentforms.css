@@ -3,39 +3,56 @@
  * (styles.css .contact-form / theme.css .contact-form-card) instead of the
  * plugin's own default look. Scoped to the two wrapper classes the theme
  * places forms inside: home + product-inquiry (.contact-form) and the
- * contact page (.contact-form-card).
+ * contact page (.contact-form-card). Every property carries !important
+ * because Fluent Forms' Styler presets emit form-ID-scoped CSS
+ * (#fluentform_N ...) whose specificity would otherwise beat plain class
+ * selectors here.
  */
 
 .contact-form .fluentform,
 .contact-form-card .fluentform {
-	margin: 0;
+	margin: 0 !important;
 }
 
 .contact-form .fluentform form fieldset,
 .contact-form-card .fluentform form fieldset {
 	display: flex !important;
-	flex-direction: column;
-	gap: 17px;
+	flex-direction: column !important;
+	gap: 17px !important;
 	border: none !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	background: transparent !important;
 	box-shadow: none !important;
+	min-inline-size: 0 !important;
 }
 
 .contact-form .fluentform .ff-el-group,
 .contact-form-card .fluentform .ff-el-group {
 	margin: 0 !important;
-	display: grid;
-	gap: 7px;
+	padding: 0 !important;
+	display: grid !important;
+	gap: 7px !important;
+}
+
+.contact-form .fluentform .ff-el-input--label,
+.contact-form-card .fluentform .ff-el-input--label {
+	margin: 0 !important;
 }
 
 .contact-form .fluentform .ff-el-input--label label,
 .contact-form-card .fluentform .ff-el-input--label label {
-	color: var(--ink-700);
-	font-size: 13px;
-	font-weight: 600;
-	margin: 0;
+	color: var(--ink-700) !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	line-height: 1.4 !important;
+	margin: 0 !important;
+}
+
+.contact-form .fluentform .ff-el-input--content,
+.contact-form-card .fluentform .ff-el-input--content {
+	margin: 0 !important;
 }
 
 .contact-form .fluentform input.ff-el-form-control,
@@ -44,23 +61,26 @@
 .contact-form-card .fluentform input.ff-el-form-control,
 .contact-form-card .fluentform textarea.ff-el-form-control,
 .contact-form-card .fluentform select.ff-el-form-control {
-	width: 100%;
+	width: 100% !important;
 	border: 1px solid #CFE0E7 !important;
 	border-radius: 14px !important;
 	background: #FBFDFE !important;
-	color: var(--ink-900);
-	font-family: inherit;
-	font-size: inherit;
-	padding: 13px 14px;
-	outline: none;
+	color: var(--ink-900) !important;
+	font-family: inherit !important;
+	font-size: 15px !important;
+	font-weight: 400 !important;
+	line-height: 1.5 !important;
+	padding: 13px 14px !important;
+	margin: 0 !important;
+	outline: none !important;
 	box-shadow: none !important;
-	transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+	transition: border-color .2s ease, box-shadow .2s ease, background .2s ease !important;
 }
 
 .contact-form .fluentform textarea.ff-el-form-control,
 .contact-form-card .fluentform textarea.ff-el-form-control {
-	resize: vertical;
-	min-height: 128px;
+	resize: vertical !important;
+	min-height: 128px !important;
 }
 
 .contact-form .fluentform input.ff-el-form-control:focus,
@@ -75,67 +95,85 @@
 /* First / last name split field */
 .contact-form .fluentform .ff-name-field-wrapper .ff-t-container,
 .contact-form-card .fluentform .ff-name-field-wrapper .ff-t-container {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 16px;
+	display: grid !important;
+	grid-template-columns: 1fr 1fr !important;
+	gap: 16px !important;
 }
 
 .contact-form .fluentform .ff-name-field-wrapper .ff-t-cell,
 .contact-form-card .fluentform .ff-name-field-wrapper .ff-t-cell {
-	padding: 0;
+	padding: 0 !important;
+	margin: 0 !important;
 }
 
 /* Submit button, matching .btn.btn-primary */
 .contact-form .fluentform button.ff-btn-submit,
 .contact-form-card .fluentform button.ff-btn-submit {
-	min-height: 50px;
-	padding: 0 21px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 9px;
+	min-height: 50px !important;
+	height: auto !important;
+	width: auto !important;
+	padding: 0 21px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 9px !important;
 	border: 1px solid var(--blue-700) !important;
 	border-radius: 13px !important;
 	background: var(--blue-700) !important;
 	color: #fff !important;
-	font-family: Manrope, sans-serif;
-	font-size: 14px;
-	font-weight: 700;
-	cursor: pointer;
-	box-shadow: 0 10px 26px rgba(15, 95, 157, .15);
-	transition: transform .28s cubic-bezier(.22, .75, .25, 1), background .28s ease, box-shadow .28s ease;
+	font-family: Manrope, sans-serif !important;
+	font-size: 14px !important;
+	font-weight: 700 !important;
+	line-height: 1 !important;
+	cursor: pointer !important;
+	box-shadow: 0 10px 26px rgba(15, 95, 157, .15) !important;
+	transition: transform .28s cubic-bezier(.22, .75, .25, 1), background .28s ease, box-shadow .28s ease !important;
 }
 
 .contact-form .fluentform button.ff-btn-submit:hover,
-.contact-form-card .fluentform button.ff-btn-submit:hover {
+.contact-form .fluentform button.ff-btn-submit:focus-visible,
+.contact-form-card .fluentform button.ff-btn-submit:hover,
+.contact-form-card .fluentform button.ff-btn-submit:focus-visible {
 	background: #0b548d !important;
-	transform: translateY(-2px);
-	box-shadow: 0 14px 32px rgba(15, 95, 157, .2);
+	border-color: #0b548d !important;
+	transform: translateY(-2px) !important;
+	box-shadow: 0 14px 32px rgba(15, 95, 157, .2) !important;
+}
+
+.contact-form .fluentform button.ff-btn-submit:active,
+.contact-form-card .fluentform button.ff-btn-submit:active {
+	transform: translateY(0) !important;
+	box-shadow: 0 6px 16px rgba(15, 95, 157, .18) !important;
 }
 
 .contact-form .fluentform .ff_submit_btn_wrapper,
 .contact-form-card .fluentform .ff_submit_btn_wrapper {
 	margin: 0 !important;
+	justify-self: start !important;
 }
 
-/* Validation messaging */
+/* Validation / status messaging */
 .contact-form .fluentform .error,
-.contact-form-card .fluentform .error,
-.contact-form .fluentform_wrapper .ff-errors-in-stack,
-.contact-form-card .fluentform_wrapper .ff-errors-in-stack {
-	color: #C0392B;
-	font-size: 12px;
-	margin-top: 4px;
+.contact-form-card .fluentform .error {
+	color: #C0392B !important;
+	font-size: 12px !important;
+	margin-top: 4px !important;
+}
+
+.contact-form .ff-errors-in-stack,
+.contact-form-card .ff-errors-in-stack {
+	font-size: 12px !important;
+	color: #C0392B !important;
 }
 
 @media (max-width: 640px) {
 	.contact-form .fluentform .ff-name-field-wrapper .ff-t-container,
 	.contact-form-card .fluentform .ff-name-field-wrapper .ff-t-container {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr !important;
 	}
 
 	.contact-form .fluentform button.ff-btn-submit,
 	.contact-form-card .fluentform button.ff-btn-submit {
-		width: 100%;
+		width: 100% !important;
 	}
 }

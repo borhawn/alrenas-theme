@@ -157,9 +157,7 @@ function alrenas_enqueue_assets() {
 		wp_enqueue_script( 'comment-reply' );
 	}
 
-	if ( function_exists( 'wpFluentForm' ) ) {
-		wp_enqueue_style( 'alrenas-fluentforms' );
-	}
+	wp_enqueue_style( 'alrenas-fluentforms' );
 }
 add_action( 'wp_enqueue_scripts', 'alrenas_enqueue_assets' );
 
