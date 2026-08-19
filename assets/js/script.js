@@ -58,6 +58,26 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// Desktop dropdown hover-intent: a short close delay lets the cursor cross the
+// gap between the trigger and the panel without the hover chain breaking,
+// while still closing promptly once the pointer genuinely leaves both.
+const DROPDOWN_CLOSE_DELAY = 250;
+nav?.querySelectorAll(':scope > ul > li.menu-item-has-children').forEach(li => {
+  let closeTimer = null;
+  const open = () => {
+    if (mobileNavQuery.matches) return;
+    clearTimeout(closeTimer);
+    li.classList.add('hover-open');
+  };
+  const scheduleClose = () => {
+    if (mobileNavQuery.matches) return;
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => li.classList.remove('hover-open'), DROPDOWN_CLOSE_DELAY);
+  };
+  li.addEventListener('mouseenter', open);
+  li.addEventListener('mouseleave', scheduleClose);
+});
+
 const revealItems = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries, obs) => {
