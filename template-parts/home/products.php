@@ -1,92 +1,101 @@
 <?php
 /**
- * Homepage WooCommerce products.
+ * Homepage "Rehabilitation systems" section.
  *
- * Product markup comes from WooCommerce's content-product template so core and
- * extension hooks continue to control images, titles, prices, ratings, sales,
- * add-to-cart behavior, and product visibility.
+ * Three admin-configured slots (Site Content > Home — Products Section),
+ * each pointing at a WooCommerce product for its link + thumbnail, with
+ * editable badge/kicker/description/tags to match the reference design.
  *
  * @package Alrenas
  */
 
-if ( ! function_exists( 'wc_get_products' ) || ! function_exists( 'wc_get_template_part' ) ) {
-	return;
-}
+$eyebrow      = alrenas_get_site_content( 'home_products_eyebrow', esc_html__( 'Rehabilitation systems', 'alrenas' ) );
+$product_slots = alrenas_get_site_content( 'home_products', array() );
 
-$product_ids = wc_get_products(
-	array(
-		'limit'      => 3,
-		'status'     => 'publish',
-		'visibility' => 'catalog',
-		'orderby'    => 'date',
-		'order'      => 'DESC',
-		'return'     => 'ids',
-	)
+$variants = array(
+	1 => array(
+		'image_class' => 'product-image--blue',
+		'reverse'     => false,
+	),
+	2 => array(
+		'image_class' => 'product-image--mint',
+		'reverse'     => true,
+	),
+	3 => array(
+		'image_class' => 'product-image--warm',
+		'reverse'     => false,
+	),
 );
 
-if ( ! $product_ids ) {
-	return;
+$rows = array();
+
+foreach ( $variants as $index => $variant ) {
+	$slot = isset( $product_slots[ $index ] ) ? $product_slots[ $index ] : array();
+	$product_id = isset( $slot['product_id'] ) ? (int) $slot['product_id'] : 0;
+
+	if ( ! $product_id || 'publish' !== get_post_status( $product_id ) ) {
+		continue;
+	}
+
+	$tags = isset( $slot['tags'] ) ? array_filter( array_map( 'trim', explode( ',', $slot['tags'] ) ) ) : array();
+
+	$rows[] = array(
+		'permalink'   => get_permalink( $product_id ),
+		'thumbnail'   => get_the_post_thumbnail( $product_id, 'large' ),
+		'title'       => get_the_title( $product_id ),
+		'badge'       => isset( $slot['badge'] ) ? $slot['badge'] : '',
+		'kicker'      => isset( $slot['kicker'] ) ? $slot['kicker'] : '',
+		'description' => isset( $slot['description'] ) ? $slot['description'] : '',
+		'tags'        => $tags,
+		'image_class' => $variant['image_class'],
+		'reverse'     => $variant['reverse'],
+	);
 }
 
-$products = new WP_Query(
-	array(
-		'post_type'              => 'product',
-		'post_status'            => 'publish',
-		'post__in'               => array_map( 'absint', $product_ids ),
-		'orderby'                => 'post__in',
-		'posts_per_page'         => 3,
-		'ignore_sticky_posts'    => true,
-		'no_found_rows'          => true,
-		'update_post_meta_cache' => true,
-		'update_post_term_cache' => true,
-	)
-);
-
-if ( ! $products->have_posts() ) {
+if ( ! $rows ) {
 	return;
 }
-
-$shop_url = wc_get_page_permalink( 'shop' );
-
-wc_setup_loop(
-	array(
-		'name'         => 'home-products',
-		'columns'      => 3,
-		'is_shortcode' => false,
-		'is_paginated' => false,
-		'total'        => $products->post_count,
-		'total_pages'  => 1,
-		'per_page'     => 3,
-		'current_page' => 1,
-	)
-);
 ?>
-<section class="section products home-products" id="products" aria-labelledby="home-products-title">
+<section class="section products" id="products" aria-labelledby="home-products-title">
 	<div class="container products-head reveal">
 		<div>
-			<span class="eyebrow"><?php esc_html_e( 'Rehabilitation systems', 'alrenas' ); ?></span>
+			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 			<h2 id="home-products-title"><?php esc_html_e( 'Purpose-built devices for balance, mobility and recovery.', 'alrenas' ); ?></h2>
 		</div>
-		<?php if ( $shop_url ) : ?>
-			<a class="text-link" href="<?php echo esc_url( $shop_url ); ?>">
-				<?php esc_html_e( 'View all products', 'alrenas' ); ?> <span aria-hidden="true">→</span>
-			</a>
-		<?php endif; ?>
+		<p><?php esc_html_e( 'Choose a system based on the patient group, treatment goals and level of support required.', 'alrenas' ); ?></p>
 	</div>
 
-	<div class="container woocommerce">
-		<?php woocommerce_product_loop_start(); ?>
-
-		<?php while ( $products->have_posts() ) : ?>
-			<?php $products->the_post(); ?>
-			<?php do_action( 'woocommerce_shop_loop' ); ?>
-			<?php wc_get_template_part( 'content', 'product' ); ?>
-		<?php endwhile; ?>
-
-		<?php woocommerce_product_loop_end(); ?>
+	<div class="container product-stack">
+		<?php foreach ( $rows as $row ) : ?>
+			<article class="product-row<?php echo $row['reverse'] ? ' product-row--reverse' : ''; ?> reveal">
+				<div class="product-image <?php echo esc_attr( $row['image_class'] ); ?>">
+					<?php if ( $row['thumbnail'] ) : ?>
+						<?php echo $row['thumbnail']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- from get_the_post_thumbnail(). ?>
+					<?php endif; ?>
+					<?php if ( $row['badge'] ) : ?>
+						<span class="product-badge"><?php echo esc_html( $row['badge'] ); ?></span>
+					<?php endif; ?>
+				</div>
+				<div class="product-content">
+					<?php if ( $row['kicker'] ) : ?>
+						<span class="product-kicker"><?php echo esc_html( $row['kicker'] ); ?></span>
+					<?php endif; ?>
+					<h3><?php echo esc_html( $row['title'] ); ?></h3>
+					<?php if ( $row['description'] ) : ?>
+						<p><?php echo esc_html( $row['description'] ); ?></p>
+					<?php endif; ?>
+					<?php if ( $row['tags'] ) : ?>
+						<div class="product-tags">
+							<?php foreach ( $row['tags'] as $tag ) : ?>
+								<span><?php echo esc_html( $tag ); ?></span>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+					<a class="text-link" href="<?php echo esc_url( $row['permalink'] ); ?>">
+						<?php esc_html_e( 'View product', 'alrenas' ); ?> <span aria-hidden="true">→</span>
+					</a>
+				</div>
+			</article>
+		<?php endforeach; ?>
 	</div>
 </section>
-<?php
-wp_reset_postdata();
-woocommerce_reset_loop();
-
