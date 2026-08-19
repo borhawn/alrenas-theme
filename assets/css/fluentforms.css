@@ -18,7 +18,7 @@
 .contact-form-card .fluentform form fieldset {
 	display: flex !important;
 	flex-direction: column !important;
-	gap: 17px !important;
+	gap: 12px !important;
 	border: none !important;
 	margin: 0 !important;
 	padding: 0 !important;
@@ -27,6 +27,8 @@
 	min-inline-size: 0 !important;
 }
 
+.contact-form .fluentform .ff-field_container,
+.contact-form-card .fluentform .ff-field_container,
 .contact-form .fluentform .ff-el-group,
 .contact-form-card .fluentform .ff-el-group {
 	margin: 0 !important;
