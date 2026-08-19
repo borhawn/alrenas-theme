@@ -72,8 +72,8 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .header-cta{justify-self:end}
 
 /* Dropdown / mega-menu for top-level items with children (e.g. Products) */
-.site-nav .sub-menu{list-style:none;margin:0;padding:14px;position:absolute;top:100%;left:50%;min-width:230px;margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-card);opacity:0;pointer-events:none;transform:translate(-50%,8px);transition:opacity .2s ease,transform .2s ease;z-index:80}
-.site-nav .menu-item-has-children:hover>.sub-menu,.site-nav .menu-item-has-children:focus-within>.sub-menu{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.site-nav .sub-menu{list-style:none;margin:0;padding:14px;position:absolute;top:100%;left:0;min-width:230px;margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-card);opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s ease,transform .2s ease;z-index:80}
+.site-nav .menu-item-has-children:hover>.sub-menu,.site-nav .menu-item-has-children:focus-within>.sub-menu{opacity:1;pointer-events:auto;transform:translateY(0)}
 .site-nav .sub-menu li{margin:0}
 .site-nav .sub-menu a{position:static;display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;white-space:nowrap;font-weight:600}
 .site-nav .sub-menu a::after{display:none}
