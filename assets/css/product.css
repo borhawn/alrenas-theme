@@ -1,8 +1,6 @@
 /* Al Balance Dyn product page — extends the approved Alrenas rehabilitation design system */
 
 .product-page { background: var(--canvas); }
-.product-page .site-nav .is-current { color: var(--blue-700); }
-.product-page .site-nav .is-current::after { width: 100%; }
 
 .product-hero {
   padding: 132px 0 76px;

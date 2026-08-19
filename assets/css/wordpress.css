@@ -6,8 +6,6 @@
 .article-card,.feature-article,.related-card{position:relative;cursor:pointer}
 .stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
 .site-nav{margin:0;padding:0;list-style:none}
-.site-nav .current-menu-item>a,.site-nav .current-menu-parent>a,.site-nav .current-menu-ancestor>a{color:var(--blue-700)}
-.site-nav .current-menu-item>a::after,.site-nav .current-menu-parent>a::after,.site-nav .current-menu-ancestor>a::after{right:0}
 .footer-menu ul{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0;padding:0;list-style:none}
 .footer-menu li{margin:0;padding:0}
 .footer-bottom ul{display:flex;flex-wrap:wrap;gap:22px;margin:0;padding:0;list-style:none}

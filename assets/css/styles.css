@@ -65,9 +65,9 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .brand-name{font-family:Manrope,sans-serif;font-size:18px;font-weight:700;letter-spacing:.08em;color:var(--ink-900)}
 .site-nav{display:flex;align-items:center;gap:28px}
 .site-nav a{position:relative;color:var(--ink-700);font-size:14px;font-weight:600;padding:8px 0}
-.site-nav a:hover,.site-nav a.is-current{color:var(--blue-700)}
+.site-nav a:hover{color:var(--blue-700)}
 .site-nav a::after{content:"";position:absolute;left:0;right:100%;bottom:1px;height:2px;border-radius:99px;background:var(--teal-600);transition:right .25s ease}
-.site-nav a:hover::after,.site-nav a.is-current::after{right:0}
+.site-nav a:hover::after{right:0}
 .header-cta{justify-self:end}
 .nav-toggle{display:none;border:0;background:transparent;width:44px;height:44px;place-items:center;gap:5px;cursor:pointer}
 .nav-toggle span{width:22px;height:2px;background:var(--ink-900);display:block;border-radius:99px;transition:transform .25s ease}

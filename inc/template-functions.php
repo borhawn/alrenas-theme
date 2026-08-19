@@ -30,28 +30,6 @@ function alrenas_pingback_header() {
 add_action( 'wp_head', 'alrenas_pingback_header' );
 
 /**
- * Map WordPress current-menu state to the existing header-link class.
- *
- * @param array    $attributes Link attributes.
- * @param WP_Post  $menu_item Menu item object.
- * @param stdClass $args       Menu arguments.
- * @return array
- */
-function alrenas_primary_menu_link_attributes( $attributes, $menu_item, $args ) {
-	if ( 'primary' !== $args->theme_location ) {
-		return $attributes;
-	}
-
-	$current_classes = array( 'current-menu-item', 'current-menu-parent', 'current-menu-ancestor', 'current_page_item' );
-	if ( array_intersect( $current_classes, (array) $menu_item->classes ) ) {
-		$attributes['class'] = trim( ( $attributes['class'] ?? '' ) . ' is-current' );
-	}
-
-	return $attributes;
-}
-add_filter( 'nav_menu_link_attributes', 'alrenas_primary_menu_link_attributes', 10, 3 );
-
-/**
  * Keep auto-generated excerpts short — blog cards clamp to 2-3 lines with
  * CSS, so a long default 55-word excerpt just wastes markup.
  *
