@@ -9,6 +9,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Build a logo <img> tag without width/height HTML attributes.
+ *
+ * wp_get_attachment_image() normally adds width/height attributes read from
+ * attachment metadata. For SVGs, WordPress core often has no recorded
+ * dimensions and emits width="0" height="0" instead — some browsers derive
+ * a 0/0 intrinsic aspect-ratio from that, which can make the image render
+ * at 0x0 even though CSS sets an explicit height, because "width: auto"
+ * has no valid ratio to compute from. Sizing is fully CSS-driven here
+ * (.brand-image), so the attributes are just omitted entirely.
+ *
+ * @param int    $attachment_id Attachment ID.
+ * @param string $alt           Alt text.
+ * @param string $class         CSS class.
+ * @return string
+ */
+function alrenas_logo_image_html( $attachment_id, $alt, $class = 'brand-image' ) {
+	$src = wp_get_attachment_image_url( $attachment_id, 'full' );
+
+	if ( ! $src ) {
+		return '';
+	}
+
+	return sprintf(
+		'<img src="%s" class="%s" alt="%s" decoding="async">',
+		esc_url( $src ),
+		esc_attr( $class ),
+		esc_attr( $alt )
+	);
+}
+
 function alrenas_body_classes( $classes ) {
 	if ( ! is_singular() ) {
 		$classes[] = 'hfeed';

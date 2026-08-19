@@ -13,17 +13,7 @@ $site_icon = get_site_icon_url( 260 );
 <div class="site-branding">
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand" rel="home" aria-label="<?php echo esc_attr( $site_name ); ?>">
 		<?php if ( $logo_id ) : ?>
-			<?php
-			echo wp_get_attachment_image(
-				$logo_id,
-				'full',
-				false,
-				array(
-					'class' => 'brand-image',
-					'alt'   => $site_name,
-				)
-			);
-			?>
+			<?php echo alrenas_logo_image_html( $logo_id, $site_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?>
 		<?php elseif ( $site_icon ) : ?>
 			<img class="brand-image" src="<?php echo esc_url( $site_icon ); ?>" alt="<?php echo esc_attr( $site_name ); ?>">
 		<?php else : ?>
