@@ -21,6 +21,20 @@ nav?.querySelectorAll('a').forEach(link => {
   });
 });
 
+document.addEventListener('click', (e) => {
+  if (!body.classList.contains('menu-open')) return;
+  if (nav?.contains(e.target) || navToggle?.contains(e.target)) return;
+  body.classList.remove('menu-open');
+  navToggle?.setAttribute('aria-expanded', 'false');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && body.classList.contains('menu-open')) {
+    body.classList.remove('menu-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+  }
+});
+
 const revealItems = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries, obs) => {

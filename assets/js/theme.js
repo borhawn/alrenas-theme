@@ -15,6 +15,18 @@
     document.body.classList.remove('menu-open');
     navToggle?.setAttribute('aria-expanded', 'false');
   }));
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('menu-open')) return;
+    if (nav?.contains(e.target) || navToggle?.contains(e.target)) return;
+    document.body.classList.remove('menu-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+      document.body.classList.remove('menu-open');
+      navToggle?.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
