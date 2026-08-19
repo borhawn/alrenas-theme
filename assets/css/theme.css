@@ -36,9 +36,9 @@ button{color:inherit}
 .eyebrow::before{content:"";width:22px;height:2px;border-radius:99px;background:var(--teal-600)}
 .kicker{color:var(--blue-700);font-size:13px;font-weight:600}
 h1,h2,h3,h4{font-family:Manrope,sans-serif;margin:0;letter-spacing:-.04em;color:var(--ink-900)}
-h1{font-size:clamp(54px,6vw,76px);line-height:1.08;font-weight:600}
-h2{font-size:clamp(40px,4vw,52px);line-height:1.14;font-weight:600}
-h3{font-size:clamp(25px,2.2vw,31px);line-height:1.2;font-weight:600}
+h1{font-size:clamp(54px,6vw,76px);line-height:1.22;font-weight:600}
+h2{font-size:clamp(40px,4vw,52px);line-height:1.25;font-weight:600}
+h3{font-size:clamp(25px,2.2vw,31px);line-height:1.3;font-weight:600}
 h4{font-size:20px;line-height:1.2;font-weight:600}
 p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .lead{font-size:20px;line-height:1.58}
