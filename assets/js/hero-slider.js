@@ -8,6 +8,7 @@
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const intervalMs = 5000;
+  const fadeMs = 1100;
   let index = 0;
 
   setInterval(() => {
@@ -15,5 +16,8 @@
     photos[index].classList.remove('is-active');
     photos[nextIndex].classList.add('is-active');
     index = nextIndex;
+
+    slider.classList.add('is-transitioning');
+    setTimeout(() => slider.classList.remove('is-transitioning'), fadeMs);
   }, intervalMs);
 })();
