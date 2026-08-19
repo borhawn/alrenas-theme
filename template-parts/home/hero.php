@@ -91,6 +91,7 @@ if ( ! $slides ) {
 					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
 					<?php if ( $slide['caption_title'] || $slide['caption_subtext'] ) : ?>
 						<div class="hero-photo-caption">
+							<span class="hero-status-dot" aria-hidden="true"></span>
 							<?php if ( $slide['caption_title'] ) : ?><strong><?php echo esc_html( $slide['caption_title'] ); ?></strong><?php endif; ?>
 							<?php if ( $slide['caption_subtext'] ) : ?><span><?php echo esc_html( $slide['caption_subtext'] ); ?></span><?php endif; ?>
 						</div>
@@ -98,7 +99,10 @@ if ( ! $slides ) {
 					<?php if ( $slide['product'] ) : ?>
 						<a class="hero-product-chip" href="<?php echo esc_url( $slide['product']->get_permalink() ); ?>">
 							<?php echo wp_kses_post( $slide['product']->get_image( 'woocommerce_thumbnail' ) ); ?>
-							<span><?php echo esc_html( $slide['product']->get_name() ); ?></span>
+							<span class="hero-product-chip-text">
+								<em><?php esc_html_e( 'Featured system', 'alrenas' ); ?></em>
+								<strong><?php echo esc_html( $slide['product']->get_name() ); ?></strong>
+							</span>
 						</a>
 					<?php endif; ?>
 				</div>
