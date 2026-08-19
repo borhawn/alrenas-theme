@@ -39,6 +39,58 @@ function alrenas_setup() {
 }
 add_action( 'after_setup_theme', 'alrenas_setup' );
 
+/**
+ * Allow SVG uploads (e.g. for the site logo), restricted to administrators
+ * since SVGs can carry embedded scripts if not sanitized.
+ *
+ * @param array $mimes Allowed mime types.
+ * @return array
+ */
+function alrenas_allow_svg_upload( $mimes ) {
+	if ( current_user_can( 'manage_options' ) ) {
+		$mimes['svg'] = 'image/svg+xml';
+	}
+
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'alrenas_allow_svg_upload' );
+
+/**
+ * Core's filetype/ext check doesn't recognize SVG by default, which can
+ * cause wp_get_attachment_image() to skip rendering the image tag.
+ *
+ * @param array  $data     Filetype data.
+ * @param string $file     Full path to the file.
+ * @param string $filename Filename.
+ * @param array  $mimes    Allowed mime types.
+ * @return array
+ */
+function alrenas_fix_svg_filetype( $data, $file, $filename, $mimes ) {
+	if ( ! empty( $data['ext'] ) && ! empty( $data['type'] ) ) {
+		return $data;
+	}
+
+	$filetype = wp_check_filetype( $filename, $mimes );
+
+	if ( 'svg' === $filetype['ext'] ) {
+		$data['ext']             = 'svg';
+		$data['type']            = 'image/svg+xml';
+		$data['proper_filename'] = $filename;
+	}
+
+	return $data;
+}
+add_filter( 'wp_check_filetype_and_ext', 'alrenas_fix_svg_filetype', 10, 4 );
+
+/**
+ * SVGs have no raster dimensions in attachment metadata, so give the media
+ * library grid a sane preview size instead of a 0x0 thumbnail.
+ */
+function alrenas_svg_media_grid_fix() {
+	echo '<style>.media-icon img[src$=".svg"], .attachment-preview img[src$=".svg"] { width: 100%; height: auto; }</style>';
+}
+add_action( 'admin_head', 'alrenas_svg_media_grid_fix' );
+
 function alrenas_content_width() {
 	$GLOBALS['content_width'] = apply_filters( 'alrenas_content_width', 1240 );
 }
