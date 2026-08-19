@@ -97,21 +97,41 @@ function alrenas_check_for_theme_update( $transient ) {
 add_filter( 'pre_set_site_transient_update_themes', 'alrenas_check_for_theme_update' );
 
 /**
- * GitHub's release zip extracts as "<owner>-<repo>-<sha>/". Rename it to the
- * theme's actual folder name so WP installs over the existing theme instead
- * of creating a new, separately-named one.
+ * GitHub's zip extracts as "<owner>-<repo>-<sha>/" (or similar). Rename it
+ * to the theme's actual folder name so WordPress installs over the existing
+ * theme instead of creating a new, separately-named one.
+ *
+ * This covers two cases: the in-admin "Update Now" flow (where WordPress
+ * already tells us via $hook_extra['theme'] that this is our theme
+ * updating), and a plain manual "Upload Theme" of a zip downloaded straight
+ * from GitHub (where WordPress doesn't know yet what theme is inside the
+ * zip, so we sniff the extracted style.css's Text Domain to confirm it's
+ * really this theme before redirecting it onto the existing folder — once
+ * renamed, WordPress's own built-in "folder already exists, replace
+ * current with uploaded?" prompt takes over correctly).
  *
  * @param string      $source        Path to the extracted package.
  * @param string      $remote_source Path to the parent temp directory.
  * @param WP_Upgrader $upgrader      Upgrader instance.
- * @param array       $hook_extra    Extra arguments, includes 'theme' on theme updates.
+ * @param array       $hook_extra    Extra arguments.
  * @return string
  */
 function alrenas_rename_github_source( $source, $remote_source, $upgrader, $hook_extra ) {
 	global $wp_filesystem;
 
-	if ( empty( $hook_extra['theme'] ) || get_stylesheet() !== $hook_extra['theme'] ) {
+	if ( empty( $hook_extra['type'] ) || 'theme' !== $hook_extra['type'] ) {
 		return $source;
+	}
+
+	$is_current_theme_update = ! empty( $hook_extra['theme'] ) && get_stylesheet() === $hook_extra['theme'];
+
+	if ( ! $is_current_theme_update ) {
+		$style_css = trailingslashit( $source ) . 'style.css';
+		$contents  = $wp_filesystem->exists( $style_css ) ? $wp_filesystem->get_contents( $style_css ) : '';
+
+		if ( ! $contents || false === strpos( $contents, 'Text Domain: alrenas' ) ) {
+			return $source;
+		}
 	}
 
 	$desired = trailingslashit( $remote_source ) . get_stylesheet();
