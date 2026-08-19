@@ -100,6 +100,14 @@ function alrenas_register_assets() {
 		alrenas_asset_version( 'assets/js/product.js' ),
 		true
 	);
+
+	wp_register_script(
+		'alrenas-hero-slider',
+		get_theme_file_uri( 'assets/js/hero-slider.js' ),
+		array(),
+		alrenas_asset_version( 'assets/js/hero-slider.js' ),
+		true
+	);
 }
 
 /**
@@ -122,6 +130,7 @@ function alrenas_enqueue_assets() {
 		wp_enqueue_style( 'alrenas-base-style' );
 		wp_enqueue_style( 'alrenas-blog-card' );
 		wp_enqueue_script( 'alrenas-shared-script' );
+		wp_enqueue_script( 'alrenas-hero-slider' );
 		$integration_dependencies = array( 'alrenas-blog-card' );
 	} else {
 		wp_enqueue_style( 'alrenas-inner-style' );
