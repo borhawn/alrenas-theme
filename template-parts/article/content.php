@@ -1,7 +1,6 @@
 <?php
 /** Single article body and sidebars. @package Alrenas */
-$related_products = function_exists( 'wc_get_products' ) ? wc_get_products( array( 'limit' => 1, 'status' => 'publish', 'visibility' => 'catalog', 'orderby' => 'date', 'order' => 'DESC' ) ) : array();
-$related_product  = $related_products ? $related_products[0] : null;
+$related_product = alrenas_get_related_product( get_the_ID() );
 ?>
 <section class="article-shell"><div class="container article-layout">
 	<?php get_template_part( 'template-parts/article/table-of-contents' ); ?>
