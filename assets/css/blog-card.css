@@ -12,8 +12,8 @@
 .article-card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s var(--ease)}
 .article-card:hover img{transform:scale(1.018)}
 .article-card-copy{padding:28px}
-.article-card h3{font-size:23px;margin:11px 0 12px;letter-spacing:-.03em}
-.article-card p{font-size:15px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.article-card h3{font-size:23px;line-height:1.14;margin:11px 0 12px;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(1.14em * 2)}
+.article-card p{font-size:15px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(1.5em * 2)}
 .article-card .text-link{margin-top:18px;font-size:13px}
 
 @media(max-width:860px){
@@ -26,5 +26,5 @@
 	.article-card{grid-template-columns:1fr}
 	.article-card-media{height:220px}
 	.article-card-copy{padding:24px}
-	.article-card p{-webkit-line-clamp:3}
+	.article-card p{-webkit-line-clamp:3;min-height:calc(1.5em * 3)}
 }
