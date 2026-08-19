@@ -110,11 +110,12 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .hero-soft-shape{position:absolute;width:300px;height:300px;right:-55px;top:-25px;border-radius:50% 42% 52% 45%;background:var(--teal-100);transform:rotate(12deg);z-index:1}
 
 /* Caption: compact, right-aligned, light glass — sits inside the photo so it can never spill outside it */
-.hero-photo-caption{position:absolute;z-index:3;top:18px;right:18px;max-width:200px;padding:14px 16px 11px;text-align:right;border-radius:13px;background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(10px);box-shadow:0 10px 24px rgba(19,64,83,.10)}
-.hero-photo-caption strong,.hero-photo-caption span{display:block}
-.hero-photo-caption strong{font-family:Manrope,sans-serif;font-size:13px;color:var(--ink-900)}
-.hero-photo-caption span{margin-top:2px;font-size:11px;color:var(--ink-600)}
-.hero-status-dot{position:absolute;top:10px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--teal-600);box-shadow:0 0 0 4px rgba(62,143,131,.16);animation:hero-status-pulse 2.2s ease-in-out infinite}
+.hero-photo-caption{position:absolute;z-index:3;top:18px;right:18px;max-width:200px;display:flex;align-items:flex-start;gap:9px;padding:13px 16px;text-align:left;border-radius:13px;background:rgba(255,255,255,.86);border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(10px);box-shadow:0 10px 24px rgba(19,64,83,.10)}
+.hero-photo-caption-text{display:block;min-width:0}
+.hero-photo-caption-text strong,.hero-photo-caption-text span{display:block}
+.hero-photo-caption-text strong{font-family:Manrope,sans-serif;font-size:13px;color:var(--ink-900)}
+.hero-photo-caption-text span{margin-top:2px;font-size:11px;color:var(--ink-600)}
+.hero-status-dot{flex:0 0 auto;margin-top:5px;width:8px;height:8px;border-radius:50%;background:var(--teal-600);box-shadow:0 0 0 4px rgba(62,143,131,.16);animation:hero-status-pulse 2.2s ease-in-out infinite}
 @keyframes hero-status-pulse{0%,100%{box-shadow:0 0 0 4px rgba(62,143,131,.16)}50%{box-shadow:0 0 0 7px rgba(62,143,131,.05)}}
 
 /* Related-product chip: small, clickable, sits inside the photo's bottom-left corner */

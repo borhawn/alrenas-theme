@@ -92,8 +92,10 @@ if ( ! $slides ) {
 					<?php if ( $slide['caption_title'] || $slide['caption_subtext'] ) : ?>
 						<div class="hero-photo-caption">
 							<span class="hero-status-dot" aria-hidden="true"></span>
-							<?php if ( $slide['caption_title'] ) : ?><strong><?php echo esc_html( $slide['caption_title'] ); ?></strong><?php endif; ?>
-							<?php if ( $slide['caption_subtext'] ) : ?><span><?php echo esc_html( $slide['caption_subtext'] ); ?></span><?php endif; ?>
+							<span class="hero-photo-caption-text">
+								<?php if ( $slide['caption_title'] ) : ?><strong><?php echo esc_html( $slide['caption_title'] ); ?></strong><?php endif; ?>
+								<?php if ( $slide['caption_subtext'] ) : ?><span><?php echo esc_html( $slide['caption_subtext'] ); ?></span><?php endif; ?>
+							</span>
 						</div>
 					<?php endif; ?>
 					<?php if ( $slide['product'] ) : ?>
