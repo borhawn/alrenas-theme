@@ -70,6 +70,13 @@ function alrenas_register_assets() {
 		alrenas_asset_version( 'assets/css/blog-card.css' )
 	);
 
+	wp_register_style(
+		'alrenas-fluentforms',
+		get_theme_file_uri( 'assets/css/fluentforms.css' ),
+		array(),
+		alrenas_asset_version( 'assets/css/fluentforms.css' )
+	);
+
 	wp_register_script(
 		'alrenas-shared-script',
 		get_theme_file_uri( 'assets/js/script.js' ),
@@ -148,6 +155,10 @@ function alrenas_enqueue_assets() {
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
+	}
+
+	if ( function_exists( 'wpFluentForm' ) ) {
+		wp_enqueue_style( 'alrenas-fluentforms' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'alrenas_enqueue_assets' );

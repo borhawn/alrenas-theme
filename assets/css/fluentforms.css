@@ -1,0 +1,141 @@
+/*
+ * Restyles Fluent Forms markup to match the reference contact-form design
+ * (styles.css .contact-form / theme.css .contact-form-card) instead of the
+ * plugin's own default look. Scoped to the two wrapper classes the theme
+ * places forms inside: home + product-inquiry (.contact-form) and the
+ * contact page (.contact-form-card).
+ */
+
+.contact-form .fluentform,
+.contact-form-card .fluentform {
+	margin: 0;
+}
+
+.contact-form .fluentform form fieldset,
+.contact-form-card .fluentform form fieldset {
+	display: flex !important;
+	flex-direction: column;
+	gap: 17px;
+	border: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+.contact-form .fluentform .ff-el-group,
+.contact-form-card .fluentform .ff-el-group {
+	margin: 0 !important;
+	display: grid;
+	gap: 7px;
+}
+
+.contact-form .fluentform .ff-el-input--label label,
+.contact-form-card .fluentform .ff-el-input--label label {
+	color: var(--ink-700);
+	font-size: 13px;
+	font-weight: 600;
+	margin: 0;
+}
+
+.contact-form .fluentform input.ff-el-form-control,
+.contact-form .fluentform textarea.ff-el-form-control,
+.contact-form .fluentform select.ff-el-form-control,
+.contact-form-card .fluentform input.ff-el-form-control,
+.contact-form-card .fluentform textarea.ff-el-form-control,
+.contact-form-card .fluentform select.ff-el-form-control {
+	width: 100%;
+	border: 1px solid #CFE0E7 !important;
+	border-radius: 14px !important;
+	background: #FBFDFE !important;
+	color: var(--ink-900);
+	font-family: inherit;
+	font-size: inherit;
+	padding: 13px 14px;
+	outline: none;
+	box-shadow: none !important;
+	transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.contact-form .fluentform textarea.ff-el-form-control,
+.contact-form-card .fluentform textarea.ff-el-form-control {
+	resize: vertical;
+	min-height: 128px;
+}
+
+.contact-form .fluentform input.ff-el-form-control:focus,
+.contact-form .fluentform textarea.ff-el-form-control:focus,
+.contact-form-card .fluentform input.ff-el-form-control:focus,
+.contact-form-card .fluentform textarea.ff-el-form-control:focus {
+	border-color: #80B8D7 !important;
+	background: #fff !important;
+	box-shadow: 0 0 0 4px rgba(23, 116, 183, .09) !important;
+}
+
+/* First / last name split field */
+.contact-form .fluentform .ff-name-field-wrapper .ff-t-container,
+.contact-form-card .fluentform .ff-name-field-wrapper .ff-t-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.contact-form .fluentform .ff-name-field-wrapper .ff-t-cell,
+.contact-form-card .fluentform .ff-name-field-wrapper .ff-t-cell {
+	padding: 0;
+}
+
+/* Submit button, matching .btn.btn-primary */
+.contact-form .fluentform button.ff-btn-submit,
+.contact-form-card .fluentform button.ff-btn-submit {
+	min-height: 50px;
+	padding: 0 21px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	border: 1px solid var(--blue-700) !important;
+	border-radius: 13px !important;
+	background: var(--blue-700) !important;
+	color: #fff !important;
+	font-family: Manrope, sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 10px 26px rgba(15, 95, 157, .15);
+	transition: transform .28s cubic-bezier(.22, .75, .25, 1), background .28s ease, box-shadow .28s ease;
+}
+
+.contact-form .fluentform button.ff-btn-submit:hover,
+.contact-form-card .fluentform button.ff-btn-submit:hover {
+	background: #0b548d !important;
+	transform: translateY(-2px);
+	box-shadow: 0 14px 32px rgba(15, 95, 157, .2);
+}
+
+.contact-form .fluentform .ff_submit_btn_wrapper,
+.contact-form-card .fluentform .ff_submit_btn_wrapper {
+	margin: 0 !important;
+}
+
+/* Validation messaging */
+.contact-form .fluentform .error,
+.contact-form-card .fluentform .error,
+.contact-form .fluentform_wrapper .ff-errors-in-stack,
+.contact-form-card .fluentform_wrapper .ff-errors-in-stack {
+	color: #C0392B;
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+	.contact-form .fluentform .ff-name-field-wrapper .ff-t-container,
+	.contact-form-card .fluentform .ff-name-field-wrapper .ff-t-container {
+		grid-template-columns: 1fr;
+	}
+
+	.contact-form .fluentform button.ff-btn-submit,
+	.contact-form-card .fluentform button.ff-btn-submit {
+		width: 100%;
+	}
+}
