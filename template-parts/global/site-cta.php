@@ -1,24 +1,38 @@
 <?php
 /**
- * Shared rehabilitation call to action.
+ * Shared rehabilitation call to action -- reused on the homepage, blog
+ * index, single posts, the Products page, and the About page. Content and
+ * both button links are editable in one place: Site Content > Site CTA.
  *
  * @package Alrenas
  */
 
-$cta_url = get_theme_mod( 'alrenas_header_cta_url', home_url( '/' ) );
+$fallback_url = get_theme_mod( 'alrenas_header_cta_url', home_url( '/' ) );
+
+$eyebrow         = alrenas_get_site_content( 'site_cta_eyebrow', esc_html__( 'Talk to our rehabilitation team', 'alrenas' ) );
+$heading         = alrenas_get_site_content( 'site_cta_heading', esc_html__( 'Find the right system for your patients and clinical workflow.', 'alrenas' ) );
+$lead            = alrenas_get_site_content( 'site_cta_lead', esc_html__( 'Tell us about your patient groups, treatment goals and facility. We can help you evaluate the appropriate Alrenas system and prepare a tailored quotation.', 'alrenas' ) );
+$primary_label   = alrenas_get_site_content( 'site_cta_primary_label', esc_html__( 'Request a Demo', 'alrenas' ) );
+$primary_url     = alrenas_get_site_content( 'site_cta_primary_url', $fallback_url );
+$secondary_label = alrenas_get_site_content( 'site_cta_secondary_label', esc_html__( 'Request a Quote', 'alrenas' ) );
+$secondary_url   = alrenas_get_site_content( 'site_cta_secondary_url', $fallback_url );
 ?>
 <section class="site-cta">
 	<div class="container">
 		<div class="site-cta-card reveal">
 			<div>
-				<span class="eyebrow"><?php esc_html_e( 'Talk to our rehabilitation team', 'alrenas' ); ?></span>
-				<h2><?php esc_html_e( 'Find the right system for your patients and clinical workflow.', 'alrenas' ); ?></h2>
-				<p><?php esc_html_e( 'Tell us about your patient groups, treatment goals and facility. We can help you evaluate the appropriate Alrenas system and prepare a tailored quotation.', 'alrenas' ); ?></p>
+				<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
+				<h2><?php echo esc_html( $heading ); ?></h2>
+				<p><?php echo esc_html( $lead ); ?></p>
 			</div>
-			<?php if ( $cta_url ) : ?>
+			<?php if ( $primary_url || $secondary_url ) : ?>
 				<div class="site-cta-actions">
-					<a href="<?php echo esc_url( $cta_url ); ?>" class="btn btn-secondary"><?php esc_html_e( 'Request a Demo', 'alrenas' ); ?></a>
-					<a href="<?php echo esc_url( $cta_url ); ?>" class="btn btn-secondary"><?php esc_html_e( 'Request a Quote', 'alrenas' ); ?></a>
+					<?php if ( $primary_url && $primary_label ) : ?>
+						<a href="<?php echo esc_url( $primary_url ); ?>" class="btn btn-secondary"><?php echo esc_html( $primary_label ); ?></a>
+					<?php endif; ?>
+					<?php if ( $secondary_url && $secondary_label ) : ?>
+						<a href="<?php echo esc_url( $secondary_url ); ?>" class="btn btn-secondary"><?php echo esc_html( $secondary_label ); ?></a>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>

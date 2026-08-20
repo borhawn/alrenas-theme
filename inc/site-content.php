@@ -66,6 +66,7 @@ function alrenas_site_content_tabs() {
 		'products-page'   => esc_html__( 'Products Page', 'alrenas' ),
 		'contact-page'    => esc_html__( 'Contact Page', 'alrenas' ),
 		'about-page'      => esc_html__( 'About Page', 'alrenas' ),
+		'site-cta'        => esc_html__( 'Site CTA', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
 }
@@ -601,6 +602,18 @@ function alrenas_site_content_settings() {
 		);
 	}
 
+	// --- Site CTA (shared component: home, blog index, single post, ---
+	// --- products page, about page) -------------------------------------
+	add_settings_section( 'alrenas_site_cta', esc_html__( 'Site CTA', 'alrenas' ), 'alrenas_section_site_cta_intro', 'alrenas-content-site-cta' );
+
+	add_settings_field( 'site_cta_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_eyebrow', 'placeholder' => esc_html__( 'Talk to our rehabilitation team', 'alrenas' ) ) );
+	add_settings_field( 'site_cta_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_heading', 'placeholder' => esc_html__( 'Find the right system for your patients and clinical workflow.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'site_cta_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_lead', 'placeholder' => esc_html__( 'Tell us about your patient groups, treatment goals and facility. We can help you evaluate the appropriate Alrenas system and prepare a tailored quotation.', 'alrenas' ) ) );
+	add_settings_field( 'site_cta_primary_label', esc_html__( 'Primary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_primary_label', 'placeholder' => esc_html__( 'Request a Demo', 'alrenas' ) ) );
+	add_settings_field( 'site_cta_primary_url', esc_html__( 'Primary button URL', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_primary_url', 'placeholder' => '/contact' ) );
+	add_settings_field( 'site_cta_secondary_label', esc_html__( 'Secondary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_secondary_label', 'placeholder' => esc_html__( 'Request a Quote', 'alrenas' ) ) );
+	add_settings_field( 'site_cta_secondary_url', esc_html__( 'Secondary button URL', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_secondary_url', 'placeholder' => '/contact' ) );
+
 	// --- Footer ----------------------------------------------------------
 	add_settings_section( 'alrenas_site_content_footer', esc_html__( 'Footer', 'alrenas' ), '__return_false', 'alrenas-content-footer' );
 	add_settings_field( 'footer_description', esc_html__( 'Footer description', 'alrenas' ), 'alrenas_field_footer_description', 'alrenas-content-footer', 'alrenas_site_content_footer' );
@@ -998,6 +1011,13 @@ function alrenas_sanitize_repeater_field( $raw, $count, $fields ) {
 }
 
 /**
+ * Intro text for the shared Site CTA settings section.
+ */
+function alrenas_section_site_cta_intro() {
+	echo '<p>' . esc_html__( 'This banner is a shared component reused across several pages (homepage, blog index, single posts, the Products page, and the About page) -- editing it here updates every one of them at once.', 'alrenas' ) . '</p>';
+}
+
+/**
  * Intro text for the Contact-page inquiry-options settings section.
  */
 function alrenas_section_contact_options_intro() {
@@ -1206,9 +1226,15 @@ function alrenas_sanitize_site_content( $input ) {
 		'about_story_heading',
 		'about_quality_eyebrow',
 		'about_quality_heading',
+		'site_cta_eyebrow',
+		'site_cta_heading',
+		'site_cta_primary_label',
+		'site_cta_primary_url',
+		'site_cta_secondary_label',
+		'site_cta_secondary_url',
 	);
 
-	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
+	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url', 'site_cta_primary_url', 'site_cta_secondary_url' );
 
 	foreach ( $text_keys as $key ) {
 		if ( ! isset( $input[ $key ] ) ) {
@@ -1308,6 +1334,8 @@ function alrenas_sanitize_site_content( $input ) {
 	$output['about_story_paragraph_1'] = isset( $input['about_story_paragraph_1'] ) ? sanitize_textarea_field( wp_unslash( $input['about_story_paragraph_1'] ) ) : '';
 	$output['about_story_paragraph_2'] = isset( $input['about_story_paragraph_2'] ) ? sanitize_textarea_field( wp_unslash( $input['about_story_paragraph_2'] ) ) : '';
 	$output['about_quality_lead']      = isset( $input['about_quality_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['about_quality_lead'] ) ) : '';
+
+	$output['site_cta_lead'] = isset( $input['site_cta_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['site_cta_lead'] ) ) : '';
 
 	$output['about_hero_small_image_id'] = isset( $input['about_hero_small_image_id'] ) ? absint( $input['about_hero_small_image_id'] ) : 0;
 	$output['about_story_image_id']      = isset( $input['about_story_image_id'] ) ? absint( $input['about_story_image_id'] ) : 0;
