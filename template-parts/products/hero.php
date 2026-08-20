@@ -53,6 +53,6 @@ if ( function_exists( 'wc_get_product' ) ) {
 }
 ?>
 <section class="page-hero products-hero"><div class="container page-hero-grid"><div class="page-hero-copy reveal">
-	<?php get_template_part( 'template-parts/global/breadcrumbs', null, array( 'current_label' => get_the_title() ) ); ?>
+	<?php get_template_part( 'template-parts/global/breadcrumbs', null, array( 'current_label' => esc_html__( 'Products', 'alrenas' ) ) ); ?>
 	<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span><h1><?php echo esc_html( $heading ); ?></h1><p class="lead"><?php echo esc_html( $lead ); ?></p><div class="page-hero-actions"><a href="#systems" class="btn btn-primary"><?php echo esc_html( $primary_label ); ?></a><?php if ( $contact_url ) : ?><a href="<?php echo esc_url( $contact_url ); ?>" class="btn btn-secondary"><?php echo esc_html( $secondary_label ); ?></a><?php endif; ?></div>
 </div><div class="hero-panel-soft reveal"><?php echo wp_kses_post( $mini_image ); ?><?php echo wp_kses_post( $main_image ); ?></div></div></section>
