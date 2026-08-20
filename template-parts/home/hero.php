@@ -62,6 +62,7 @@ if ( ! $slides ) {
 ?>
 <section class="hero">
 	<div class="container hero-grid">
+		<div class="hero-soft-shape" aria-hidden="true"></div>
 		<div class="hero-copy reveal">
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 			<h1><?php echo esc_html( $headline ); ?> <span><?php echo esc_html( $headline_highlight ); ?></span></h1>
@@ -84,8 +85,6 @@ if ( ! $slides ) {
 		</div>
 
 		<div class="hero-media reveal" data-hero-slider>
-			<div class="hero-soft-shape" aria-hidden="true"></div>
-
 			<?php foreach ( $slides as $i => $slide ) : ?>
 				<div class="hero-photo<?php echo 0 === $i ? ' is-active' : ''; ?>" data-hero-slide="<?php echo esc_attr( $i ); ?>">
 					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
