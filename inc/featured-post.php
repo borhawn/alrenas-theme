@@ -86,14 +86,14 @@ add_action( 'save_post', 'alrenas_save_featured_post_meta' );
  */
 function alrenas_featured_first_query_args() {
 	return array(
-		'meta_key' => ALRENAS_FEATURED_POST_META_KEY, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small site, only used on the two post-listing views.
-		'orderby'    => array(
-			'meta_value_num' => 'DESC',
-			'date'           => 'DESC',
-		),
+		// A named meta_query clause (rather than the top-level meta_key +
+		// orderby=meta_value_num shortcut) is what lets WordPress use a
+		// LEFT JOIN here: every post matches either the EXISTS or the
+		// NOT EXISTS branch, so nothing gets excluded -- ordering by the
+		// clause name just ranks the EXISTS matches first.
 		'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-			'relation' => 'OR',
-			array(
+			'relation'        => 'OR',
+			'featured_clause' => array(
 				'key'     => ALRENAS_FEATURED_POST_META_KEY,
 				'compare' => 'EXISTS',
 			),
@@ -101,6 +101,10 @@ function alrenas_featured_first_query_args() {
 				'key'     => ALRENAS_FEATURED_POST_META_KEY,
 				'compare' => 'NOT EXISTS',
 			),
+		),
+		'orderby'    => array(
+			'featured_clause' => 'DESC',
+			'date'            => 'DESC',
 		),
 	);
 }
