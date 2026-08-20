@@ -78,3 +78,27 @@ function alrenas_woocommerce_wrapper_start() {
 function alrenas_woocommerce_wrapper_end() {
 	echo '</div></main>';
 }
+
+/**
+ * WooCommerce forces its own archive-product.php for whatever page is set
+ * as the Shop page in WooCommerce settings, overriding any custom page
+ * template that page has assigned -- regardless of intent. Our Products
+ * Landing page (page-products.php) happens to also be the configured Shop
+ * page, so without this it silently gets replaced by the plain WooCommerce
+ * product grid. Put our template back if that's the page being requested.
+ *
+ * @param string $template Template path WooCommerce/WordPress resolved.
+ * @return string
+ */
+function alrenas_restore_products_landing_template( $template ) {
+	if ( is_page() && 'page-products.php' === get_page_template_slug() ) {
+		$theme_template = locate_template( 'page-products.php' );
+
+		if ( $theme_template ) {
+			return $theme_template;
+		}
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'alrenas_restore_products_landing_template', 100 );
