@@ -23,6 +23,11 @@ define( 'ALRENAS_STORY_POINT_COUNT', 3 );
 define( 'ALRENAS_PRODUCTS_SYSTEM_COUNT', 3 );
 define( 'ALRENAS_PRODUCTS_SELECTOR_COUNT', 3 );
 define( 'ALRENAS_PRODUCTS_QUOTE_STEP_COUNT', 3 );
+define( 'ALRENAS_CONTACT_OPTION_COUNT', 4 );
+define( 'ALRENAS_ABOUT_MISSION_POINT_COUNT', 4 );
+define( 'ALRENAS_ABOUT_VALUE_COUNT', 3 );
+define( 'ALRENAS_ABOUT_STORY_POINT_COUNT', 3 );
+define( 'ALRENAS_ABOUT_QUALITY_BADGE_COUNT', 4 );
 
 /**
  * Get a single site content value.
@@ -59,6 +64,8 @@ function alrenas_site_content_tabs() {
 		'home-story'      => esc_html__( 'Home — Clinical Story', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
 		'products-page'   => esc_html__( 'Products Page', 'alrenas' ),
+		'contact-page'    => esc_html__( 'Contact Page', 'alrenas' ),
+		'about-page'      => esc_html__( 'About Page', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
 }
@@ -445,6 +452,155 @@ function alrenas_site_content_settings() {
 		);
 	}
 
+	// --- Contact Page --------------------------------------------------
+	add_settings_section( 'alrenas_contact_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-contact-page' );
+
+	add_settings_field( 'contact_hero_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_eyebrow', 'placeholder' => esc_html__( 'Contact Alrenas', 'alrenas' ) ) );
+	add_settings_field( 'contact_hero_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_heading', 'placeholder' => esc_html__( 'Start with the rehabilitation need.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'contact_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_lead', 'placeholder' => esc_html__( 'Whether you are evaluating a device for a hospital, physiotherapy clinic, rehabilitation center or research project, tell us what you need to achieve. We\'ll help you take the next step.', 'alrenas' ) ) );
+	add_settings_field( 'contact_hero_primary_label', esc_html__( 'Primary button label (links to the form below)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_primary_label', 'placeholder' => esc_html__( 'Send an Inquiry', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_contact_options', esc_html__( 'Inquiry options', 'alrenas' ), 'alrenas_section_contact_options_intro', 'alrenas-content-contact-page' );
+
+	for ( $i = 1; $i <= ALRENAS_CONTACT_OPTION_COUNT; $i++ ) {
+		add_settings_field(
+			'contact_option_' . $i,
+			sprintf( /* translators: %d: option slot number. */ esc_html__( 'Option %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-contact-page',
+			'alrenas_contact_options',
+			array(
+				'index'      => $i,
+				'option_key' => 'contact_options_items',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. Product guidance', 'alrenas' ) ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'text', 'wide' => true, 'placeholder' => esc_html__( 'e.g. Help choosing the right rehabilitation system.', 'alrenas' ) ),
+				),
+			)
+		);
+	}
+
+	add_settings_section( 'alrenas_contact_details', esc_html__( 'Details panel', 'alrenas' ), '__return_false', 'alrenas-content-contact-page' );
+
+	add_settings_field( 'contact_details_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_eyebrow', 'placeholder' => esc_html__( 'Talk to our team', 'alrenas' ) ) );
+	add_settings_field( 'contact_details_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_heading', 'placeholder' => esc_html__( 'We\'ll route your request to the right person.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'contact_details_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_lead', 'placeholder' => esc_html__( 'Share the clinical or practical context rather than trying to fit your question into a generic sales form.', 'alrenas' ) ) );
+	add_settings_field( 'contact_map_note', esc_html__( 'Note (below the contact details)', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_note', 'placeholder' => esc_html__( 'For urgent technical assistance, calling the team directly is the fastest route.', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_contact_form_head', esc_html__( 'Form card', 'alrenas' ), '__return_false', 'alrenas-content-contact-page' );
+
+	add_settings_field( 'contact_form_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_form_head', array( 'key' => 'contact_form_heading', 'placeholder' => esc_html__( 'Tell us how we can help.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'contact_form_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_form_head', array( 'key' => 'contact_form_lead', 'placeholder' => esc_html__( 'For quotations and demos, include the facility type, product of interest and intended clinical use where possible.', 'alrenas' ) ) );
+
+	// --- About Page ------------------------------------------------------
+	add_settings_section( 'alrenas_about_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
+
+	add_settings_field( 'about_hero_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_eyebrow', 'placeholder' => esc_html__( 'About Alrenas', 'alrenas' ) ) );
+	add_settings_field( 'about_hero_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_heading', 'placeholder' => esc_html__( 'Rehabilitation technology with recovery at the center.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'about_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_lead', 'placeholder' => esc_html__( 'We develop rehabilitation systems to help healthcare professionals assess movement, guide therapy and support patients toward greater stability, mobility and independence.', 'alrenas' ) ) );
+	add_settings_field( 'about_hero_primary_label', esc_html__( 'Primary button label (links to Products)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_primary_label', 'placeholder' => esc_html__( 'Explore Our Systems', 'alrenas' ) ) );
+	add_settings_field( 'about_hero_secondary_label', esc_html__( 'Secondary button label (links to Contact)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_secondary_label', 'placeholder' => esc_html__( 'Meet Our Team', 'alrenas' ) ) );
+	add_settings_field( 'about_hero_small_image', esc_html__( 'Small overlapping image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_small_image_id', 'title' => esc_html__( 'Select small image', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_about_mission', esc_html__( 'Mission', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
+
+	add_settings_field( 'about_mission_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_mission', array( 'key' => 'about_mission_eyebrow', 'placeholder' => esc_html__( 'Redefining recovery', 'alrenas' ) ) );
+	add_settings_field( 'about_mission_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_mission', array( 'key' => 'about_mission_heading', 'placeholder' => esc_html__( 'Designed to support the people inside the rehabilitation process.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'about_mission_paragraph_1', esc_html__( 'Paragraph 1', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_mission', array( 'key' => 'about_mission_paragraph_1', 'placeholder' => esc_html__( 'Alrenas specializes in rehabilitation equipment and physiotherapy devices for healthcare professionals, patients and rehabilitation organizations. Our goal is straightforward: create practical systems that make assessment clearer, therapy more adaptable and patient progress easier to follow.', 'alrenas' ) ) );
+	add_settings_field( 'about_mission_paragraph_2', esc_html__( 'Paragraph 2', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_mission', array( 'key' => 'about_mission_paragraph_2', 'placeholder' => esc_html__( 'Technology matters, but it is never the point on its own. A rehabilitation device has to fit clinical workflows, feel safe to the patient and give the therapist useful information.', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_ABOUT_MISSION_POINT_COUNT; $i++ ) {
+		add_settings_field(
+			'about_mission_point_' . $i,
+			sprintf( /* translators: %d: mission point slot number. */ esc_html__( 'Point %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-about-page',
+			'alrenas_about_mission',
+			array(
+				'index'      => $i,
+				'option_key' => 'about_mission_points',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. For clinicians', 'alrenas' ) ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'text', 'wide' => true, 'placeholder' => esc_html__( 'e.g. Objective assessment, adaptable training and clearer progress information.', 'alrenas' ) ),
+				),
+			)
+		);
+	}
+
+	add_settings_section( 'alrenas_about_values', esc_html__( 'Values', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
+
+	add_settings_field( 'about_values_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_values', array( 'key' => 'about_values_eyebrow', 'placeholder' => esc_html__( 'What guides our work', 'alrenas' ) ) );
+	add_settings_field( 'about_values_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_values', array( 'key' => 'about_values_heading', 'placeholder' => esc_html__( 'Clinical value before technical spectacle.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'about_values_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_values', array( 'key' => 'about_values_lead', 'placeholder' => esc_html__( 'The best rehabilitation technology should quietly make care better. These principles shape how we think about products, software and support.', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_ABOUT_VALUE_COUNT; $i++ ) {
+		add_settings_field(
+			'about_value_' . $i,
+			sprintf( /* translators: %d: value card slot number. */ esc_html__( 'Value %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-about-page',
+			'alrenas_about_values',
+			array(
+				'index'      => $i,
+				'option_key' => 'about_value_cards',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. Safety and confidence', 'alrenas' ) ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'textarea', 'placeholder' => esc_html__( 'e.g. Patients may be working at the edge of their current ability...', 'alrenas' ) ),
+				),
+			)
+		);
+	}
+
+	add_settings_section( 'alrenas_about_story', esc_html__( 'Story', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
+
+	add_settings_field( 'about_story_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_story', array( 'key' => 'about_story_eyebrow', 'placeholder' => esc_html__( 'Your partner in rehabilitation', 'alrenas' ) ) );
+	add_settings_field( 'about_story_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_story', array( 'key' => 'about_story_heading', 'placeholder' => esc_html__( 'Built for the full care environment, not just the device itself.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'about_story_paragraph_1', esc_html__( 'Paragraph 1', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_story', array( 'key' => 'about_story_paragraph_1', 'placeholder' => esc_html__( 'Our team brings together product development, technical knowledge and clinical perspectives to create solutions for physiotherapy, neurological and orthopedic rehabilitation, geriatrics and movement training.', 'alrenas' ) ) );
+	add_settings_field( 'about_story_paragraph_2', esc_html__( 'Paragraph 2', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_story', array( 'key' => 'about_story_paragraph_2', 'placeholder' => esc_html__( 'We also support healthcare professionals with product guidance, training and ongoing communication so the system can be integrated into real clinical practice.', 'alrenas' ) ) );
+	add_settings_field( 'about_story_image', esc_html__( 'Image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-about-page', 'alrenas_about_story', array( 'key' => 'about_story_image_id', 'title' => esc_html__( 'Select story image', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_ABOUT_STORY_POINT_COUNT; $i++ ) {
+		add_settings_field(
+			'about_story_point_' . $i,
+			sprintf( /* translators: %d: story checklist item slot number. */ esc_html__( 'Checklist item %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-about-page',
+			'alrenas_about_story',
+			array(
+				'index'      => $i,
+				'option_key' => 'about_story_points',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. Professional support', 'alrenas' ) ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'text', 'wide' => true, 'placeholder' => esc_html__( 'e.g. Product guidance and training for healthcare teams.', 'alrenas' ) ),
+				),
+			)
+		);
+	}
+
+	add_settings_section( 'alrenas_about_quality', esc_html__( 'Quality band', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
+
+	add_settings_field( 'about_quality_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_quality', array( 'key' => 'about_quality_eyebrow', 'placeholder' => esc_html__( 'Quality and responsibility', 'alrenas' ) ) );
+	add_settings_field( 'about_quality_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_quality', array( 'key' => 'about_quality_heading', 'placeholder' => esc_html__( 'Professional equipment has to earn clinical trust.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'about_quality_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_quality', array( 'key' => 'about_quality_lead', 'placeholder' => esc_html__( 'Alrenas emphasizes safety, reliability, patient comfort, usability and compliance with relevant international requirements. Product-specific certifications and specifications are available on each system page and in technical documentation.', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_ABOUT_QUALITY_BADGE_COUNT; $i++ ) {
+		add_settings_field(
+			'about_quality_badge_' . $i,
+			sprintf( /* translators: %d: quality badge slot number. */ esc_html__( 'Badge %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-about-page',
+			'alrenas_about_quality',
+			array(
+				'index'      => $i,
+				'option_key' => 'about_quality_badges',
+				'fields'     => array(
+					'value' => array( 'label' => esc_html__( 'Value (large text)', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. CE', 'alrenas' ) ),
+					'label' => array( 'label' => esc_html__( 'Label', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. Product conformity', 'alrenas' ) ),
+				),
+			)
+		);
+	}
+
 	// --- Footer ----------------------------------------------------------
 	add_settings_section( 'alrenas_site_content_footer', esc_html__( 'Footer', 'alrenas' ), '__return_false', 'alrenas-content-footer' );
 	add_settings_field( 'footer_description', esc_html__( 'Footer description', 'alrenas' ), 'alrenas_field_footer_description', 'alrenas-content-footer', 'alrenas_site_content_footer' );
@@ -771,6 +927,84 @@ function alrenas_field_quote_step( $args ) {
 }
 
 /**
+ * Generic repeater-item fieldset renderer, used for the several simple
+ * "N items, each with the same 2-3 text/textarea sub-fields" repeaters on
+ * the Contact and About pages, so each doesn't need its own near-identical
+ * render function.
+ *
+ * @param array $args {
+ *     @type int    $index      1-based slot number.
+ *     @type string $option_key Site-content array key.
+ *     @type array  $fields     Map of sub-field key => array{label, type: 'text'|'textarea', placeholder?, wide?}.
+ * }
+ */
+function alrenas_field_repeater_item( $args ) {
+	$index = (int) $args['index'];
+	$items = alrenas_get_site_content( $args['option_key'], array() );
+	$item  = isset( $items[ $index ] ) ? $items[ $index ] : array();
+	$name  = ALRENAS_SITE_CONTENT_OPTION . '[' . $args['option_key'] . '][' . $index . ']';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<?php foreach ( $args['fields'] as $key => $field ) : ?>
+			<?php $value = isset( $item[ $key ] ) ? $item[ $key ] : ''; ?>
+			<p>
+				<label class="alrenas-field-label"><?php echo esc_html( $field['label'] ); ?></label>
+				<?php if ( 'textarea' === $field['type'] ) : ?>
+					<textarea name="<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>]" rows="2" class="large-text"><?php echo esc_textarea( $value ); ?></textarea>
+				<?php else : ?>
+					<input type="text" name="<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>" class="<?php echo empty( $field['wide'] ) ? 'regular-text' : 'large-text'; ?>" placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>">
+				<?php endif; ?>
+			</p>
+		<?php endforeach; ?>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
+ * Sanitize a 1-indexed repeater array posted from alrenas_field_repeater_item
+ * fieldsets, dropping any index outside the expected range.
+ *
+ * @param mixed $raw    Raw posted value for the array key.
+ * @param int   $count  Highest valid 1-based index.
+ * @param array $fields Map of sub-field key => 'text'|'textarea'.
+ * @return array
+ */
+function alrenas_sanitize_repeater_field( $raw, $count, $fields ) {
+	$output = array();
+
+	if ( empty( $raw ) || ! is_array( $raw ) ) {
+		return $output;
+	}
+
+	foreach ( $raw as $index => $row ) {
+		$index = (int) $index;
+
+		if ( $index < 1 || $index > $count ) {
+			continue;
+		}
+
+		$clean = array();
+
+		foreach ( $fields as $key => $type ) {
+			$value         = isset( $row[ $key ] ) ? wp_unslash( $row[ $key ] ) : '';
+			$clean[ $key ] = 'textarea' === $type ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
+		}
+
+		$output[ $index ] = $clean;
+	}
+
+	return $output;
+}
+
+/**
+ * Intro text for the Contact-page inquiry-options settings section.
+ */
+function alrenas_section_contact_options_intro() {
+	echo '<p>' . esc_html__( 'The 4 selectable buttons shown above the contact form. Each title also fills the intent badge on the form card when that option is selected.', 'alrenas' ) . '</p>';
+}
+
+/**
  * Best-effort admin preview thumbnail for any attachment type (image, SVG,
  * or video) -- falls back to WordPress's generic file-type icon so video
  * attachments still show something in the picker preview.
@@ -954,6 +1188,24 @@ function alrenas_sanitize_site_content( $input ) {
 		'products_selector_heading',
 		'products_quote_eyebrow',
 		'products_quote_heading',
+		'contact_hero_eyebrow',
+		'contact_hero_heading',
+		'contact_hero_primary_label',
+		'contact_details_eyebrow',
+		'contact_details_heading',
+		'contact_form_heading',
+		'about_hero_eyebrow',
+		'about_hero_heading',
+		'about_hero_primary_label',
+		'about_hero_secondary_label',
+		'about_mission_eyebrow',
+		'about_mission_heading',
+		'about_values_eyebrow',
+		'about_values_heading',
+		'about_story_eyebrow',
+		'about_story_heading',
+		'about_quality_eyebrow',
+		'about_quality_heading',
 	);
 
 	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
@@ -1042,6 +1294,29 @@ function alrenas_sanitize_site_content( $input ) {
 			);
 		}
 	}
+
+	// --- Contact / About pages ------------------------------------------
+	$output['contact_hero_lead']    = isset( $input['contact_hero_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_hero_lead'] ) ) : '';
+	$output['contact_details_lead'] = isset( $input['contact_details_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_details_lead'] ) ) : '';
+	$output['contact_map_note']     = isset( $input['contact_map_note'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_map_note'] ) ) : '';
+	$output['contact_form_lead']    = isset( $input['contact_form_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_form_lead'] ) ) : '';
+
+	$output['about_hero_lead']         = isset( $input['about_hero_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['about_hero_lead'] ) ) : '';
+	$output['about_mission_paragraph_1'] = isset( $input['about_mission_paragraph_1'] ) ? sanitize_textarea_field( wp_unslash( $input['about_mission_paragraph_1'] ) ) : '';
+	$output['about_mission_paragraph_2'] = isset( $input['about_mission_paragraph_2'] ) ? sanitize_textarea_field( wp_unslash( $input['about_mission_paragraph_2'] ) ) : '';
+	$output['about_values_lead']       = isset( $input['about_values_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['about_values_lead'] ) ) : '';
+	$output['about_story_paragraph_1'] = isset( $input['about_story_paragraph_1'] ) ? sanitize_textarea_field( wp_unslash( $input['about_story_paragraph_1'] ) ) : '';
+	$output['about_story_paragraph_2'] = isset( $input['about_story_paragraph_2'] ) ? sanitize_textarea_field( wp_unslash( $input['about_story_paragraph_2'] ) ) : '';
+	$output['about_quality_lead']      = isset( $input['about_quality_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['about_quality_lead'] ) ) : '';
+
+	$output['about_hero_small_image_id'] = isset( $input['about_hero_small_image_id'] ) ? absint( $input['about_hero_small_image_id'] ) : 0;
+	$output['about_story_image_id']      = isset( $input['about_story_image_id'] ) ? absint( $input['about_story_image_id'] ) : 0;
+
+	$output['contact_options_items'] = alrenas_sanitize_repeater_field( $input['contact_options_items'] ?? null, ALRENAS_CONTACT_OPTION_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
+	$output['about_mission_points']  = alrenas_sanitize_repeater_field( $input['about_mission_points'] ?? null, ALRENAS_ABOUT_MISSION_POINT_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
+	$output['about_value_cards']     = alrenas_sanitize_repeater_field( $input['about_value_cards'] ?? null, ALRENAS_ABOUT_VALUE_COUNT, array( 'title' => 'text', 'description' => 'textarea' ) );
+	$output['about_story_points']    = alrenas_sanitize_repeater_field( $input['about_story_points'] ?? null, ALRENAS_ABOUT_STORY_POINT_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
+	$output['about_quality_badges']  = alrenas_sanitize_repeater_field( $input['about_quality_badges'] ?? null, ALRENAS_ABOUT_QUALITY_BADGE_COUNT, array( 'value' => 'text', 'label' => 'text' ) );
 
 	$output['story_points'] = array();
 
