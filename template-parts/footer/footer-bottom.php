@@ -9,7 +9,9 @@
 	<span>
 		<?php
 		printf(
-			esc_html__( '© %s Alrenas Technology', 'alrenas' ),
+			/* translators: 1: developer credit link, 2: current year */
+			wp_kses_post( __( 'Designed / Developed by %1$s &nbsp; © %2$s Alrenas Technology', 'alrenas' ) ),
+			'<a class="footer-credit-link" href="https://borhawn.dev" target="_blank" rel="noopener noreferrer">Borhan Milani</a>',
 			esc_html( wp_date( 'Y' ) )
 		);
 		?>

@@ -258,6 +258,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .footer-bottom{margin-top:58px;padding-top:22px;border-top:1px solid rgba(255,255,255,.11);display:flex;justify-content:space-between;gap:30px;color:#7E9AA8;font-size:12px}
 .footer-bottom div{display:flex;gap:22px}
 .footer-bottom a:hover{color:#fff}
+.footer-credit-link{color:inherit;font-weight:600}
 
 /* Reveal */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
