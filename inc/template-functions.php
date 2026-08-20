@@ -77,6 +77,79 @@ function alrenas_render_media_html( $attachment_id, $class = '' ) {
 	return $image ? $image : '';
 }
 
+/**
+ * Read the items in the 'contact' nav menu location, typed by URL scheme
+ * (tel: / mailto: / anything else = address), for places that need to
+ * display phone/email/address individually rather than as a plain link
+ * list -- e.g. the contact page's labeled detail cards.
+ *
+ * @return array<int,array{type:string,label:string,value:string,url:string}>
+ */
+function alrenas_get_contact_menu_entries() {
+	static $entries = null;
+
+	if ( null !== $entries ) {
+		return $entries;
+	}
+
+	$entries  = array();
+	$location = get_nav_menu_locations();
+
+	if ( empty( $location['contact'] ) ) {
+		return $entries;
+	}
+
+	$menu = wp_get_nav_menu_object( $location['contact'] );
+
+	if ( ! $menu ) {
+		return $entries;
+	}
+
+	$items = wp_get_nav_menu_items( $menu->term_id );
+
+	if ( ! $items ) {
+		return $entries;
+	}
+
+	foreach ( $items as $item ) {
+		if ( 0 === strpos( $item->url, 'tel:' ) ) {
+			$type  = 'tel';
+			$label = __( 'Phone', 'alrenas' );
+		} elseif ( 0 === strpos( $item->url, 'mailto:' ) ) {
+			$type  = 'mailto';
+			$label = __( 'Email', 'alrenas' );
+		} else {
+			$type  = 'address';
+			$label = __( 'Address', 'alrenas' );
+		}
+
+		$entries[] = array(
+			'type'  => $type,
+			'label' => $label,
+			'value' => $item->title,
+			'url'   => $item->url,
+		);
+	}
+
+	return $entries;
+}
+
+/**
+ * First contact-menu entry of a given type ('tel', 'mailto', 'address').
+ *
+ * @param string $type Entry type.
+ * @return array{type:string,label:string,value:string,url:string}|null
+ */
+function alrenas_get_contact_menu_entry( $type ) {
+	foreach ( alrenas_get_contact_menu_entries() as $entry ) {
+		if ( $entry['type'] === $type ) {
+			return $entry;
+		}
+	}
+
+	return null;
+}
+
 function alrenas_body_classes( $classes ) {
 	if ( ! is_singular() ) {
 		$classes[] = 'hfeed';
