@@ -20,6 +20,7 @@ require_once get_template_directory() . '/inc/woocommerce.php';
 require_once get_template_directory() . '/inc/related-product.php';
 require_once get_template_directory() . '/inc/featured-post.php';
 require_once get_template_directory() . '/inc/nav-mega-menu.php';
+require_once get_template_directory() . '/inc/disable-comments.php';
 
 /**
  * Register editable theme menu locations.
