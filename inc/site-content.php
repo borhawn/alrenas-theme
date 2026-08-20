@@ -20,6 +20,9 @@ define( 'ALRENAS_HERO_SLIDE_COUNT', 5 );
 define( 'ALRENAS_CARE_STEP_COUNT', 3 );
 define( 'ALRENAS_DISCIPLINE_COUNT', 4 );
 define( 'ALRENAS_STORY_POINT_COUNT', 3 );
+define( 'ALRENAS_PRODUCTS_SYSTEM_COUNT', 3 );
+define( 'ALRENAS_PRODUCTS_SELECTOR_COUNT', 3 );
+define( 'ALRENAS_PRODUCTS_QUOTE_STEP_COUNT', 3 );
 
 /**
  * Get a single site content value.
@@ -55,6 +58,7 @@ function alrenas_site_content_tabs() {
 		'home-discipline' => esc_html__( 'Home — Disciplines', 'alrenas' ),
 		'home-story'      => esc_html__( 'Home — Clinical Story', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
+		'products-page'   => esc_html__( 'Products Page', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
 }
@@ -361,6 +365,86 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'care_strip_text', esc_html__( 'Intro text', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_text', 'placeholder' => esc_html__( 'Supporting rehabilitation across the continuum of care', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'care_strip_tags', esc_html__( 'Tags (comma-separated)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_tags', 'placeholder' => esc_html__( 'Balance rehabilitation, Fall-risk assessment, Postural control, Mobility training, Muscle strengthening', 'alrenas' ), 'wide' => true ) );
 
+	// --- Products Page -----------------------------------------------------
+	add_settings_section( 'alrenas_products_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
+
+	add_settings_field( 'products_hero_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_eyebrow', 'placeholder' => esc_html__( 'Rehabilitation systems', 'alrenas' ) ) );
+	add_settings_field( 'products_hero_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_heading', 'placeholder' => esc_html__( 'Technology shaped around the way recovery happens.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'products_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_lead', 'placeholder' => esc_html__( 'Clinical systems for balance assessment, guided physiotherapy and supported mobility — selected according to the patient, treatment goal and level of assistance required.', 'alrenas' ) ) );
+	add_settings_field( 'products_hero_primary_label', esc_html__( 'Primary button label (links to the systems section)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_primary_label', 'placeholder' => esc_html__( 'Explore Systems', 'alrenas' ) ) );
+	add_settings_field( 'products_hero_secondary_label', esc_html__( 'Secondary button label (links to Contact)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_secondary_label', 'placeholder' => esc_html__( 'Get Product Guidance', 'alrenas' ) ) );
+	add_settings_field( 'products_hero_main_product_id', esc_html__( 'Large hero image (product)', 'alrenas' ), 'alrenas_field_products_hero_image', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_main_product_id' ) );
+	add_settings_field( 'products_hero_mini_product_id', esc_html__( 'Small overlapping hero image (product)', 'alrenas' ), 'alrenas_field_products_hero_image', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_mini_product_id' ) );
+
+	add_settings_section( 'alrenas_products_intro', esc_html__( 'Introduction', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
+
+	add_settings_field( 'products_intro_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_intro', array( 'key' => 'products_intro_eyebrow', 'placeholder' => esc_html__( 'Not a catalogue of commodities', 'alrenas' ) ) );
+	add_settings_field( 'products_intro_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_intro', array( 'key' => 'products_intro_heading', 'placeholder' => esc_html__( 'Choose by clinical need, not by a price tag.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'products_intro_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-products-page', 'alrenas_products_intro', array( 'key' => 'products_intro_lead', 'placeholder' => esc_html__( 'Alrenas systems are configured for professional rehabilitation environments. Instead of fixed online pricing, we discuss your facility, patient population, training requirements and support needs before preparing a quotation.', 'alrenas' ) ) );
+	add_settings_field( 'products_intro_link_label', esc_html__( 'Link label (links to Contact)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_intro', array( 'key' => 'products_intro_link_label', 'placeholder' => esc_html__( 'Discuss your requirements', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_products_systems', esc_html__( 'Systems section', 'alrenas' ), 'alrenas_section_products_systems_intro', 'alrenas-content-products-page' );
+
+	add_settings_field( 'products_systems_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_systems', array( 'key' => 'products_systems_eyebrow', 'placeholder' => esc_html__( 'Rehabilitation pathways', 'alrenas' ) ) );
+	add_settings_field( 'products_systems_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_systems', array( 'key' => 'products_systems_heading', 'placeholder' => esc_html__( 'From objective assessment to supported standing.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'products_systems_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-products-page', 'alrenas_products_systems', array( 'key' => 'products_systems_lead', 'placeholder' => esc_html__( 'Each system answers a different clinical need while sharing a focus on safe progression, feedback and measurable rehabilitation.', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_PRODUCTS_SYSTEM_COUNT; $i++ ) {
+		add_settings_field(
+			'product_capabilities_' . $i,
+			sprintf(
+				/* translators: %d: system slot number (matches Home — Products slot 1-3). */
+				esc_html__( 'System %d capabilities', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_product_capabilities',
+			'alrenas-content-products-page',
+			'alrenas_products_systems',
+			array( 'index' => $i )
+		);
+	}
+
+	add_settings_section( 'alrenas_products_selector', esc_html__( 'Selector section', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
+
+	add_settings_field( 'products_selector_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_selector', array( 'key' => 'products_selector_eyebrow', 'placeholder' => esc_html__( 'A simple starting point', 'alrenas' ) ) );
+	add_settings_field( 'products_selector_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_selector', array( 'key' => 'products_selector_heading', 'placeholder' => esc_html__( 'Which rehabilitation need are you addressing?', 'alrenas' ), 'wide' => true ) );
+
+	for ( $i = 1; $i <= ALRENAS_PRODUCTS_SELECTOR_COUNT; $i++ ) {
+		add_settings_field(
+			'selector_item_' . $i,
+			sprintf(
+				/* translators: %d: selector item slot number. */
+				esc_html__( 'Item %d', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_selector_item',
+			'alrenas-content-products-page',
+			'alrenas_products_selector',
+			array( 'index' => $i )
+		);
+	}
+
+	add_settings_section( 'alrenas_products_quote', esc_html__( 'Quotation process section', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
+
+	add_settings_field( 'products_quote_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_quote', array( 'key' => 'products_quote_eyebrow', 'placeholder' => esc_html__( 'How quotations work', 'alrenas' ) ) );
+	add_settings_field( 'products_quote_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_quote', array( 'key' => 'products_quote_heading', 'placeholder' => esc_html__( 'A configuration based on your clinical environment.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'products_quote_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-products-page', 'alrenas_products_quote', array( 'key' => 'products_quote_lead', 'placeholder' => esc_html__( 'Medical equipment is rarely a one-size-fits-all purchase. We use a short consultation to understand what you actually need before pricing the system.', 'alrenas' ) ) );
+
+	for ( $i = 1; $i <= ALRENAS_PRODUCTS_QUOTE_STEP_COUNT; $i++ ) {
+		add_settings_field(
+			'quote_step_' . $i,
+			sprintf(
+				/* translators: %d: quote step slot number. */
+				esc_html__( 'Step %d', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_quote_step',
+			'alrenas-content-products-page',
+			'alrenas_products_quote',
+			array( 'index' => $i )
+		);
+	}
+
 	// --- Footer ----------------------------------------------------------
 	add_settings_section( 'alrenas_site_content_footer', esc_html__( 'Footer', 'alrenas' ), '__return_false', 'alrenas-content-footer' );
 	add_settings_field( 'footer_description', esc_html__( 'Footer description', 'alrenas' ), 'alrenas_field_footer_description', 'alrenas-content-footer', 'alrenas_site_content_footer' );
@@ -584,6 +668,109 @@ function alrenas_field_story_point( $args ) {
 }
 
 /**
+ * Render a product-select field for a Products-page hero image slot.
+ *
+ * @param array $args Contains 'key' (site-content key).
+ */
+function alrenas_field_products_hero_image( $args ) {
+	$selected = (int) alrenas_get_site_content( $args['key'], 0 );
+	?>
+	<p>
+		<?php alrenas_render_product_select( ALRENAS_SITE_CONTENT_OPTION . '[' . $args['key'] . ']', $selected ); ?>
+		<span class="description"><?php esc_html_e( 'Uses that product\'s image. Leave unset to fall back to the most recent products.', 'alrenas' ); ?></span>
+	</p>
+	<?php
+}
+
+/**
+ * Intro text for the Products-page Systems settings section.
+ */
+function alrenas_section_products_systems_intro() {
+	echo '<p>' . esc_html__( 'The 3 system cards reuse the same product, badge, kicker, description, and tags configured under Home — Products. Capabilities (the 3 short highlights on each card) are specific to this page, so they\'re configured here, matched by slot number.', 'alrenas' ) . '</p>';
+}
+
+/**
+ * Render one system's capabilities field (comma-separated, matches the
+ * Home — Products slot with the same index).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_PRODUCTS_SYSTEM_COUNT).
+ */
+function alrenas_field_product_capabilities( $args ) {
+	$index         = (int) $args['index'];
+	$capabilities  = alrenas_get_site_content( 'product_capabilities', array() );
+	$value         = isset( $capabilities[ $index ] ) ? $capabilities[ $index ] : '';
+	$name          = ALRENAS_SITE_CONTENT_OPTION . '[product_capabilities][' . $index . ']';
+	?>
+	<p>
+		<input type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="large-text" placeholder="<?php esc_attr_e( 'e.g. Objective postural assessment, Fall-risk evaluation, Guided balance training', 'alrenas' ); ?>">
+	</p>
+	<?php
+}
+
+/**
+ * Render one selector-grid item fieldset (title + description + chip label).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_PRODUCTS_SELECTOR_COUNT).
+ */
+function alrenas_field_selector_item( $args ) {
+	$index = (int) $args['index'];
+	$items = alrenas_get_site_content( 'products_selector_items', array() );
+	$item  = isset( $items[ $index ] ) ? $items[ $index ] : array();
+
+	$title       = isset( $item['title'] ) ? $item['title'] : '';
+	$description = isset( $item['description'] ) ? $item['description'] : '';
+	$chip        = isset( $item['chip'] ) ? $item['chip'] : '';
+
+	$name = ALRENAS_SITE_CONTENT_OPTION . '[products_selector_items][' . $index . ']';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Measure static balance', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Description', 'alrenas' ); ?></label>
+			<textarea name="<?php echo esc_attr( $name ); ?>[description]" rows="2" class="large-text"><?php echo esc_textarea( $description ); ?></textarea>
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Chip label', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[chip]" value="<?php echo esc_attr( $chip ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Stabilometric', 'alrenas' ); ?>">
+		</p>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
+ * Render one quotation-process step fieldset (title + description).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_PRODUCTS_QUOTE_STEP_COUNT).
+ */
+function alrenas_field_quote_step( $args ) {
+	$index = (int) $args['index'];
+	$steps = alrenas_get_site_content( 'products_quote_steps', array() );
+	$step  = isset( $steps[ $index ] ) ? $steps[ $index ] : array();
+
+	$title       = isset( $step['title'] ) ? $step['title'] : '';
+	$description = isset( $step['description'] ) ? $step['description'] : '';
+
+	$name = ALRENAS_SITE_CONTENT_OPTION . '[products_quote_steps][' . $index . ']';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Tell us about your facility', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Description', 'alrenas' ); ?></label>
+			<textarea name="<?php echo esc_attr( $name ); ?>[description]" rows="2" class="large-text"><?php echo esc_textarea( $description ); ?></textarea>
+		</p>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
  * Best-effort admin preview thumbnail for any attachment type (image, SVG,
  * or video) -- falls back to WordPress's generic file-type icon so video
  * attachments still show something in the picker preview.
@@ -754,6 +941,19 @@ function alrenas_sanitize_site_content( $input ) {
 		'discipline_heading',
 		'story_eyebrow',
 		'story_heading',
+		'products_hero_eyebrow',
+		'products_hero_heading',
+		'products_hero_primary_label',
+		'products_hero_secondary_label',
+		'products_intro_eyebrow',
+		'products_intro_heading',
+		'products_intro_link_label',
+		'products_systems_eyebrow',
+		'products_systems_heading',
+		'products_selector_eyebrow',
+		'products_selector_heading',
+		'products_quote_eyebrow',
+		'products_quote_heading',
 	);
 
 	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
@@ -785,6 +985,63 @@ function alrenas_sanitize_site_content( $input ) {
 
 	$output['story_main_image_id']  = isset( $input['story_main_image_id'] ) ? absint( $input['story_main_image_id'] ) : 0;
 	$output['story_small_image_id'] = isset( $input['story_small_image_id'] ) ? absint( $input['story_small_image_id'] ) : 0;
+
+	$output['products_hero_lead']   = isset( $input['products_hero_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_hero_lead'] ) ) : '';
+	$output['products_intro_lead']  = isset( $input['products_intro_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_intro_lead'] ) ) : '';
+	$output['products_systems_lead'] = isset( $input['products_systems_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_systems_lead'] ) ) : '';
+	$output['products_quote_lead']  = isset( $input['products_quote_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_quote_lead'] ) ) : '';
+
+	$output['products_hero_main_product_id'] = isset( $input['products_hero_main_product_id'] ) ? absint( $input['products_hero_main_product_id'] ) : 0;
+	$output['products_hero_mini_product_id'] = isset( $input['products_hero_mini_product_id'] ) ? absint( $input['products_hero_mini_product_id'] ) : 0;
+
+	$output['product_capabilities'] = array();
+
+	if ( ! empty( $input['product_capabilities'] ) && is_array( $input['product_capabilities'] ) ) {
+		foreach ( $input['product_capabilities'] as $index => $value ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_PRODUCTS_SYSTEM_COUNT ) {
+				continue;
+			}
+
+			$output['product_capabilities'][ $index ] = sanitize_text_field( wp_unslash( $value ) );
+		}
+	}
+
+	$output['products_selector_items'] = array();
+
+	if ( ! empty( $input['products_selector_items'] ) && is_array( $input['products_selector_items'] ) ) {
+		foreach ( $input['products_selector_items'] as $index => $item ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_PRODUCTS_SELECTOR_COUNT ) {
+				continue;
+			}
+
+			$output['products_selector_items'][ $index ] = array(
+				'title'       => isset( $item['title'] ) ? sanitize_text_field( wp_unslash( $item['title'] ) ) : '',
+				'description' => isset( $item['description'] ) ? sanitize_textarea_field( wp_unslash( $item['description'] ) ) : '',
+				'chip'        => isset( $item['chip'] ) ? sanitize_text_field( wp_unslash( $item['chip'] ) ) : '',
+			);
+		}
+	}
+
+	$output['products_quote_steps'] = array();
+
+	if ( ! empty( $input['products_quote_steps'] ) && is_array( $input['products_quote_steps'] ) ) {
+		foreach ( $input['products_quote_steps'] as $index => $step ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_PRODUCTS_QUOTE_STEP_COUNT ) {
+				continue;
+			}
+
+			$output['products_quote_steps'][ $index ] = array(
+				'title'       => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
+				'description' => isset( $step['description'] ) ? sanitize_textarea_field( wp_unslash( $step['description'] ) ) : '',
+			);
+		}
+	}
 
 	$output['story_points'] = array();
 
