@@ -46,9 +46,10 @@ function alrenas_get_site_content( $key, $default = '' ) {
  */
 function alrenas_site_content_tabs() {
 	return array(
-		'home-hero'     => esc_html__( 'Home — Hero', 'alrenas' ),
-		'home-products' => esc_html__( 'Home — Products', 'alrenas' ),
-		'footer'        => esc_html__( 'Footer', 'alrenas' ),
+		'home-hero'       => esc_html__( 'Home — Hero', 'alrenas' ),
+		'home-products'   => esc_html__( 'Home — Products', 'alrenas' ),
+		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
+		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
 }
 
@@ -263,6 +264,12 @@ function alrenas_site_content_settings() {
 			array( 'index' => $i )
 		);
 	}
+
+	// --- Home — Care Strip -----------------------------------------------
+	add_settings_section( 'alrenas_site_content_care_strip', esc_html__( 'Care strip', 'alrenas' ), '__return_false', 'alrenas-content-home-care-strip' );
+
+	add_settings_field( 'care_strip_text', esc_html__( 'Intro text', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_text', 'placeholder' => esc_html__( 'Supporting rehabilitation across the continuum of care', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'care_strip_tags', esc_html__( 'Tags (comma-separated)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_tags', 'placeholder' => esc_html__( 'Balance rehabilitation, Fall-risk assessment, Postural control, Mobility training, Muscle strengthening', 'alrenas' ), 'wide' => true ) );
 
 	// --- Footer ----------------------------------------------------------
 	add_settings_section( 'alrenas_site_content_footer', esc_html__( 'Footer', 'alrenas' ), '__return_false', 'alrenas-content-footer' );
@@ -489,6 +496,8 @@ function alrenas_sanitize_site_content( $input ) {
 		'hero_secondary_url',
 		'hero_tags',
 		'home_products_eyebrow',
+		'care_strip_text',
+		'care_strip_tags',
 	);
 
 	foreach ( $text_keys as $key ) {
