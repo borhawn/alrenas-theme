@@ -206,6 +206,8 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .discipline-tab:hover{background:#fff;color:var(--blue-700)}
 .discipline-tab.is-active{background:#fff;color:var(--blue-700);box-shadow:inset 3px 0 0 var(--teal-600)}
 .discipline-panel{min-height:360px;padding:58px 62px;display:flex;flex-direction:column;justify-content:center}
+.discipline-panel.is-fading-in{animation:alrenas-panel-fade-in .18s ease-out}
+@keyframes alrenas-panel-fade-in{from{opacity:0}to{opacity:1}}
 .discipline-panel>span{color:var(--teal-600);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .discipline-panel h3{margin-top:14px;max-width:720px;font-size:clamp(31px,3vw,42px)}
 .discipline-panel p{margin-top:18px;max-width:690px;font-size:18px}

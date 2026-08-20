@@ -110,6 +110,11 @@ document.querySelectorAll('[data-tabs]').forEach(tabRoot => {
       panels.forEach(panel => {
         const active = panel.dataset.panel === key;
         panel.hidden = !active;
+        panel.classList.remove('is-fading-in');
+        if (active) {
+          void panel.offsetWidth;
+          panel.classList.add('is-fading-in');
+        }
       });
     });
   });
