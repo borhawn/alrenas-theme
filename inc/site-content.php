@@ -18,6 +18,7 @@ define( 'ALRENAS_SITE_CONTENT_OPTION', 'alrenas_site_content' );
 define( 'ALRENAS_SITE_CONTENT_GROUP', 'alrenas_site_content_group' );
 define( 'ALRENAS_HERO_SLIDE_COUNT', 5 );
 define( 'ALRENAS_CARE_STEP_COUNT', 3 );
+define( 'ALRENAS_DISCIPLINE_COUNT', 4 );
 
 /**
  * Get a single site content value.
@@ -50,6 +51,7 @@ function alrenas_site_content_tabs() {
 		'home-hero'       => esc_html__( 'Home — Hero', 'alrenas' ),
 		'home-products'   => esc_html__( 'Home — Products', 'alrenas' ),
 		'home-process'    => esc_html__( 'Home — Process', 'alrenas' ),
+		'home-discipline' => esc_html__( 'Home — Disciplines', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
@@ -299,6 +301,29 @@ function alrenas_site_content_settings() {
 		);
 	}
 
+	// --- Home — Disciplines ------------------------------------------------
+	add_settings_section( 'alrenas_discipline_text', esc_html__( 'Section text', 'alrenas' ), '__return_false', 'alrenas-content-home-discipline' );
+
+	add_settings_field( 'discipline_eyebrow', esc_html__( 'Eyebrow (small label)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-discipline', 'alrenas_discipline_text', array( 'key' => 'discipline_eyebrow', 'placeholder' => esc_html__( 'Across rehabilitation specialties', 'alrenas' ) ) );
+	add_settings_field( 'discipline_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-discipline', 'alrenas_discipline_text', array( 'key' => 'discipline_heading', 'placeholder' => esc_html__( 'Built for different patients. One goal: better movement.', 'alrenas' ), 'wide' => true ) );
+
+	add_settings_section( 'alrenas_discipline_tabs', esc_html__( 'Tabs', 'alrenas' ), 'alrenas_section_discipline_tabs_intro', 'alrenas-content-home-discipline' );
+
+	for ( $i = 1; $i <= ALRENAS_DISCIPLINE_COUNT; $i++ ) {
+		add_settings_field(
+			'discipline_tab_' . $i,
+			sprintf(
+				/* translators: %d: tab slot number. */
+				esc_html__( 'Tab %d', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_discipline_tab',
+			'alrenas-content-home-discipline',
+			'alrenas_discipline_tabs',
+			array( 'index' => $i )
+		);
+	}
+
 	// --- Home — Care Strip -----------------------------------------------
 	add_settings_section( 'alrenas_site_content_care_strip', esc_html__( 'Care strip', 'alrenas' ), '__return_false', 'alrenas-content-home-care-strip' );
 
@@ -428,6 +453,52 @@ function alrenas_field_hero_slide( $args ) {
 		<p>
 			<label class="alrenas-field-label"><?php esc_html_e( 'Related product (shown in the floating card)', 'alrenas' ); ?></label>
 			<?php alrenas_render_product_select( $name . '[product_id]', $product_id ); ?>
+		</p>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
+ * Intro text for the Home Disciplines settings section.
+ */
+function alrenas_section_discipline_tabs_intro() {
+	echo '<p>' . esc_html__( 'Each tab has its own button label plus the kicker, title, and description shown in its panel.', 'alrenas' ) . '</p>';
+}
+
+/**
+ * Render one discipline-tab fieldset (label + kicker + title + description).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_DISCIPLINE_COUNT).
+ */
+function alrenas_field_discipline_tab( $args ) {
+	$index = (int) $args['index'];
+	$tabs  = alrenas_get_site_content( 'discipline_tabs', array() );
+	$tab   = isset( $tabs[ $index ] ) ? $tabs[ $index ] : array();
+
+	$label       = isset( $tab['label'] ) ? $tab['label'] : '';
+	$kicker      = isset( $tab['kicker'] ) ? $tab['kicker'] : '';
+	$title       = isset( $tab['title'] ) ? $tab['title'] : '';
+	$description = isset( $tab['description'] ) ? $tab['description'] : '';
+
+	$name = ALRENAS_SITE_CONTENT_OPTION . '[discipline_tabs][' . $index . ']';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Tab label', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[label]" value="<?php echo esc_attr( $label ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Neurological', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Panel kicker (small label above title)', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[kicker]" value="<?php echo esc_attr( $kicker ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Neurological rehabilitation', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Panel title', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="large-text" placeholder="<?php esc_attr_e( 'e.g. Support balance, motor control and confidence through structured training.', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Panel description', 'alrenas' ); ?></label>
+			<textarea name="<?php echo esc_attr( $name ); ?>[description]" rows="2" class="large-text"><?php echo esc_textarea( $description ); ?></textarea>
 		</p>
 	</fieldset>
 	<hr>
@@ -601,6 +672,8 @@ function alrenas_sanitize_site_content( $input ) {
 		'process_heading',
 		'process_link_label',
 		'process_link_url',
+		'discipline_eyebrow',
+		'discipline_heading',
 	);
 
 	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
@@ -659,6 +732,25 @@ function alrenas_sanitize_site_content( $input ) {
 				'title'       => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
 				'description' => isset( $step['description'] ) ? sanitize_textarea_field( wp_unslash( $step['description'] ) ) : '',
 				'media_id'    => isset( $step['media_id'] ) ? absint( $step['media_id'] ) : 0,
+			);
+		}
+	}
+
+	$output['discipline_tabs'] = array();
+
+	if ( ! empty( $input['discipline_tabs'] ) && is_array( $input['discipline_tabs'] ) ) {
+		foreach ( $input['discipline_tabs'] as $index => $tab ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_DISCIPLINE_COUNT ) {
+				continue;
+			}
+
+			$output['discipline_tabs'][ $index ] = array(
+				'label'       => isset( $tab['label'] ) ? sanitize_text_field( wp_unslash( $tab['label'] ) ) : '',
+				'kicker'      => isset( $tab['kicker'] ) ? sanitize_text_field( wp_unslash( $tab['kicker'] ) ) : '',
+				'title'       => isset( $tab['title'] ) ? sanitize_text_field( wp_unslash( $tab['title'] ) ) : '',
+				'description' => isset( $tab['description'] ) ? sanitize_textarea_field( wp_unslash( $tab['description'] ) ) : '',
 			);
 		}
 	}
