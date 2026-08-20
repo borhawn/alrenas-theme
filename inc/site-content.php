@@ -28,6 +28,7 @@ define( 'ALRENAS_ABOUT_MISSION_POINT_COUNT', 4 );
 define( 'ALRENAS_ABOUT_VALUE_COUNT', 3 );
 define( 'ALRENAS_ABOUT_STORY_POINT_COUNT', 3 );
 define( 'ALRENAS_ABOUT_QUALITY_BADGE_COUNT', 4 );
+define( 'ALRENAS_PRODUCT_SETTING_COUNT', 3 );
 
 /**
  * Get a single site content value.
@@ -67,6 +68,7 @@ function alrenas_site_content_tabs() {
 		'contact-page'    => esc_html__( 'Contact Page', 'alrenas' ),
 		'about-page'      => esc_html__( 'About Page', 'alrenas' ),
 		'site-cta'        => esc_html__( 'Site CTA', 'alrenas' ),
+		'single-product'  => esc_html__( 'Single Product Page', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
 }
@@ -614,6 +616,73 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'site_cta_secondary_label', esc_html__( 'Secondary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_secondary_label', 'placeholder' => esc_html__( 'Request a Quote', 'alrenas' ) ) );
 	add_settings_field( 'site_cta_secondary_url', esc_html__( 'Secondary button URL', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-site-cta', 'alrenas_site_cta', array( 'key' => 'site_cta_secondary_url', 'placeholder' => '/contact' ) );
 
+	// --- Single Product Page (text repeated across every product) --------
+	add_settings_section( 'alrenas_sp_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_primary_label', esc_html__( 'Primary button label (links to the inquiry form)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_hero', array( 'key' => 'sp_primary_label', 'placeholder' => esc_html__( 'Request a Quote', 'alrenas' ) ) );
+	add_settings_field( 'sp_secondary_label', esc_html__( 'Secondary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_hero', array( 'key' => 'sp_secondary_label', 'placeholder' => esc_html__( 'Request a Demo', 'alrenas' ) ) );
+	add_settings_field( 'sp_quote_note', esc_html__( 'Note under the buttons (%s becomes the product name)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_hero', array( 'key' => 'sp_quote_note', 'placeholder' => esc_html__( '%s is configured around your facility, clinical needs and support requirements. Pricing is provided by quotation.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_badge_title', esc_html__( 'Photo badge title', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_hero', array( 'key' => 'sp_badge_title', 'placeholder' => esc_html__( 'Clinical rehabilitation', 'alrenas' ) ) );
+	add_settings_field( 'sp_badge_subtitle', esc_html__( 'Photo badge subtitle', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_hero', array( 'key' => 'sp_badge_subtitle', 'placeholder' => esc_html__( 'Assessment + guided training', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_sp_intro', esc_html__( 'Intro section', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+	add_settings_field( 'sp_intro_link_label', esc_html__( 'Link label (scrolls to the workflow section)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_intro', array( 'key' => 'sp_intro_link_label', 'placeholder' => esc_html__( 'Explore the clinical workflow', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_sp_setting', esc_html__( 'Clinical settings section', 'alrenas' ), 'alrenas_section_sp_setting_intro', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_setting_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_setting', array( 'key' => 'sp_setting_eyebrow', 'placeholder' => esc_html__( 'Built for rehabilitation settings', 'alrenas' ) ) );
+	add_settings_field( 'sp_setting_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_setting', array( 'key' => 'sp_setting_heading', 'placeholder' => esc_html__( 'A system for clinicians who need both measurable assessment and adaptable therapy.', 'alrenas' ), 'wide' => true ) );
+
+	$setting_defaults = array(
+		1 => array( 'title' => esc_html__( 'Hospitals', 'alrenas' ), 'description' => esc_html__( 'Support structured balance evaluation and rehabilitation within multidisciplinary care pathways.', 'alrenas' ) ),
+		2 => array( 'title' => esc_html__( 'Physiotherapy', 'alrenas' ), 'description' => esc_html__( 'Combine assessment data with targeted exercises, dynamic challenges and patient feedback.', 'alrenas' ) ),
+		3 => array( 'title' => esc_html__( 'Rehabilitation centers', 'alrenas' ), 'description' => esc_html__( 'Use one system across neurological, orthopedic, geriatric and balance-focused programs.', 'alrenas' ) ),
+	);
+
+	for ( $i = 1; $i <= ALRENAS_PRODUCT_SETTING_COUNT; $i++ ) {
+		add_settings_field(
+			'sp_setting_' . $i,
+			sprintf( /* translators: %d: setting card slot number. */ esc_html__( 'Card %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-single-product',
+			'alrenas_sp_setting',
+			array(
+				'index'      => $i,
+				'option_key' => 'sp_setting_cards',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => $setting_defaults[ $i ]['title'] ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'textarea', 'placeholder' => $setting_defaults[ $i ]['description'] ),
+				),
+			)
+		);
+	}
+
+	add_settings_section( 'alrenas_sp_gallery', esc_html__( 'Gallery section', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_gallery_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_gallery', array( 'key' => 'sp_gallery_eyebrow', 'placeholder' => esc_html__( 'Product gallery', 'alrenas' ) ) );
+	add_settings_field( 'sp_gallery_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_gallery', array( 'key' => 'sp_gallery_heading', 'placeholder' => esc_html__( 'See the system in detail.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_gallery_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_gallery', array( 'key' => 'sp_gallery_lead', 'placeholder' => esc_html__( 'Product, clinical use and software views from the current system.', 'alrenas' ), 'wide' => true ) );
+
+	add_settings_section( 'alrenas_sp_details', esc_html__( 'Technical information section', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_details_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_details', array( 'key' => 'sp_details_eyebrow', 'placeholder' => esc_html__( 'Technical information', 'alrenas' ) ) );
+	add_settings_field( 'sp_details_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_details', array( 'key' => 'sp_details_heading', 'placeholder' => esc_html__( 'Everything your clinical and procurement team needs to evaluate the system.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_details_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_details', array( 'key' => 'sp_details_lead', 'placeholder' => esc_html__( 'Technical information stays available without dominating the rehabilitation story. Open the sections you need.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_certifications', esc_html__( 'Certification chips (comma-separated)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_details', array( 'key' => 'sp_certifications', 'placeholder' => esc_html__( 'CE, UKCA, 2-year warranty', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_details_note', esc_html__( 'Note shown if a product has no attributes yet', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_details', array( 'key' => 'sp_details_note', 'placeholder' => esc_html__( 'Detailed specifications for this system are coming soon.', 'alrenas' ), 'wide' => true ) );
+
+	add_settings_section( 'alrenas_sp_video', esc_html__( 'Video section', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_video_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_video', array( 'key' => 'sp_video_eyebrow', 'placeholder' => esc_html__( 'See it in action', 'alrenas' ) ) );
+	add_settings_field( 'sp_video_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_video', array( 'key' => 'sp_video_heading', 'placeholder' => esc_html__( 'Watch the system in a clinical setting.', 'alrenas' ), 'wide' => true ) );
+
+	add_settings_section( 'alrenas_sp_documentation', esc_html__( 'Documentation section', 'alrenas' ), '__return_false', 'alrenas-content-single-product' );
+
+	add_settings_field( 'sp_documentation_kicker', esc_html__( 'Kicker', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_documentation', array( 'key' => 'sp_documentation_kicker', 'placeholder' => esc_html__( 'Product documentation', 'alrenas' ) ) );
+	add_settings_field( 'sp_documentation_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_documentation', array( 'key' => 'sp_documentation_heading', 'placeholder' => esc_html__( 'Need the complete product information?', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_documentation_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_documentation', array( 'key' => 'sp_documentation_lead', 'placeholder' => esc_html__( 'Download the current product document for technical review, internal evaluation or procurement discussions.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'sp_documentation_button', esc_html__( 'Button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_documentation', array( 'key' => 'sp_documentation_button', 'placeholder' => esc_html__( 'Download Documentation', 'alrenas' ) ) );
+
 	// --- Footer ----------------------------------------------------------
 	add_settings_section( 'alrenas_site_content_footer', esc_html__( 'Footer', 'alrenas' ), '__return_false', 'alrenas-content-footer' );
 	add_settings_field( 'footer_description', esc_html__( 'Footer description', 'alrenas' ), 'alrenas_field_footer_description', 'alrenas-content-footer', 'alrenas_site_content_footer' );
@@ -1011,6 +1080,13 @@ function alrenas_sanitize_repeater_field( $raw, $count, $fields ) {
 }
 
 /**
+ * Intro text for the Single-Product-Page clinical-settings section.
+ */
+function alrenas_section_sp_setting_intro() {
+	echo '<p>' . esc_html__( 'This text and these 3 cards repeat identically on every product page. Everything else on the product page (title, images, description, tags, workflow tabs, specifications, video, document) is configured per product -- on that product\'s own edit screen.', 'alrenas' ) . '</p>';
+}
+
+/**
  * Intro text for the shared Site CTA settings section.
  */
 function alrenas_section_site_cta_intro() {
@@ -1232,6 +1308,28 @@ function alrenas_sanitize_site_content( $input ) {
 		'site_cta_primary_url',
 		'site_cta_secondary_label',
 		'site_cta_secondary_url',
+		'sp_primary_label',
+		'sp_secondary_label',
+		'sp_quote_note',
+		'sp_badge_title',
+		'sp_badge_subtitle',
+		'sp_intro_link_label',
+		'sp_setting_eyebrow',
+		'sp_setting_heading',
+		'sp_gallery_eyebrow',
+		'sp_gallery_heading',
+		'sp_gallery_lead',
+		'sp_details_eyebrow',
+		'sp_details_heading',
+		'sp_details_lead',
+		'sp_certifications',
+		'sp_details_note',
+		'sp_video_eyebrow',
+		'sp_video_heading',
+		'sp_documentation_kicker',
+		'sp_documentation_heading',
+		'sp_documentation_lead',
+		'sp_documentation_button',
 	);
 
 	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url', 'site_cta_primary_url', 'site_cta_secondary_url' );
@@ -1345,6 +1443,7 @@ function alrenas_sanitize_site_content( $input ) {
 	$output['about_value_cards']     = alrenas_sanitize_repeater_field( $input['about_value_cards'] ?? null, ALRENAS_ABOUT_VALUE_COUNT, array( 'title' => 'text', 'description' => 'textarea' ) );
 	$output['about_story_points']    = alrenas_sanitize_repeater_field( $input['about_story_points'] ?? null, ALRENAS_ABOUT_STORY_POINT_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
 	$output['about_quality_badges']  = alrenas_sanitize_repeater_field( $input['about_quality_badges'] ?? null, ALRENAS_ABOUT_QUALITY_BADGE_COUNT, array( 'value' => 'text', 'label' => 'text' ) );
+	$output['sp_setting_cards']      = alrenas_sanitize_repeater_field( $input['sp_setting_cards'] ?? null, ALRENAS_PRODUCT_SETTING_COUNT, array( 'title' => 'text', 'description' => 'textarea' ) );
 
 	$output['story_points'] = array();
 

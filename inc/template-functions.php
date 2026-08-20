@@ -150,6 +150,38 @@ function alrenas_get_contact_menu_entry( $type ) {
 	return null;
 }
 
+/**
+ * Convert any common YouTube URL form (watch?v=, youtu.be/, embed/,
+ * shorts/) into a privacy-enhanced embed URL, or '' if it isn't
+ * recognizable as a YouTube URL.
+ *
+ * @param string $url Raw URL as entered by an admin.
+ * @return string
+ */
+function alrenas_get_youtube_embed_url( $url ) {
+	$url = trim( (string) $url );
+
+	if ( ! $url ) {
+		return '';
+	}
+
+	$video_id = '';
+
+	if ( preg_match( '~youtu\.be/([A-Za-z0-9_-]{6,})~', $url, $matches ) ) {
+		$video_id = $matches[1];
+	} elseif ( preg_match( '~[?&]v=([A-Za-z0-9_-]{6,})~', $url, $matches ) ) {
+		$video_id = $matches[1];
+	} elseif ( preg_match( '~youtube\.com/(?:embed|shorts)/([A-Za-z0-9_-]{6,})~', $url, $matches ) ) {
+		$video_id = $matches[1];
+	}
+
+	if ( ! $video_id ) {
+		return '';
+	}
+
+	return 'https://www.youtube-nocookie.com/embed/' . $video_id;
+}
+
 function alrenas_body_classes( $classes ) {
 	if ( ! is_singular() ) {
 		$classes[] = 'hfeed';

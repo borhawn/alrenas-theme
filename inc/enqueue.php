@@ -125,6 +125,7 @@ function alrenas_enqueue_assets() {
 	if ( $is_product ) {
 		wp_enqueue_style( 'alrenas-product-style' );
 		wp_enqueue_script( 'alrenas-shared-script' );
+		wp_enqueue_script( 'alrenas-product-script' );
 		$integration_dependencies = array( 'alrenas-product-style' );
 	} elseif ( is_front_page() ) {
 		wp_enqueue_style( 'alrenas-base-style' );

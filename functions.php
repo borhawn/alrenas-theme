@@ -21,6 +21,8 @@ require_once get_template_directory() . '/inc/related-product.php';
 require_once get_template_directory() . '/inc/featured-post.php';
 require_once get_template_directory() . '/inc/nav-mega-menu.php';
 require_once get_template_directory() . '/inc/disable-comments.php';
+require_once get_template_directory() . '/inc/product-attributes.php';
+require_once get_template_directory() . '/inc/product-meta.php';
 
 /**
  * Register editable theme menu locations.
