@@ -91,7 +91,7 @@ if ( ! $rows ) {
 							<?php endforeach; ?>
 						</div>
 					<?php endif; ?>
-					<a class="text-link" href="<?php echo esc_url( $row['permalink'] ); ?>">
+					<a class="text-link stretched-link" href="<?php echo esc_url( $row['permalink'] ); ?>">
 						<?php esc_html_e( 'View product', 'alrenas' ); ?> <span aria-hidden="true">→</span>
 					</a>
 				</div>

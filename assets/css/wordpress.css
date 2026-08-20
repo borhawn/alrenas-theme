@@ -3,7 +3,7 @@
 .screen-reader-text:focus{z-index:100000;top:8px;left:8px;width:auto;height:auto;margin:0;padding:12px 16px;clip:auto;background:#fff;color:var(--blue-700);border-radius:8px;box-shadow:var(--shadow-card)}
 .brand-image{display:block!important;width:auto!important;max-width:260px!important;height:40px!important;object-fit:contain!important}
 .brand--footer .brand-image{filter:brightness(0) invert(1)}
-.article-card,.feature-article,.related-card{position:relative;cursor:pointer}
+.article-card,.feature-article,.related-card,.product-row{position:relative;cursor:pointer}
 .stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
 .site-nav{margin:0;padding:0;list-style:none}
 .footer-menu ul{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0;padding:0;list-style:none}
