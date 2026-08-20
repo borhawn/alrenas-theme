@@ -5,6 +5,7 @@
 .brand--footer .brand-image{filter:brightness(0) invert(1)}
 .article-card,.feature-article,.related-card,.product-row{position:relative;cursor:pointer}
 .stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
+.product-row .stretched-link::after{z-index:4}
 .site-nav{margin:0;padding:0;list-style:none}
 .footer-menu ul{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0;padding:0;list-style:none}
 .footer-menu li{margin:0;padding:0}
