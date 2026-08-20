@@ -40,6 +40,43 @@ function alrenas_logo_image_html( $attachment_id, $alt, $class = 'brand-image' )
 	);
 }
 
+/**
+ * Render an attachment as whichever tag its type needs: <video> for video
+ * files (autoplaying, muted, looped — treated as an ambient clip, not a
+ * player), <img> for everything else (photos, webp, svg).
+ *
+ * @param int    $attachment_id Attachment ID.
+ * @param string $class         CSS class for the rendered tag.
+ * @return string
+ */
+function alrenas_render_media_html( $attachment_id, $class = '' ) {
+	$attachment_id = (int) $attachment_id;
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	$mime = get_post_mime_type( $attachment_id );
+
+	if ( $mime && 0 === strpos( $mime, 'video/' ) ) {
+		$src = wp_get_attachment_url( $attachment_id );
+
+		if ( ! $src ) {
+			return '';
+		}
+
+		return sprintf(
+			'<video class="%s" src="%s" autoplay muted loop playsinline preload="metadata"></video>',
+			esc_attr( $class ),
+			esc_url( $src )
+		);
+	}
+
+	$image = wp_get_attachment_image( $attachment_id, 'large', false, array( 'class' => $class ) );
+
+	return $image ? $image : '';
+}
+
 function alrenas_body_classes( $classes ) {
 	if ( ! is_singular() ) {
 		$classes[] = 'hfeed';

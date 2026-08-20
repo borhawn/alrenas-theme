@@ -4,32 +4,66 @@
  *
  * @package Alrenas
  */
+
+$eyebrow    = alrenas_get_site_content( 'process_eyebrow', esc_html__( 'Designed around rehabilitation', 'alrenas' ) );
+$heading    = alrenas_get_site_content( 'process_heading', esc_html__( 'From assessment to progress, one clearer path to recovery.', 'alrenas' ) );
+$lead       = alrenas_get_site_content( 'process_lead', esc_html__( 'Alrenas systems help healthcare professionals assess balance objectively, guide patients through targeted rehabilitation exercises and follow progress over time.', 'alrenas' ) );
+$link_label = alrenas_get_site_content( 'process_link_label', esc_html__( 'See the systems', 'alrenas' ) );
+$link_url   = alrenas_get_site_content( 'process_link_url', '#products' );
+
+$step_defaults = array(
+	1 => array(
+		'title'       => esc_html__( 'Assess', 'alrenas' ),
+		'description' => esc_html__( 'Objective balance and postural measurements give clinicians a clearer baseline for treatment planning.', 'alrenas' ),
+		'variant'     => '',
+	),
+	2 => array(
+		'title'       => esc_html__( 'Train', 'alrenas' ),
+		'description' => esc_html__( 'Adaptable exercises and interactive rehabilitation activities support safe, patient-specific training.', 'alrenas' ),
+		'variant'     => 'care-card--teal',
+	),
+	3 => array(
+		'title'       => esc_html__( 'Follow progress', 'alrenas' ),
+		'description' => esc_html__( 'Repeatable tests and reporting help make improvement visible to clinicians, patients and care teams.', 'alrenas' ),
+		'variant'     => 'care-card--warm',
+	),
+);
+
+$saved_steps = alrenas_get_site_content( 'care_steps', array() );
 ?>
 <section class="section intro" id="care">
 	<div class="container intro-grid">
 		<div class="section-heading reveal">
-			<span class="eyebrow"><?php esc_html_e( 'Designed around rehabilitation', 'alrenas' ); ?></span>
-			<h2><?php esc_html_e( 'From assessment to progress, one clearer path to recovery.', 'alrenas' ); ?></h2>
+			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
+			<h2><?php echo esc_html( $heading ); ?></h2>
 		</div>
 		<div class="intro-copy reveal">
-			<p><?php esc_html_e( 'Alrenas systems help healthcare professionals assess balance objectively, guide patients through targeted rehabilitation exercises and follow progress over time.', 'alrenas' ); ?></p>
-			<a href="#products" class="text-link"><?php esc_html_e( 'See the systems', 'alrenas' ); ?> <span aria-hidden="true">→</span></a>
+			<p><?php echo esc_html( $lead ); ?></p>
+			<?php if ( $link_label ) : ?>
+				<a href="<?php echo esc_url( $link_url ); ?>" class="text-link"><?php echo esc_html( $link_label ); ?> <span aria-hidden="true">→</span></a>
+			<?php endif; ?>
 		</div>
 	</div>
 
 	<div class="container care-cards">
-		<article class="care-card reveal">
-			<div class="care-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M6 20c4-8 8-12 20-14M7 25c6-5 11-8 19-9"/><circle cx="7" cy="25" r="2.5"/></svg></div>
-			<span>01</span><h3><?php esc_html_e( 'Assess', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Objective balance and postural measurements give clinicians a clearer baseline for treatment planning.', 'alrenas' ); ?></p>
-		</article>
-		<article class="care-card care-card--teal reveal">
-			<div class="care-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M8 25V14m8 11V7m8 18V11"/><path d="M5 25h22"/></svg></div>
-			<span>02</span><h3><?php esc_html_e( 'Train', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Adaptable exercises and interactive rehabilitation activities support safe, patient-specific training.', 'alrenas' ); ?></p>
-		</article>
-		<article class="care-card care-card--warm reveal">
-			<div class="care-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M5 20l7-7 5 5 10-11"/><path d="M21 7h6v6"/></svg></div>
-			<span>03</span><h3><?php esc_html_e( 'Follow progress', 'alrenas' ); ?></h3><p><?php esc_html_e( 'Repeatable tests and reporting help make improvement visible to clinicians, patients and care teams.', 'alrenas' ); ?></p>
-		</article>
+		<?php foreach ( $step_defaults as $index => $default ) : ?>
+			<?php
+			$saved       = isset( $saved_steps[ $index ] ) ? $saved_steps[ $index ] : array();
+			$title       = ! empty( $saved['title'] ) ? $saved['title'] : $default['title'];
+			$description = ! empty( $saved['description'] ) ? $saved['description'] : $default['description'];
+			$media_id    = ! empty( $saved['media_id'] ) ? (int) $saved['media_id'] : 0;
+			?>
+			<article class="care-card <?php echo esc_attr( $default['variant'] ); ?> reveal">
+				<div class="care-card-body">
+					<h3><?php echo esc_html( $title ); ?></h3>
+					<p><?php echo esc_html( $description ); ?></p>
+				</div>
+				<?php if ( $media_id ) : ?>
+					<div class="care-card-media">
+						<?php echo alrenas_render_media_html( $media_id, 'care-card-media-el' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping helper. ?>
+					</div>
+				<?php endif; ?>
+			</article>
+		<?php endforeach; ?>
 	</div>
 </section>
-

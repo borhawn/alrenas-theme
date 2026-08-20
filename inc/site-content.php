@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'ALRENAS_SITE_CONTENT_OPTION', 'alrenas_site_content' );
 define( 'ALRENAS_SITE_CONTENT_GROUP', 'alrenas_site_content_group' );
 define( 'ALRENAS_HERO_SLIDE_COUNT', 5 );
+define( 'ALRENAS_CARE_STEP_COUNT', 3 );
 
 /**
  * Get a single site content value.
@@ -48,6 +49,7 @@ function alrenas_site_content_tabs() {
 	return array(
 		'home-hero'       => esc_html__( 'Home — Hero', 'alrenas' ),
 		'home-products'   => esc_html__( 'Home — Products', 'alrenas' ),
+		'home-process'    => esc_html__( 'Home — Process', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
@@ -156,7 +158,13 @@ function alrenas_site_content_inline_footer() {
 					frame.on( 'select', function () {
 						var attachment = frame.state().get( 'selection' ).first().toJSON();
 						input.value = attachment.id;
-						preview.src = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
+						if ( attachment.sizes && attachment.sizes.medium ) {
+							preview.src = attachment.sizes.medium.url;
+						} else if ( attachment.type === 'image' ) {
+							preview.src = attachment.url;
+						} else {
+							preview.src = attachment.icon || attachment.url;
+						}
 						preview.hidden = false;
 						if ( remove ) {
 							remove.hidden = false;
@@ -261,6 +269,32 @@ function alrenas_site_content_settings() {
 			'alrenas_field_home_product',
 			'alrenas-content-home-products',
 			'alrenas_site_content_home_products',
+			array( 'index' => $i )
+		);
+	}
+
+	// --- Home — Process ----------------------------------------------------
+	add_settings_section( 'alrenas_process_text', esc_html__( 'Section text', 'alrenas' ), '__return_false', 'alrenas-content-home-process' );
+
+	add_settings_field( 'process_eyebrow', esc_html__( 'Eyebrow (small label)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-process', 'alrenas_process_text', array( 'key' => 'process_eyebrow', 'placeholder' => esc_html__( 'Designed around rehabilitation', 'alrenas' ) ) );
+	add_settings_field( 'process_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-process', 'alrenas_process_text', array( 'key' => 'process_heading', 'placeholder' => esc_html__( 'From assessment to progress, one clearer path to recovery.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'process_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-home-process', 'alrenas_process_text', array( 'key' => 'process_lead', 'placeholder' => esc_html__( 'Alrenas systems help healthcare professionals assess balance objectively, guide patients through targeted rehabilitation exercises and follow progress over time.', 'alrenas' ) ) );
+	add_settings_field( 'process_link_label', esc_html__( 'Link label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-process', 'alrenas_process_text', array( 'key' => 'process_link_label', 'placeholder' => esc_html__( 'See the systems', 'alrenas' ) ) );
+	add_settings_field( 'process_link_url', esc_html__( 'Link URL', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-process', 'alrenas_process_text', array( 'key' => 'process_link_url', 'placeholder' => '#products' ) );
+
+	add_settings_section( 'alrenas_process_steps', esc_html__( 'Boxes', 'alrenas' ), 'alrenas_section_process_steps_intro', 'alrenas-content-home-process' );
+
+	for ( $i = 1; $i <= ALRENAS_CARE_STEP_COUNT; $i++ ) {
+		add_settings_field(
+			'care_step_' . $i,
+			sprintf(
+				/* translators: %d: box slot number. */
+				esc_html__( 'Box %d', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_care_step',
+			'alrenas-content-home-process',
+			'alrenas_process_steps',
 			array( 'index' => $i )
 		);
 	}
@@ -401,6 +435,71 @@ function alrenas_field_hero_slide( $args ) {
 }
 
 /**
+ * Best-effort admin preview thumbnail for any attachment type (image, SVG,
+ * or video) -- falls back to WordPress's generic file-type icon so video
+ * attachments still show something in the picker preview.
+ *
+ * @param int $media_id Attachment ID.
+ * @return string
+ */
+function alrenas_admin_media_preview_url( $media_id ) {
+	$image_url = wp_get_attachment_image_url( $media_id, 'medium' );
+
+	if ( $image_url ) {
+		return $image_url;
+	}
+
+	$icon_url = wp_mime_type_icon( $media_id );
+
+	return $icon_url ? $icon_url : '';
+}
+
+/**
+ * Intro text for the Home Process settings section.
+ */
+function alrenas_section_process_steps_intro() {
+	echo '<p>' . esc_html__( 'Title and description for each box, plus an optional image, SVG, or .webm video shown at the bottom of the box. Media fills the full width with no side padding, and every box is the same height.', 'alrenas' ) . '</p>';
+}
+
+/**
+ * Render one process-step fieldset (title + description + media).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_CARE_STEP_COUNT).
+ */
+function alrenas_field_care_step( $args ) {
+	$index = (int) $args['index'];
+	$steps = alrenas_get_site_content( 'care_steps', array() );
+	$step  = isset( $steps[ $index ] ) ? $steps[ $index ] : array();
+
+	$title       = isset( $step['title'] ) ? $step['title'] : '';
+	$description = isset( $step['description'] ) ? $step['description'] : '';
+	$media_id    = isset( $step['media_id'] ) ? (int) $step['media_id'] : 0;
+
+	$name      = ALRENAS_SITE_CONTENT_OPTION . '[care_steps][' . $index . ']';
+	$media_url = $media_id ? alrenas_admin_media_preview_url( $media_id ) : '';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Assess', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Description', 'alrenas' ); ?></label>
+			<textarea name="<?php echo esc_attr( $name ); ?>[description]" rows="2" class="large-text"><?php echo esc_textarea( $description ); ?></textarea>
+		</p>
+		<p class="alrenas-image-field">
+			<span class="alrenas-field-label"><?php esc_html_e( 'Media (image, SVG, or .webm video)', 'alrenas' ); ?></span>
+			<img class="alrenas-image-preview" src="<?php echo esc_url( $media_url ); ?>" <?php echo $media_url ? '' : 'hidden'; ?>>
+			<input type="hidden" name="<?php echo esc_attr( $name ); ?>[media_id]" value="<?php echo esc_attr( $media_id ); ?>">
+			<button type="button" class="button alrenas-media-picker" data-title="<?php esc_attr_e( 'Select box media', 'alrenas' ); ?>"><?php esc_html_e( 'Select media', 'alrenas' ); ?></button>
+			<button type="button" class="button alrenas-media-remove" <?php echo $media_url ? '' : 'hidden'; ?>><?php esc_html_e( 'Remove', 'alrenas' ); ?></button>
+		</p>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
  * Intro text for the Home Products settings section.
  */
 function alrenas_section_home_products_intro() {
@@ -498,7 +597,13 @@ function alrenas_sanitize_site_content( $input ) {
 		'home_products_eyebrow',
 		'care_strip_text',
 		'care_strip_tags',
+		'process_eyebrow',
+		'process_heading',
+		'process_link_label',
+		'process_link_url',
 	);
+
+	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
 
 	foreach ( $text_keys as $key ) {
 		if ( ! isset( $input[ $key ] ) ) {
@@ -508,13 +613,17 @@ function alrenas_sanitize_site_content( $input ) {
 
 		$value = wp_unslash( $input[ $key ] );
 
-		$output[ $key ] = ( 'hero_primary_url' === $key || 'hero_secondary_url' === $key )
+		$output[ $key ] = in_array( $key, $url_keys, true )
 			? esc_url_raw( $value )
 			: sanitize_text_field( $value );
 	}
 
 	$output['hero_lead'] = isset( $input['hero_lead'] )
 		? sanitize_textarea_field( wp_unslash( $input['hero_lead'] ) )
+		: '';
+
+	$output['process_lead'] = isset( $input['process_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['process_lead'] ) )
 		: '';
 
 	$output['hero_slides'] = array();
@@ -532,6 +641,24 @@ function alrenas_sanitize_site_content( $input ) {
 				'caption_title'   => isset( $slide['caption_title'] ) ? sanitize_text_field( wp_unslash( $slide['caption_title'] ) ) : '',
 				'caption_subtext' => isset( $slide['caption_subtext'] ) ? sanitize_text_field( wp_unslash( $slide['caption_subtext'] ) ) : '',
 				'product_id'      => isset( $slide['product_id'] ) ? absint( $slide['product_id'] ) : 0,
+			);
+		}
+	}
+
+	$output['care_steps'] = array();
+
+	if ( ! empty( $input['care_steps'] ) && is_array( $input['care_steps'] ) ) {
+		foreach ( $input['care_steps'] as $index => $step ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_CARE_STEP_COUNT ) {
+				continue;
+			}
+
+			$output['care_steps'][ $index ] = array(
+				'title'       => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
+				'description' => isset( $step['description'] ) ? sanitize_textarea_field( wp_unslash( $step['description'] ) ) : '',
+				'media_id'    => isset( $step['media_id'] ) ? absint( $step['media_id'] ) : 0,
 			);
 		}
 	}
