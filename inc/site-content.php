@@ -19,6 +19,7 @@ define( 'ALRENAS_SITE_CONTENT_GROUP', 'alrenas_site_content_group' );
 define( 'ALRENAS_HERO_SLIDE_COUNT', 5 );
 define( 'ALRENAS_CARE_STEP_COUNT', 3 );
 define( 'ALRENAS_DISCIPLINE_COUNT', 4 );
+define( 'ALRENAS_STORY_POINT_COUNT', 3 );
 
 /**
  * Get a single site content value.
@@ -52,6 +53,7 @@ function alrenas_site_content_tabs() {
 		'home-products'   => esc_html__( 'Home — Products', 'alrenas' ),
 		'home-process'    => esc_html__( 'Home — Process', 'alrenas' ),
 		'home-discipline' => esc_html__( 'Home — Disciplines', 'alrenas' ),
+		'home-story'      => esc_html__( 'Home — Clinical Story', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
 	);
@@ -324,6 +326,35 @@ function alrenas_site_content_settings() {
 		);
 	}
 
+	// --- Home — Clinical Story -----------------------------------------
+	add_settings_section( 'alrenas_story_text', esc_html__( 'Section text', 'alrenas' ), '__return_false', 'alrenas-content-home-story' );
+
+	add_settings_field( 'story_eyebrow', esc_html__( 'Eyebrow (small label)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-story', 'alrenas_story_text', array( 'key' => 'story_eyebrow', 'placeholder' => esc_html__( 'For real clinical environments', 'alrenas' ) ) );
+	add_settings_field( 'story_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-story', 'alrenas_story_text', array( 'key' => 'story_heading', 'placeholder' => esc_html__( 'Technology should support therapy, not get in the way of it.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'story_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-home-story', 'alrenas_story_text', array( 'key' => 'story_lead', 'placeholder' => esc_html__( 'Every interaction is built around the practical needs of rehabilitation: patient safety, adjustable support, clear feedback and repeatable clinical assessment.', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_story_images', esc_html__( 'Images', 'alrenas' ), '__return_false', 'alrenas-content-home-story' );
+
+	add_settings_field( 'story_main_image', esc_html__( 'Main image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-home-story', 'alrenas_story_images', array( 'key' => 'story_main_image_id', 'title' => esc_html__( 'Select main image', 'alrenas' ) ) );
+	add_settings_field( 'story_small_image', esc_html__( 'Small overlapping image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-home-story', 'alrenas_story_images', array( 'key' => 'story_small_image_id', 'title' => esc_html__( 'Select small image', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_story_points', esc_html__( 'Points', 'alrenas' ), '__return_false', 'alrenas-content-home-story' );
+
+	for ( $i = 1; $i <= ALRENAS_STORY_POINT_COUNT; $i++ ) {
+		add_settings_field(
+			'story_point_' . $i,
+			sprintf(
+				/* translators: %d: point slot number. */
+				esc_html__( 'Point %d', 'alrenas' ),
+				$i
+			),
+			'alrenas_field_story_point',
+			'alrenas-content-home-story',
+			'alrenas_story_points',
+			array( 'index' => $i )
+		);
+	}
+
 	// --- Home — Care Strip -----------------------------------------------
 	add_settings_section( 'alrenas_site_content_care_strip', esc_html__( 'Care strip', 'alrenas' ), '__return_false', 'alrenas-content-home-care-strip' );
 
@@ -506,6 +537,53 @@ function alrenas_field_discipline_tab( $args ) {
 }
 
 /**
+ * Render a single image-picker field for the clinical story section.
+ *
+ * @param array $args Contains 'key' (site-content key) and 'title' (media modal title).
+ */
+function alrenas_field_story_image( $args ) {
+	$image_id  = (int) alrenas_get_site_content( $args['key'], 0 );
+	$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'medium' ) : '';
+	?>
+	<p class="alrenas-image-field">
+		<img class="alrenas-image-preview" src="<?php echo esc_url( $image_url ); ?>" <?php echo $image_url ? '' : 'hidden'; ?>>
+		<input type="hidden" name="<?php echo esc_attr( ALRENAS_SITE_CONTENT_OPTION ); ?>[<?php echo esc_attr( $args['key'] ); ?>]" value="<?php echo esc_attr( $image_id ); ?>">
+		<button type="button" class="button alrenas-media-picker" data-title="<?php echo esc_attr( $args['title'] ); ?>"><?php esc_html_e( 'Select image', 'alrenas' ); ?></button>
+		<button type="button" class="button alrenas-media-remove" <?php echo $image_url ? '' : 'hidden'; ?>><?php esc_html_e( 'Remove', 'alrenas' ); ?></button>
+	</p>
+	<?php
+}
+
+/**
+ * Render one clinical-story point fieldset (title + text).
+ *
+ * @param array $args Contains 'index' (1-ALRENAS_STORY_POINT_COUNT).
+ */
+function alrenas_field_story_point( $args ) {
+	$index  = (int) $args['index'];
+	$points = alrenas_get_site_content( 'story_points', array() );
+	$point  = isset( $points[ $index ] ) ? $points[ $index ] : array();
+
+	$title = isset( $point['title'] ) ? $point['title'] : '';
+	$text  = isset( $point['text'] ) ? $point['text'] : '';
+
+	$name = ALRENAS_SITE_CONTENT_OPTION . '[story_points][' . $index . ']';
+	?>
+	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Patient-centered', 'alrenas' ); ?>">
+		</p>
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Text', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[text]" value="<?php echo esc_attr( $text ); ?>" class="large-text" placeholder="<?php esc_attr_e( 'e.g. Adapt treatment to different abilities and rehabilitation stages.', 'alrenas' ); ?>">
+		</p>
+	</fieldset>
+	<hr>
+	<?php
+}
+
+/**
  * Best-effort admin preview thumbnail for any attachment type (image, SVG,
  * or video) -- falls back to WordPress's generic file-type icon so video
  * attachments still show something in the picker preview.
@@ -674,6 +752,8 @@ function alrenas_sanitize_site_content( $input ) {
 		'process_link_url',
 		'discipline_eyebrow',
 		'discipline_heading',
+		'story_eyebrow',
+		'story_heading',
 	);
 
 	$url_keys = array( 'hero_primary_url', 'hero_secondary_url', 'process_link_url' );
@@ -698,6 +778,30 @@ function alrenas_sanitize_site_content( $input ) {
 	$output['process_lead'] = isset( $input['process_lead'] )
 		? sanitize_textarea_field( wp_unslash( $input['process_lead'] ) )
 		: '';
+
+	$output['story_lead'] = isset( $input['story_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['story_lead'] ) )
+		: '';
+
+	$output['story_main_image_id']  = isset( $input['story_main_image_id'] ) ? absint( $input['story_main_image_id'] ) : 0;
+	$output['story_small_image_id'] = isset( $input['story_small_image_id'] ) ? absint( $input['story_small_image_id'] ) : 0;
+
+	$output['story_points'] = array();
+
+	if ( ! empty( $input['story_points'] ) && is_array( $input['story_points'] ) ) {
+		foreach ( $input['story_points'] as $index => $point ) {
+			$index = (int) $index;
+
+			if ( $index < 1 || $index > ALRENAS_STORY_POINT_COUNT ) {
+				continue;
+			}
+
+			$output['story_points'][ $index ] = array(
+				'title' => isset( $point['title'] ) ? sanitize_text_field( wp_unslash( $point['title'] ) ) : '',
+				'text'  => isset( $point['text'] ) ? sanitize_text_field( wp_unslash( $point['text'] ) ) : '',
+			);
+		}
+	}
 
 	$output['hero_slides'] = array();
 
