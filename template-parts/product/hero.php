@@ -15,9 +15,12 @@ if ( ! $product ) {
 	return;
 }
 
-$kicker     = alrenas_get_product_meta( $product->get_id(), 'hero_kicker' );
-$stat_value = alrenas_get_product_meta( $product->get_id(), 'hero_stat_value' );
-$stat_label = alrenas_get_product_meta( $product->get_id(), 'hero_stat_label' );
+$product_id = $product->get_id();
+$kicker     = alrenas_get_product_meta( $product_id, 'hero_kicker' );
+$badge_title    = alrenas_get_product_meta( $product_id, 'hero_badge_title' );
+$badge_subtitle = alrenas_get_product_meta( $product_id, 'hero_badge_subtitle' );
+$stat_value = alrenas_get_product_meta( $product_id, 'hero_stat_value' );
+$stat_label = alrenas_get_product_meta( $product_id, 'hero_stat_label' );
 
 $title       = $product->get_name();
 $title_words = explode( ' ', $title );
@@ -25,14 +28,12 @@ $title_last  = array_pop( $title_words );
 $title_rest  = implode( ' ', $title_words );
 
 $lead = $product->get_short_description();
-$tags = wc_get_product_tag_list( $product->get_id(), ',' );
+$tags = wc_get_product_tag_list( $product_id, ',' );
 $tags = $tags ? array_filter( array_map( 'trim', explode( ',', wp_strip_all_tags( $tags ) ) ) ) : array();
 
 $primary_label   = alrenas_get_site_content( 'sp_primary_label', esc_html__( 'Request a Quote', 'alrenas' ) );
 $secondary_label = alrenas_get_site_content( 'sp_secondary_label', esc_html__( 'Request a Demo', 'alrenas' ) );
-$quote_note      = alrenas_get_site_content( 'sp_quote_note', esc_html__( '%s is configured around your facility, clinical needs and support requirements. Pricing is provided by quotation.', 'alrenas' ) );
-$badge_title     = alrenas_get_site_content( 'sp_badge_title', esc_html__( 'Clinical rehabilitation', 'alrenas' ) );
-$badge_subtitle  = alrenas_get_site_content( 'sp_badge_subtitle', esc_html__( 'Assessment + guided training', 'alrenas' ) );
+$quote_note      = alrenas_get_site_content( 'sp_quote_note', esc_html__( 'Quoted according to your facility, intended use, configuration and support requirements — not sold as a fixed-price ecommerce product.', 'alrenas' ) );
 
 $image_id  = $product->get_image_id();
 $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_placeholder_img_src( 'large' );
@@ -55,7 +56,7 @@ $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_
 			</div>
 
 			<?php if ( $quote_note ) : ?>
-				<p class="quote-note"><span aria-hidden="true">i</span> <?php echo esc_html( sprintf( $quote_note, $title ) ); ?></p>
+				<p class="quote-note"><span aria-hidden="true">i</span> <?php echo esc_html( $quote_note ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $tags ) : ?>

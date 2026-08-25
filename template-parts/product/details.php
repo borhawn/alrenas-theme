@@ -13,11 +13,13 @@ if ( ! $product instanceof WC_Product ) {
 	return;
 }
 
+$product_id      = $product->get_id();
 $groups          = alrenas_get_grouped_product_attributes( $product );
 $eyebrow         = alrenas_get_site_content( 'sp_details_eyebrow', esc_html__( 'Technical information', 'alrenas' ) );
-$heading         = alrenas_get_site_content( 'sp_details_heading', esc_html__( 'Everything your clinical and procurement team needs to evaluate the system.', 'alrenas' ) );
-$lead            = alrenas_get_site_content( 'sp_details_lead', esc_html__( 'Technical information stays available without dominating the rehabilitation story. Open the sections you need.', 'alrenas' ) );
-$certifications  = array_filter( array_map( 'trim', explode( ',', alrenas_get_site_content( 'sp_certifications', esc_html__( 'CE, UKCA, 2-year warranty', 'alrenas' ) ) ) ) );
+$heading         = alrenas_get_product_meta( $product_id, 'details_heading', esc_html__( 'Key specifications for clinical and procurement review.', 'alrenas' ) );
+$lead            = alrenas_get_product_meta( $product_id, 'details_lead', esc_html__( 'Technical information stays available without dominating the rehabilitation story. Open the sections you need.', 'alrenas' ) );
+$certifications_raw = alrenas_get_product_meta( $product_id, 'certifications', alrenas_get_site_content( 'sp_certifications', esc_html__( 'CE, UKCA, 2-year warranty', 'alrenas' ) ) );
+$certifications  = array_filter( array_map( 'trim', explode( ',', $certifications_raw ) ) );
 $empty_note      = alrenas_get_site_content( 'sp_details_note', esc_html__( 'Detailed specifications for this system are coming soon.', 'alrenas' ) );
 ?>
 <section class="section product-details" id="details">

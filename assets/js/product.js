@@ -75,3 +75,17 @@ if (productForm) {
     link.addEventListener('click', () => setInquiryType(link.dataset.inquiryIntent));
   });
 }
+
+document.querySelectorAll('[data-faq]').forEach(faqRoot => {
+  faqRoot.querySelectorAll('.faq-item button').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const item = trigger.closest('.faq-item');
+      const answer = item?.querySelector('.faq-answer');
+      if (!item || !answer) return;
+      const open = item.classList.contains('is-open');
+      item.classList.toggle('is-open', !open);
+      trigger.setAttribute('aria-expanded', String(!open));
+      answer.hidden = open;
+    });
+  });
+});

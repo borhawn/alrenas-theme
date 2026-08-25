@@ -36,8 +36,8 @@ if ( ! $images ) {
 }
 
 $eyebrow = alrenas_get_site_content( 'sp_gallery_eyebrow', esc_html__( 'Product gallery', 'alrenas' ) );
-$heading = alrenas_get_site_content( 'sp_gallery_heading', esc_html__( 'See the system in detail.', 'alrenas' ) );
-$lead    = alrenas_get_site_content( 'sp_gallery_lead', esc_html__( 'Product, clinical use and software views from the current system.', 'alrenas' ) );
+$heading = alrenas_get_product_meta( $product->get_id(), 'gallery_heading', esc_html__( 'See the system in detail.', 'alrenas' ) );
+$lead    = alrenas_get_product_meta( $product->get_id(), 'gallery_lead', esc_html__( 'Product, clinical use and software views from the current system.', 'alrenas' ) );
 $main    = $images[0];
 ?>
 <section class="section product-gallery-section">

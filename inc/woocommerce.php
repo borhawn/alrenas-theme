@@ -48,13 +48,16 @@ function alrenas_woocommerce_wrappers() {
 add_action( 'wp', 'alrenas_woocommerce_wrappers' );
 
 /**
- * Add the theme's plugin-controlled inquiry section after WooCommerce's own
- * tabs, upsells and related-product callbacks.
+ * Print Product + FAQPage structured data for single-product pages.
  */
-function alrenas_product_inquiry() {
-	get_template_part( 'template-parts/product/product-inquiry' );
+function alrenas_output_product_schema() {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+
+	get_template_part( 'template-parts/product/schema' );
 }
-add_action( 'woocommerce_after_single_product_summary', 'alrenas_product_inquiry', 30 );
+add_action( 'wp_head', 'alrenas_output_product_schema' );
 
 /**
  * Open the theme's WooCommerce content wrapper.

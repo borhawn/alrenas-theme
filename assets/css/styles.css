@@ -117,6 +117,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .hero-photo-caption-text strong{font-family:Manrope,sans-serif;font-size:13px;color:var(--ink-900)}
 .hero-photo-caption-text span{margin-top:2px;font-size:11px;color:var(--ink-600)}
 .hero-status-dot{flex:0 0 auto;margin-top:5px;width:8px;height:8px;border-radius:50%;background:var(--teal-600);box-shadow:0 0 0 4px rgba(62,143,131,.16);animation:hero-status-pulse 2.2s ease-in-out infinite}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--teal-600);box-shadow:0 0 0 5px rgba(62,143,131,.13);flex:0 0 auto}
 @keyframes hero-status-pulse{0%,100%{box-shadow:0 0 0 4px rgba(62,143,131,.16)}50%{box-shadow:0 0 0 7px rgba(62,143,131,.05)}}
 
 /* Related-product chip: small, clickable, sits inside the photo's bottom-left corner */
