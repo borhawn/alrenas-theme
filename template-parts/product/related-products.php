@@ -64,7 +64,7 @@ if ( ! $related ) {
 						<?php if ( $item['kicker'] ) : ?><span class="product-kicker"><?php echo esc_html( $item['kicker'] ); ?></span><?php endif; ?>
 						<h3><?php echo esc_html( $item['title'] ); ?></h3>
 						<?php if ( $item['description'] ) : ?><p><?php echo esc_html( $item['description'] ); ?></p><?php endif; ?>
-						<a class="text-link" href="<?php echo esc_url( $item['permalink'] ); ?>"><?php esc_html_e( 'View system', 'alrenas' ); ?> <span aria-hidden="true">→</span></a>
+						<a class="text-link stretched-link" href="<?php echo esc_url( $item['permalink'] ); ?>"><?php esc_html_e( 'View system', 'alrenas' ); ?> <span aria-hidden="true">→</span></a>
 					</div>
 				</article>
 			<?php endforeach; ?>
