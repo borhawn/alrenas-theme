@@ -78,6 +78,36 @@ function alrenas_render_media_html( $attachment_id, $class = '' ) {
 }
 
 /**
+ * URL of the page using the "Contact" page template, resolved by template
+ * rather than a hardcoded slug so it keeps working if the page is ever
+ * renamed/moved. Falls back to /contact/ if no such page is found.
+ *
+ * @return string
+ */
+function alrenas_get_contact_page_url() {
+	static $url = null;
+
+	if ( null !== $url ) {
+		return $url;
+	}
+
+	$pages = get_posts(
+		array(
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'meta_key'       => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small site, cached via static.
+			'meta_value'     => 'page-contact.php', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			'fields'         => 'ids',
+		)
+	);
+
+	$url = $pages ? get_permalink( $pages[0] ) : home_url( '/contact/' );
+
+	return $url;
+}
+
+/**
  * Read the items in the 'contact' nav menu location, typed by URL scheme
  * (tel: / mailto: / anything else = address), for places that need to
  * display phone/email/address individually rather than as a plain link
