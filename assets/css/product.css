@@ -304,7 +304,14 @@
    image is capped by max-height, a horizontal one by max-width, and
    WooCommerce's own core CSS (.woocommerce-page img{height:auto;max-width:100%})
    can't fight this because those happen to be values this rule wants too. */
-.gallery-main img { max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; border-radius: 14px; transition: transform .4s var(--ease), opacity .13s ease; }
+/* min-width/min-height:0 is the fix here, not just decoration: grid items
+   default to min-width/min-height:auto, which for a replaced element like
+   <img> resolves to its natural intrinsic size -- so the grid's auto track
+   was sizing itself to the image's full native pixel dimensions before
+   max-width/max-height ever got a chance to constrain it (the classic
+   "grid blowout" bug), which is what made images render oversized/cropped
+   instead of contained. */
+.gallery-main img { min-width: 0 !important; min-height: 0 !important; max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; object-fit: contain; border-radius: 14px; transition: transform .4s var(--ease), opacity .13s ease; }
 .gallery-main:hover img { transform: scale(1.012); }
 .gallery-thumbs { display: flex; flex-direction: column; gap: 11px; max-height: 630px; overflow-y: auto; scrollbar-width: thin; }
 .gallery-thumbs::-webkit-scrollbar { width: 6px; }
