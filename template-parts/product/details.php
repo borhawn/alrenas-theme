@@ -40,7 +40,7 @@ $empty_note      = alrenas_get_site_content( 'sp_details_note', esc_html__( 'Det
 				<?php foreach ( $groups as $i => $group ) : ?>
 					<article class="detail-item<?php echo 0 === $i ? ' is-open' : ''; ?>">
 						<button type="button" class="detail-trigger" aria-expanded="<?php echo 0 === $i ? 'true' : 'false'; ?>"><span><?php echo esc_html( $group['label'] ); ?></span><i></i></button>
-						<div class="detail-content" <?php echo 0 === $i ? '' : 'hidden'; ?>>
+						<div class="detail-content" aria-hidden="<?php echo 0 === $i ? 'false' : 'true'; ?>">
 							<dl class="spec-list">
 								<?php foreach ( $group['specs'] as $spec ) : ?>
 									<div><dt><?php echo esc_html( $spec['label'] ); ?></dt><dd><?php echo esc_html( $spec['value'] ); ?></dd></div>

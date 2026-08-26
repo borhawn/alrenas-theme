@@ -107,9 +107,12 @@ if (accordionRoot) {
       const content = item?.querySelector('.detail-content');
       if (!item || !content) return;
       const open = item.classList.contains('is-open');
+      // No [hidden] toggle here on purpose -- hidden forces display:none,
+      // which can't be transitioned. Visibility is driven entirely by the
+      // is-open class (max-height/opacity in product.css) so it animates.
       item.classList.toggle('is-open', !open);
       trigger.setAttribute('aria-expanded', String(!open));
-      content.hidden = open;
+      content.setAttribute('aria-hidden', String(open));
     });
   });
 }
@@ -140,9 +143,11 @@ document.querySelectorAll('[data-faq]').forEach(faqRoot => {
       const answer = item?.querySelector('.faq-answer');
       if (!item || !answer) return;
       const open = item.classList.contains('is-open');
+      // Same reasoning as the details accordion above: no [hidden] toggle,
+      // the is-open class alone drives the animated expand/collapse.
       item.classList.toggle('is-open', !open);
       trigger.setAttribute('aria-expanded', String(!open));
-      answer.hidden = open;
+      answer.setAttribute('aria-hidden', String(open));
     });
   });
 });

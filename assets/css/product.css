@@ -234,6 +234,13 @@
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(23,80,111,.05);
 }
+.workflow-panel.is-fading-in {
+  /* Reuses the keyframe already defined in styles.css (loaded on every
+     product page as the base bundle), same fade used for the homepage
+     discipline tabs -- switching tabs fades the new panel in instead of
+     an instant cut. */
+  animation: alrenas-panel-fade-in .18s ease-out;
+}
 .workflow-copy { padding: 58px 52px; display: flex; flex-direction: column; justify-content: center; }
 .workflow-copy h3 { margin: 12px 0 18px; font-family: Manrope,sans-serif; font-size: clamp(32px,3vw,42px); line-height: 1.1; letter-spacing: -.035em; }
 .workflow-copy > p { margin: 0; color: var(--ink-600); font-size: 18px; }
@@ -326,7 +333,8 @@
 .detail-trigger i::before { width: 14px; height: 2px; left: 2px; top: 8px; }
 .detail-trigger i::after { width: 2px; height: 14px; left: 8px; top: 2px; }
 .detail-item.is-open .detail-trigger i::after { transform: rotate(90deg); }
-.detail-content { padding: 0 0 28px; }
+.detail-content { max-height: 0; padding: 0; overflow: hidden; opacity: 0; transition: max-height .3s ease, padding .3s ease, opacity .25s ease; }
+.detail-item.is-open .detail-content { max-height: 900px; padding: 0 0 28px; opacity: 1; }
 .spec-list { margin: 0; }
 .spec-list > div { min-height: 49px; display: grid; grid-template-columns: minmax(160px,.7fr) 1.3fr; gap: 22px; align-items: center; border-top: 1px solid rgba(207,223,231,.72); }
 .spec-list dt { color: var(--ink-600); font-size: 14px; }
@@ -513,7 +521,8 @@
 .faq-item button i::before { width:14px;height:2px;left:2px;top:8px; }
 .faq-item button i::after { width:2px;height:14px;left:8px;top:2px; }
 .faq-item.is-open button i::after { transform:rotate(90deg); }
-.faq-answer { padding:0 42px 25px 0; }
+.faq-answer { max-height:0;padding:0;overflow:hidden;opacity:0;transition:max-height .3s ease,padding .3s ease,opacity .25s ease; }
+.faq-item.is-open .faq-answer { max-height:600px;padding:0 42px 25px 0;opacity:1; }
 .faq-answer p { font-size:15px; }
 
 .related-products { background:#fff; }

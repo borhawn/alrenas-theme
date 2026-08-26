@@ -33,7 +33,7 @@ if ( ! $items ) {
 			<?php foreach ( $items as $i => $item ) : ?>
 				<article class="faq-item<?php echo 0 === $i ? ' is-open' : ''; ?>">
 					<button type="button" aria-expanded="<?php echo 0 === $i ? 'true' : 'false'; ?>"><span><?php echo esc_html( $item['question'] ); ?></span><i></i></button>
-					<div class="faq-answer" <?php echo 0 === $i ? '' : 'hidden'; ?>><p><?php echo esc_html( $item['answer'] ); ?></p></div>
+					<div class="faq-answer" aria-hidden="<?php echo 0 === $i ? 'false' : 'true'; ?>"><p><?php echo esc_html( $item['answer'] ); ?></p></div>
 				</article>
 			<?php endforeach; ?>
 		</div>
