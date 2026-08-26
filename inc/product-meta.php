@@ -68,6 +68,7 @@ function alrenas_register_product_meta_boxes() {
 		'alrenas-product-workflow'      => array( __( 'Alrenas: Clinical workflow', 'alrenas' ), 'alrenas_render_workflow_meta_box' ),
 		'alrenas-product-note'          => array( __( 'Alrenas: Clinical note band', 'alrenas' ), 'alrenas_render_note_meta_box' ),
 		'alrenas-product-story'         => array( __( 'Alrenas: Feature story section', 'alrenas' ), 'alrenas_render_story_meta_box' ),
+		'alrenas-product-software'      => array( __( 'Alrenas: Software showcase', 'alrenas' ), 'alrenas_render_software_meta_box' ),
 		'alrenas-product-applications'  => array( __( 'Alrenas: Clinical applications (4 cards)', 'alrenas' ), 'alrenas_render_applications_meta_box' ),
 		'alrenas-product-gallery-text'  => array( __( 'Alrenas: Gallery section text', 'alrenas' ), 'alrenas_render_gallery_text_meta_box' ),
 		'alrenas-product-details-text'  => array( __( 'Alrenas: Technical information text', 'alrenas' ), 'alrenas_render_details_text_meta_box' ),
@@ -443,6 +444,29 @@ function alrenas_render_story_meta_box( $post ) {
 	);
 }
 
+/**
+ * Software-showcase meta box: section intro + an add/remove-able list of
+ * screens (title, description, 16:9 screenshot). Rendered as tabs on the
+ * front end when there's more than one; a single screen just shows on its
+ * own with no tab list.
+ */
+function alrenas_render_software_meta_box( $post ) {
+	alrenas_pm_text( '_alrenas_software_eyebrow', __( 'Eyebrow', 'alrenas' ), alrenas_get_product_meta( $post->ID, 'software_eyebrow' ), __( 'e.g. Software', 'alrenas' ) );
+	alrenas_pm_text( '_alrenas_software_heading', __( 'Heading', 'alrenas' ), alrenas_get_product_meta( $post->ID, 'software_heading' ), __( 'e.g. See what the software can do.', 'alrenas' ) );
+	alrenas_pm_textarea( '_alrenas_software_lead', __( 'Paragraph (optional)', 'alrenas' ), alrenas_get_product_meta( $post->ID, 'software_lead' ), __( 'e.g. A closer look at the screens clinicians and patients use every day.', 'alrenas' ) );
+	echo '<p class="description">' . esc_html__( 'Add as many software screens as this product has -- one is fine, so is ten. Each needs a title, description, and a 16:9 screenshot.', 'alrenas' ) . '</p>';
+	alrenas_pm_dynamic_repeater(
+		'software_items',
+		array(
+			'title'       => array( 'label' => __( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => __( 'e.g. Assessment dashboard', 'alrenas' ) ),
+			'description' => array( 'label' => __( 'Description', 'alrenas' ), 'type' => 'textarea', 'placeholder' => __( 'e.g. Review balance scores, patient history and session comparisons at a glance.', 'alrenas' ) ),
+			'image_id'    => array( 'label' => __( 'Screenshot (16:9 recommended)', 'alrenas' ), 'type' => 'media', 'placeholder' => __( 'Select screenshot', 'alrenas' ) ),
+		),
+		alrenas_get_product_meta( $post->ID, 'software_items', array() ),
+		__( '+ Add software screen', 'alrenas' )
+	);
+}
+
 function alrenas_render_applications_meta_box( $post ) {
 	alrenas_pm_text( '_alrenas_applications_eyebrow', __( 'Eyebrow', 'alrenas' ), alrenas_get_product_meta( $post->ID, 'applications_eyebrow' ), __( 'e.g. Where dynamic balance fits', 'alrenas' ) );
 	alrenas_pm_text( '_alrenas_applications_heading', __( 'Heading', 'alrenas' ), alrenas_get_product_meta( $post->ID, 'applications_heading' ), __( 'e.g. For rehabilitation programs that need progression beyond a stable surface.', 'alrenas' ) );
@@ -548,6 +572,7 @@ function alrenas_save_product_meta( $post_id ) {
 		'_alrenas_workflow_eyebrow', '_alrenas_workflow_heading',
 		'_alrenas_note_eyebrow', '_alrenas_note_heading',
 		'_alrenas_story_eyebrow', '_alrenas_story_heading',
+		'_alrenas_software_eyebrow', '_alrenas_software_heading',
 		'_alrenas_applications_eyebrow', '_alrenas_applications_heading',
 		'_alrenas_gallery_heading', '_alrenas_gallery_lead',
 		'_alrenas_details_heading', '_alrenas_details_lead', '_alrenas_certifications',
@@ -564,7 +589,7 @@ function alrenas_save_product_meta( $post_id ) {
 		}
 	}
 
-	$textarea_fields = array( '_alrenas_workflow_lead', '_alrenas_note_paragraph', '_alrenas_note_list', '_alrenas_story_paragraph', '_alrenas_procurement_lead', '_alrenas_documentation_lead' );
+	$textarea_fields = array( '_alrenas_workflow_lead', '_alrenas_note_paragraph', '_alrenas_note_list', '_alrenas_story_paragraph', '_alrenas_software_lead', '_alrenas_procurement_lead', '_alrenas_documentation_lead' );
 
 	foreach ( $textarea_fields as $key ) {
 		if ( isset( $_POST[ $key ] ) ) {
@@ -594,6 +619,11 @@ function alrenas_save_product_meta( $post_id ) {
 	update_post_meta( $post_id, '_alrenas_faq_items', alrenas_sanitize_pm_dynamic_repeater(
 		$_POST['_alrenas_faq_items'] ?? null,
 		array( 'question' => 'required', 'answer' => 'textarea' )
+	) );
+
+	update_post_meta( $post_id, '_alrenas_software_items', alrenas_sanitize_pm_dynamic_repeater(
+		$_POST['_alrenas_software_items'] ?? null,
+		array( 'title' => 'required', 'description' => 'textarea', 'image_id' => 'int' )
 	) );
 }
 add_action( 'save_post', 'alrenas_save_product_meta' );

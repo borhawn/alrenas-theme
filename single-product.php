@@ -32,6 +32,7 @@ get_header();
 		get_template_part( 'template-parts/product/gallery' );
 		get_template_part( 'template-parts/product/workflow' );
 		get_template_part( 'template-parts/product/story' );
+		get_template_part( 'template-parts/product/software' );
 		get_template_part( 'template-parts/product/applications' );
 		get_template_part( 'template-parts/product/note-band' );
 		get_template_part( 'template-parts/product/details' );
