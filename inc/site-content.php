@@ -622,8 +622,7 @@ function alrenas_site_content_settings() {
 	// own "Alrenas:" meta boxes (see inc/product-meta.php).
 	add_settings_section( 'alrenas_sp_general', esc_html__( 'Shared text', 'alrenas' ), 'alrenas_section_sp_general_intro', 'alrenas-content-single-product' );
 
-	add_settings_field( 'sp_primary_label', esc_html__( 'Hero primary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_primary_label', 'placeholder' => esc_html__( 'Request a Quote', 'alrenas' ) ) );
-	add_settings_field( 'sp_secondary_label', esc_html__( 'Hero secondary button label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_secondary_label', 'placeholder' => esc_html__( 'Request a Demo', 'alrenas' ) ) );
+	add_settings_field( 'sp_primary_label', esc_html__( 'Hero primary button label (scrolls to the inquiry form)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_primary_label', 'placeholder' => esc_html__( 'Get a Quote', 'alrenas' ) ) );
 	add_settings_field( 'sp_quote_note', esc_html__( 'Hero note under the buttons', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_quote_note', 'placeholder' => esc_html__( 'Quoted according to your facility, intended use, configuration and support requirements — not sold as a fixed-price ecommerce product.', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'sp_gallery_eyebrow', esc_html__( 'Gallery section eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_gallery_eyebrow', 'placeholder' => esc_html__( 'Product gallery', 'alrenas' ) ) );
 	add_settings_field( 'sp_details_eyebrow', esc_html__( 'Technical information section eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_details_eyebrow', 'placeholder' => esc_html__( 'Technical information', 'alrenas' ) ) );
@@ -631,8 +630,8 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'sp_details_note', esc_html__( 'Note shown if a product has no attributes yet', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_details_note', 'placeholder' => esc_html__( 'Detailed specifications for this system are coming soon.', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'sp_procurement_eyebrow', esc_html__( 'Procurement section eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_procurement_eyebrow', 'placeholder' => esc_html__( 'Before requesting a quote', 'alrenas' ) ) );
 	add_settings_field( 'sp_faq_eyebrow', esc_html__( 'FAQ section eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_faq_eyebrow', 'placeholder' => esc_html__( 'Frequently asked questions', 'alrenas' ) ) );
-	add_settings_field( 'sp_documentation_download_label', esc_html__( 'Documentation button label (file uploaded)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_documentation_download_label', 'placeholder' => esc_html__( 'Download Documentation', 'alrenas' ) ) );
-	add_settings_field( 'sp_documentation_request_label', esc_html__( 'Documentation button label (no file uploaded yet)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_documentation_request_label', 'placeholder' => esc_html__( 'Request Documentation', 'alrenas' ) ) );
+	add_settings_field( 'sp_documentation_download_label', esc_html__( 'Documentation button label (file uploaded) -- used in both the hero and the documentation section', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_documentation_download_label', 'placeholder' => esc_html__( 'Download Documentation', 'alrenas' ) ) );
+	add_settings_field( 'sp_documentation_request_label', esc_html__( 'Documentation button label (no file uploaded yet) -- used in both the hero and the documentation section', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_documentation_request_label', 'placeholder' => esc_html__( 'Request Documentation', 'alrenas' ) ) );
 	add_settings_field( 'sp_related_eyebrow', esc_html__( 'Related-products section eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_related_eyebrow', 'placeholder' => esc_html__( 'Related rehabilitation systems', 'alrenas' ) ) );
 	add_settings_field( 'sp_related_link_label', esc_html__( 'Related-products link label', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-single-product', 'alrenas_sp_general', array( 'key' => 'sp_related_link_label', 'placeholder' => esc_html__( 'Compare all systems', 'alrenas' ) ) );
 
@@ -1262,7 +1261,6 @@ function alrenas_sanitize_site_content( $input ) {
 		'site_cta_secondary_label',
 		'site_cta_secondary_url',
 		'sp_primary_label',
-		'sp_secondary_label',
 		'sp_quote_note',
 		'sp_gallery_eyebrow',
 		'sp_details_eyebrow',

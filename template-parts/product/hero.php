@@ -31,9 +31,21 @@ $lead = $product->get_short_description();
 $tags = wc_get_product_tag_list( $product_id, ',' );
 $tags = $tags ? array_filter( array_map( 'trim', explode( ',', wp_strip_all_tags( $tags ) ) ) ) : array();
 
-$primary_label   = alrenas_get_site_content( 'sp_primary_label', esc_html__( 'Request a Quote', 'alrenas' ) );
-$secondary_label = alrenas_get_site_content( 'sp_secondary_label', esc_html__( 'Request a Demo', 'alrenas' ) );
+$primary_label   = alrenas_get_site_content( 'sp_primary_label', esc_html__( 'Get a Quote', 'alrenas' ) );
 $quote_note      = alrenas_get_site_content( 'sp_quote_note', esc_html__( 'Quoted according to your facility, intended use, configuration and support requirements — not sold as a fixed-price ecommerce product.', 'alrenas' ) );
+
+$document_id  = (int) alrenas_get_product_meta( $product_id, 'document_id', 0 );
+$document_url = $document_id ? wp_get_attachment_url( $document_id ) : '';
+
+if ( $document_url ) {
+	$secondary_label = alrenas_get_site_content( 'sp_documentation_download_label', esc_html__( 'Download Documentation', 'alrenas' ) );
+	$secondary_url   = $document_url;
+	$secondary_attrs = 'target="_blank" rel="noopener"';
+} else {
+	$secondary_label = alrenas_get_site_content( 'sp_documentation_request_label', esc_html__( 'Request Documentation', 'alrenas' ) );
+	$secondary_url   = '#inquiry';
+	$secondary_attrs = 'data-inquiry-intent="quote"';
+}
 
 $image_id  = $product->get_image_id();
 $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_placeholder_img_src( 'large' );
@@ -52,7 +64,7 @@ $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_
 
 			<div class="product-hero-actions">
 				<a href="#inquiry" class="btn btn-primary"><?php echo esc_html( $primary_label ); ?></a>
-				<a href="#inquiry" class="btn btn-secondary" data-inquiry-intent="demo"><?php echo esc_html( $secondary_label ); ?></a>
+				<a href="<?php echo esc_url( $secondary_url ); ?>" class="btn btn-secondary" <?php echo $secondary_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed attribute string, not user input. ?>><?php echo esc_html( $secondary_label ); ?></a>
 			</div>
 
 			<?php if ( $quote_note ) : ?>
