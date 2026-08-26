@@ -525,7 +525,7 @@
 .faq-item.is-open .faq-answer { max-height:600px;padding:0 42px 25px 0;opacity:1; }
 .faq-answer p { font-size:15px; }
 
-.related-products { background:#fff; }
+.related-products { background:#fff; padding-top:64px; }
 .related-head { display:flex;justify-content:space-between;gap:40px;align-items:end; }
 .related-head > div { max-width:760px; }
 .related-grid { margin-top:44px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px; }
