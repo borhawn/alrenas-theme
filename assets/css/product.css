@@ -291,11 +291,13 @@
 .gallery-heading { display: grid; grid-template-columns: 1.25fr .75fr; gap: 90px; align-items: end; }
 .gallery-heading p { margin: 0 0 5px; color: var(--ink-600); font-size: 18px; }
 .product-gallery { margin-top: 58px; display: grid; grid-template-columns: minmax(0,1fr) 122px; gap: 14px; }
-.gallery-main { min-height: 630px; padding: 48px; border: 1px solid #dce9ee; border-radius: var(--radius-lg); background: linear-gradient(145deg,#eef8fc,#edf8f5); cursor: zoom-in; overflow: hidden; }
-.gallery-main img { width: 100%; height: 100%; max-height: 560px; object-fit: contain; transition: transform .4s var(--ease); }
+.gallery-main { min-height: 630px; padding: 18px; border: 1px solid #dce9ee; border-radius: var(--radius-lg); background: linear-gradient(145deg,#eef8fc,#edf8f5); cursor: zoom-in; overflow: hidden; }
+.gallery-main img { width: 100%; height: 100%; object-fit: contain; transition: transform .4s var(--ease); }
 .gallery-main:hover img { transform: scale(1.012); }
-.gallery-thumbs { display: flex; flex-direction: column; gap: 11px; }
-.gallery-thumb { aspect-ratio: 1; padding: 8px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; overflow: hidden; transition: border-color .2s ease, box-shadow .2s ease; }
+.gallery-thumbs { display: flex; flex-direction: column; gap: 11px; max-height: 630px; overflow-y: auto; scrollbar-width: thin; }
+.gallery-thumbs::-webkit-scrollbar { width: 6px; }
+.gallery-thumbs::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+.gallery-thumb { aspect-ratio: 1; flex: 0 0 auto; padding: 8px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; overflow: hidden; transition: border-color .2s ease, box-shadow .2s ease; }
 .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
 .gallery-thumb:first-child img { object-fit: contain; background: var(--blue-050); }
 .gallery-thumb:hover,
@@ -351,6 +353,10 @@
 .gallery-lightbox[hidden] { display: none; }
 .gallery-lightbox img { max-width: min(1100px,90vw); max-height: 86vh; border-radius: 18px; background: #fff; box-shadow: 0 24px 80px rgba(0,0,0,.25); }
 .lightbox-close { position: absolute; top: 24px; right: 28px; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; font-size: 28px; line-height: 1; cursor: pointer; }
+.lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.3); border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; font-size: 30px; line-height: 1; cursor: pointer; transition: background .2s ease; }
+.lightbox-nav:hover { background: rgba(255,255,255,.22); }
+.lightbox-prev { left: 24px; }
+.lightbox-next { right: 24px; }
 
 @media (max-width: 1120px) {
   .product-hero-grid { grid-template-columns: .92fr 1.08fr; gap: 48px; }
@@ -409,13 +415,16 @@
   .clinical-list { grid-template-columns: 1fr; }
   .dynamic-care-caption { position: relative; width: calc(100% - 28px); right: auto; margin: -32px 14px 0; }
   .dynamic-care-media { padding-bottom: 0; }
-  .gallery-main { min-height: 420px; padding: 22px; }
+  .gallery-main { min-height: 420px; padding: 14px; }
   .gallery-thumb { flex-basis: 78px; }
   .spec-list > div { grid-template-columns: 1fr; gap: 2px; padding: 12px 0; }
   .documentation-card { padding: 26px; grid-template-columns: 1fr; }
   .documentation-card .btn { grid-column: auto; width: 100%; }
   .inquiry-type { grid-template-columns: 1fr; }
   .gallery-lightbox { padding: 18px; }
+  .lightbox-nav { width: 42px; height: 42px; font-size: 22px; }
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
 }
 
 /* Shared additions for the three SEO-focused product pages */

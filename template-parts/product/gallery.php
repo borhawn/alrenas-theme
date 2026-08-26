@@ -58,3 +58,14 @@ $main    = $images[0];
 		<?php endif; ?>
 	</div>
 </section>
+
+<div class="gallery-lightbox" data-lightbox hidden role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Product image', 'alrenas' ); ?>">
+	<button class="lightbox-close" type="button" data-lightbox-close aria-label="<?php esc_attr_e( 'Close image', 'alrenas' ); ?>">&times;</button>
+	<?php if ( count( $images ) > 1 ) : ?>
+		<button class="lightbox-nav lightbox-prev" type="button" data-lightbox-prev aria-label="<?php esc_attr_e( 'Previous image', 'alrenas' ); ?>">&lsaquo;</button>
+	<?php endif; ?>
+	<img src="" alt="" data-lightbox-image>
+	<?php if ( count( $images ) > 1 ) : ?>
+		<button class="lightbox-nav lightbox-next" type="button" data-lightbox-next aria-label="<?php esc_attr_e( 'Next image', 'alrenas' ); ?>">&rsaquo;</button>
+	<?php endif; ?>
+</div>

@@ -6,16 +6,36 @@ if (productGallery) {
   const lightbox = document.querySelector('[data-lightbox]');
   const lightboxImage = document.querySelector('[data-lightbox-image]');
   const closeLightbox = document.querySelector('[data-lightbox-close]');
+  const prevButton = document.querySelector('[data-lightbox-prev]');
+  const nextButton = document.querySelector('[data-lightbox-next]');
 
-  thumbs.forEach(thumb => {
-    thumb.addEventListener('click', () => {
-      thumbs.forEach(item => item.classList.remove('is-active'));
-      thumb.classList.add('is-active');
-      if (mainImage) {
-        mainImage.src = thumb.dataset.gallerySrc;
-        mainImage.alt = thumb.dataset.galleryAlt || 'Al Balance Dyn product image';
-      }
-    });
+  let activeIndex = Math.max(0, thumbs.findIndex(thumb => thumb.classList.contains('is-active')));
+
+  const setActive = (index, { scroll } = {}) => {
+    if (!thumbs.length) return;
+    activeIndex = (index + thumbs.length) % thumbs.length;
+    const thumb = thumbs[activeIndex];
+    const src = thumb.dataset.gallerySrc;
+    const alt = thumb.dataset.galleryAlt || '';
+
+    thumbs.forEach(item => item.classList.remove('is-active'));
+    thumb.classList.add('is-active');
+
+    if (mainImage) {
+      mainImage.src = src;
+      mainImage.alt = alt;
+    }
+    if (lightbox && !lightbox.hidden && lightboxImage) {
+      lightboxImage.src = src;
+      lightboxImage.alt = alt;
+    }
+    if (scroll) {
+      thumb.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    }
+  };
+
+  thumbs.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => setActive(index));
   });
 
   const openLightbox = () => {
@@ -37,8 +57,26 @@ if (productGallery) {
   lightbox?.addEventListener('click', event => {
     if (event.target === lightbox) close();
   });
+  prevButton?.addEventListener('click', () => setActive(activeIndex - 1, { scroll: true }));
+  nextButton?.addEventListener('click', () => setActive(activeIndex + 1, { scroll: true }));
+
+  // Left/right arrow keys step through the gallery whether or not the
+  // lightbox is open, as long as the visitor isn't typing somewhere else.
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && lightbox && !lightbox.hidden) close();
+    const active = document.activeElement;
+    const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+
+    if (event.key === 'Escape' && lightbox && !lightbox.hidden) {
+      close();
+      return;
+    }
+    if (isTyping) return;
+
+    if (event.key === 'ArrowLeft') {
+      setActive(activeIndex - 1, { scroll: true });
+    } else if (event.key === 'ArrowRight') {
+      setActive(activeIndex + 1, { scroll: true });
+    }
   });
 }
 
