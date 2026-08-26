@@ -11,6 +11,25 @@ if (productGallery) {
 
   let activeIndex = Math.max(0, thumbs.findIndex(thumb => thumb.classList.contains('is-active')));
 
+  // Quick fade-out/fade-in instead of an instant src swap when changing
+  // images (by thumbnail, arrow key, or lightbox nav) -- fast enough to
+  // stay snappy, smooth enough to feel deliberate rather than a jump cut.
+  const FADE_MS = 130;
+  let mainFadeTimer = null;
+  let lightboxFadeTimer = null;
+
+  const crossfade = imgEl => (src, alt) => {
+    if (!imgEl) return null;
+    imgEl.style.opacity = '0';
+    return window.setTimeout(() => {
+      imgEl.src = src;
+      imgEl.alt = alt;
+      imgEl.style.opacity = '1';
+    }, FADE_MS);
+  };
+  const fadeMainImage = crossfade(mainImage);
+  const fadeLightboxImage = crossfade(lightboxImage);
+
   const setActive = (index, { scroll } = {}) => {
     if (!thumbs.length) return;
     activeIndex = (index + thumbs.length) % thumbs.length;
@@ -22,12 +41,12 @@ if (productGallery) {
     thumb.classList.add('is-active');
 
     if (mainImage) {
-      mainImage.src = src;
-      mainImage.alt = alt;
+      window.clearTimeout(mainFadeTimer);
+      mainFadeTimer = fadeMainImage(src, alt);
     }
     if (lightbox && !lightbox.hidden && lightboxImage) {
-      lightboxImage.src = src;
-      lightboxImage.alt = alt;
+      window.clearTimeout(lightboxFadeTimer);
+      lightboxFadeTimer = fadeLightboxImage(src, alt);
     }
     if (scroll) {
       thumb.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
