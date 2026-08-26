@@ -298,8 +298,13 @@
 .gallery-heading { display: grid; grid-template-columns: 1.25fr .75fr; gap: 90px; align-items: end; }
 .gallery-heading p { margin: 0 0 5px; color: var(--ink-600); font-size: 18px; }
 .product-gallery { margin-top: 58px; display: grid; grid-template-columns: minmax(0,1fr) 122px; gap: 14px; }
-.gallery-main { position: relative; height: 630px; border: 1px solid #dce9ee; border-radius: var(--radius-lg); background: linear-gradient(145deg,#eef8fc,#edf8f5); cursor: zoom-in; overflow: hidden; }
-.gallery-main img { position: absolute; inset: 18px; object-fit: contain; border-radius: 14px; transition: transform .4s var(--ease), opacity .13s ease; }
+.gallery-main { position: relative; height: 630px; display: grid; place-items: center; padding: 18px; border: 1px solid #dce9ee; border-radius: var(--radius-lg); background: linear-gradient(145deg,#eef8fc,#edf8f5); cursor: zoom-in; overflow: hidden; }
+/* max-width/max-height (not width/height:100%) so the whole image is
+   always visible and centered, whichever way it's oriented -- a vertical
+   image is capped by max-height, a horizontal one by max-width, and
+   WooCommerce's own core CSS (.woocommerce-page img{height:auto;max-width:100%})
+   can't fight this because those happen to be values this rule wants too. */
+.gallery-main img { max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; border-radius: 14px; transition: transform .4s var(--ease), opacity .13s ease; }
 .gallery-main:hover img { transform: scale(1.012); }
 .gallery-thumbs { display: flex; flex-direction: column; gap: 11px; max-height: 630px; overflow-y: auto; scrollbar-width: thin; }
 .gallery-thumbs::-webkit-scrollbar { width: 6px; }
@@ -423,8 +428,7 @@
   .clinical-list { grid-template-columns: 1fr; }
   .dynamic-care-caption { position: relative; width: calc(100% - 28px); right: auto; margin: -32px 14px 0; }
   .dynamic-care-media { padding-bottom: 0; }
-  .gallery-main { height: 420px; }
-  .gallery-main img { inset: 14px; }
+  .gallery-main { height: 420px; padding: 14px; }
   .gallery-thumb { flex-basis: 78px; }
   .spec-list > div { grid-template-columns: 1fr; gap: 2px; padding: 12px 0; }
   .documentation-card { padding: 26px; grid-template-columns: 1fr; }
