@@ -108,6 +108,28 @@ function alrenas_register_assets() {
 		alrenas_asset_version( 'assets/js/hero-slider.js' ),
 		true
 	);
+
+	wp_register_style(
+		'alrenas-quote-modal',
+		get_theme_file_uri( 'assets/css/quote-modal.css' ),
+		array( 'alrenas-product-style' ),
+		alrenas_asset_version( 'assets/css/quote-modal.css' )
+	);
+
+	wp_register_script(
+		'alrenas-quote-modal',
+		get_theme_file_uri( 'assets/js/quote-modal.js' ),
+		array( 'alrenas-shared-script' ),
+		alrenas_asset_version( 'assets/js/quote-modal.js' ),
+		true
+	);
+
+	wp_register_style(
+		'alrenas-quote-view',
+		get_theme_file_uri( 'assets/css/quote-view.css' ),
+		array( 'alrenas-inner-style' ),
+		alrenas_asset_version( 'assets/css/quote-view.css' )
+	);
 }
 
 /**
@@ -120,13 +142,25 @@ function alrenas_enqueue_assets() {
 
 	alrenas_register_assets();
 
-	$is_product = is_singular( 'product' );
+	$is_product    = is_singular( 'product' );
+	$is_quote_view = function_exists( 'alrenas_is_quote_view_request' ) && alrenas_is_quote_view_request();
 
 	if ( $is_product ) {
 		wp_enqueue_style( 'alrenas-product-style' );
+		wp_enqueue_style( 'alrenas-quote-modal' );
 		wp_enqueue_script( 'alrenas-shared-script' );
 		wp_enqueue_script( 'alrenas-product-script' );
+		wp_enqueue_script( 'alrenas-quote-modal' );
 		$integration_dependencies = array( 'alrenas-product-style' );
+	} elseif ( $is_quote_view ) {
+		// The guest quote-view page renders at a virtual, unregistered
+		// URL intercepted on template_redirect (see inc/quotes/actions.php),
+		// so it needs its own branch rather than falling through to
+		// whichever real page/archive type that URL would otherwise 404 as.
+		wp_enqueue_style( 'alrenas-inner-style' );
+		wp_enqueue_style( 'alrenas-quote-view' );
+		wp_enqueue_script( 'alrenas-inner-script' );
+		$integration_dependencies = array( 'alrenas-inner-style' );
 	} elseif ( is_front_page() ) {
 		wp_enqueue_style( 'alrenas-base-style' );
 		wp_enqueue_style( 'alrenas-blog-card' );

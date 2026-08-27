@@ -23,6 +23,13 @@ require_once get_template_directory() . '/inc/nav-mega-menu.php';
 require_once get_template_directory() . '/inc/disable-comments.php';
 require_once get_template_directory() . '/inc/product-attributes.php';
 require_once get_template_directory() . '/inc/product-meta.php';
+require_once get_template_directory() . '/inc/quotes/statuses.php';
+require_once get_template_directory() . '/inc/quotes/intake.php';
+require_once get_template_directory() . '/inc/quotes/emails.php';
+require_once get_template_directory() . '/inc/quotes/admin-meta-boxes.php';
+require_once get_template_directory() . '/inc/quotes/admin-list.php';
+require_once get_template_directory() . '/inc/quotes/actions.php';
+require_once get_template_directory() . '/inc/quotes/frontend.php';
 
 /**
  * Register editable theme menu locations.

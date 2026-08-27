@@ -41,6 +41,7 @@ get_header();
 		get_template_part( 'template-parts/product/documentation' );
 		get_template_part( 'template-parts/product/related-products' );
 		get_template_part( 'template-parts/product/product-inquiry' );
+		get_template_part( 'template-parts/product/quote-modal' );
 	endwhile;
 	?>
 </main>

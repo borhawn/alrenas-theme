@@ -1,0 +1,195 @@
+/* "Get a Quote" intake modal. */
+
+.quote-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(13, 40, 54, .55);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+}
+
+.quote-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .2s ease, visibility 0s linear 0s;
+}
+
+.quote-modal-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.quote-modal-card {
+  position: relative;
+  width: min(560px, 100%);
+  max-height: min(720px, 90vh);
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 40px;
+  transform: translateY(14px) scale(.98);
+  transition: transform .22s var(--ease);
+}
+
+.quote-modal.is-open .quote-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.quote-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--canvas);
+  color: var(--ink-700);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+
+.quote-modal-close:hover {
+  background: var(--blue-100);
+  color: var(--blue-700);
+}
+
+.quote-modal-panel h2 {
+  margin: 6px 0 6px;
+  font-size: clamp(24px, 3vw, 28px);
+}
+
+.quote-modal-product {
+  margin: 0 0 20px;
+  color: var(--ink-600);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quote-modal-product:empty {
+  display: none;
+}
+
+.quote-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.quote-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-family: Manrope, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.quote-field em {
+  color: var(--blue-700);
+  font-style: normal;
+}
+
+.quote-field small {
+  color: var(--ink-600);
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.quote-field input,
+.quote-field textarea {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-900);
+  background: var(--canvas);
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.quote-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.quote-field input:focus,
+.quote-field textarea:focus {
+  outline: none;
+  border-color: var(--blue-600);
+  background: var(--surface);
+}
+
+.quote-field-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.quote-form-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: #FDECEC;
+  color: #B3261E;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quote-form-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.quote-modal-panel[data-quote-modal-panel="success"] {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.quote-success-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--teal-100);
+  color: var(--teal-600);
+  font-size: 26px;
+}
+
+.quote-modal-panel[data-quote-modal-panel="success"] p {
+  color: var(--ink-600);
+  margin: 0 0 24px;
+}
+
+.quote-modal-panel[data-quote-modal-panel="success"] .btn {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .quote-modal-card {
+    padding: 28px 22px;
+  }
+
+  .quote-field-row {
+    grid-template-columns: 1fr;
+  }
+}
