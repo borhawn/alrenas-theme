@@ -11,9 +11,13 @@
  * - "Resend Quote Email": re-sends that same email without a status
  *   change, for when the admin edits pricing after already sending it.
  *
- * Both post to admin-post.php rather than hooking a post-save action, so
+ * Both link to admin-post.php rather than hooking a post-save action, so
  * they behave identically whether HPOS or the legacy post-based order
- * storage is active.
+ * storage is active. They're plain nonce-protected links, not a <form> --
+ * a meta box renders inside WooCommerce's own order-edit <form>, and a
+ * nested <form> is invalid HTML that browsers silently fold into the
+ * outer one, so a real <form> here would submit as a normal order Save
+ * instead of ever reaching admin-post.php.
  *
  * @package Alrenas
  */
@@ -70,20 +74,27 @@ function alrenas_render_quote_meta_box( $post_or_order_object ) {
 	}
 
 	printf( '<p><strong>%s</strong></p>', esc_html( $statuses[ $status ] ) );
+
+	$action = 'quote-requested' === $status ? 'alrenas_send_quote' : 'alrenas_resend_quote';
+	$url    = wp_nonce_url(
+		add_query_arg(
+			array(
+				'action'   => $action,
+				'order_id' => $order->get_id(),
+			),
+			admin_url( 'admin-post.php' )
+		),
+		'alrenas_quote_action_' . $order->get_id(),
+		'alrenas_quote_action_nonce'
+	);
 	?>
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<?php wp_nonce_field( 'alrenas_quote_action_' . $order->get_id(), 'alrenas_quote_action_nonce' ); ?>
-		<input type="hidden" name="order_id" value="<?php echo esc_attr( $order->get_id() ); ?>">
-		<?php if ( 'quote-requested' === $status ) : ?>
-			<input type="hidden" name="action" value="alrenas_send_quote">
-			<p class="description"><?php esc_html_e( 'Price this order using the boxes below, then send it to the customer.', 'alrenas' ); ?></p>
-			<button type="submit" class="button button-primary" style="width:100%;"><?php esc_html_e( 'Send Quote to Customer', 'alrenas' ); ?></button>
-		<?php else : ?>
-			<input type="hidden" name="action" value="alrenas_resend_quote">
-			<p class="description"><?php esc_html_e( 'Edited the pricing since this was sent? Resend the quote email.', 'alrenas' ); ?></p>
-			<button type="submit" class="button" style="width:100%;"><?php esc_html_e( 'Resend Quote Email', 'alrenas' ); ?></button>
-		<?php endif; ?>
-	</form>
+	<?php if ( 'quote-requested' === $status ) : ?>
+		<p class="description"><?php esc_html_e( 'Price this order using the boxes below, then send it to the customer.', 'alrenas' ); ?></p>
+		<a href="<?php echo esc_url( $url ); ?>" class="button button-primary" style="width:100%;text-align:center;"><?php esc_html_e( 'Send Quote to Customer', 'alrenas' ); ?></a>
+	<?php else : ?>
+		<p class="description"><?php esc_html_e( 'Edited the pricing since this was sent? Resend the quote email.', 'alrenas' ); ?></p>
+		<a href="<?php echo esc_url( $url ); ?>" class="button" style="width:100%;text-align:center;"><?php esc_html_e( 'Resend Quote Email', 'alrenas' ); ?></a>
+	<?php endif; ?>
 	<?php
 }
 
@@ -92,7 +103,7 @@ function alrenas_render_quote_meta_box( $post_or_order_object ) {
  * quote email via the status-transition hook chain.
  */
 function alrenas_handle_send_quote() {
-	$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+	$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
 	check_admin_referer( 'alrenas_quote_action_' . $order_id, 'alrenas_quote_action_nonce' );
 
 	if ( ! current_user_can( 'edit_shop_orders' ) ) {
@@ -115,7 +126,7 @@ add_action( 'admin_post_alrenas_send_quote', 'alrenas_handle_send_quote' );
  * useful after editing pricing on an already-sent quote.
  */
 function alrenas_handle_resend_quote() {
-	$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+	$order_id = isset( $_GET['order_id'] ) ? absint( $_GET['order_id'] ) : 0;
 	check_admin_referer( 'alrenas_quote_action_' . $order_id, 'alrenas_quote_action_nonce' );
 
 	if ( ! current_user_can( 'edit_shop_orders' ) ) {
