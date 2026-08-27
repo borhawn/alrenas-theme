@@ -72,8 +72,19 @@
 		</div>
 
 		<div class="quote-modal-panel" data-quote-modal-panel="success" hidden>
-			<span class="quote-success-icon" aria-hidden="true">&#10003;</span>
-			<h2><?php esc_html_e( 'Request received', 'alrenas' ); ?></h2>
+			<div class="quote-success-status">
+				<span class="status-dot" aria-hidden="true"></span>
+				<span><?php esc_html_e( 'Request received', 'alrenas' ); ?></span>
+			</div>
+			<h2><?php esc_html_e( 'We\'ve got your request.', 'alrenas' ); ?></h2>
+
+			<div class="quote-product-card" data-quote-modal-success-product hidden>
+				<img class="quote-product-thumb" data-quote-modal-success-image src="" alt="">
+				<div class="quote-product-info">
+					<span class="quote-product-name" data-quote-modal-success-name></span>
+				</div>
+			</div>
+
 			<p data-quote-success-message><?php esc_html_e( 'Thanks -- your request has been received. We will follow up shortly with pricing.', 'alrenas' ); ?></p>
 			<button type="button" class="btn btn-secondary" data-quote-modal-close><?php esc_html_e( 'Close', 'alrenas' ); ?></button>
 		</div>

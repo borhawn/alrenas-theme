@@ -11,12 +11,16 @@ if (quoteModal) {
   const formPanel = quoteModal.querySelector('[data-quote-modal-panel="form"]');
   const successPanel = quoteModal.querySelector('[data-quote-modal-panel="success"]');
   const successMessage = quoteModal.querySelector('[data-quote-success-message]');
+  const successProductCard = quoteModal.querySelector('[data-quote-modal-success-product]');
+  const successProductImage = quoteModal.querySelector('[data-quote-modal-success-image]');
+  const successProductName = quoteModal.querySelector('[data-quote-modal-success-name]');
   const errorEl = quoteModal.querySelector('[data-quote-form-error]');
   const submitButton = quoteModal.querySelector('[data-quote-submit]');
   const submitLabel = quoteModal.querySelector('[data-quote-submit-label]');
   const submitLabelDefault = submitLabel ? submitLabel.textContent : '';
 
   let lastFocused = null;
+  let currentProduct = { name: '', image: '' };
 
   const showError = message => {
     if (!errorEl) return;
@@ -55,6 +59,7 @@ if (quoteModal) {
 
     const name = trigger?.dataset.productName || '';
     const image = trigger?.dataset.productImage || '';
+    currentProduct = { name, image };
 
     if (productNameEl) productNameEl.textContent = name;
     if (productImage) {
@@ -124,6 +129,17 @@ if (quoteModal) {
           if (successMessage && data.data && data.data.message) {
             successMessage.textContent = data.data.message;
           }
+
+          const qty = quantityField ? parseInt(quantityField.value, 10) || 1 : 1;
+          const label = qty > 1 && currentProduct.name ? `${qty} × ${currentProduct.name}` : currentProduct.name;
+
+          if (successProductName) successProductName.textContent = label;
+          if (successProductImage) {
+            successProductImage.src = currentProduct.image;
+            successProductImage.alt = currentProduct.name;
+          }
+          if (successProductCard) successProductCard.hidden = !currentProduct.name;
+
           if (formPanel) formPanel.hidden = true;
           if (successPanel) successPanel.hidden = false;
         } else {

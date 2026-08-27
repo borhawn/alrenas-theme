@@ -220,30 +220,27 @@
   margin-top: 4px;
 }
 
-.quote-modal-panel[data-quote-modal-panel="success"] {
-  text-align: center;
-  padding: 24px 0 8px;
+.quote-success-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--teal-600);
+  font-family: Manrope, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
-.quote-success-icon {
-  display: inline-grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 16px;
-  border-radius: 50%;
-  background: var(--teal-100);
-  color: var(--teal-600);
-  font-size: 26px;
+.quote-success-status .status-dot {
+  background: var(--teal-600);
+  box-shadow: 0 0 0 5px rgba(62, 143, 131, .13);
 }
 
 .quote-modal-panel[data-quote-modal-panel="success"] p {
   color: var(--ink-600);
-  margin: 0 0 24px;
-}
-
-.quote-modal-panel[data-quote-modal-panel="success"] .btn {
-  width: 100%;
+  margin: 0 0 22px;
 }
 
 @media (max-width: 640px) {
