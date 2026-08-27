@@ -115,7 +115,12 @@ function alrenas_handle_customer_quote_decision() {
 	}
 
 	if ( 'quote-sent' === $order->get_status() ) {
-		$accepted = 'alrenas_customer_accept_quote' === current_action();
+		// Not current_action() -- admin-post.php fires this callback via
+		// "admin_post_{$action}"/"admin_post_nopriv_{$action}", so
+		// current_action() always returns that prefixed hook name, never
+		// the bare action value being compared against here.
+		$submitted_action = isset( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
+		$accepted         = 'alrenas_customer_accept_quote' === $submitted_action;
 		$order->update_status(
 			$accepted ? 'quote-accepted' : 'quote-declined',
 			$accepted
