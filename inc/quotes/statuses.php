@@ -105,3 +105,23 @@ function alrenas_register_quote_email_actions( $actions ) {
 	return $actions;
 }
 add_filter( 'woocommerce_email_actions', 'alrenas_register_quote_email_actions' );
+
+/**
+ * WC_Order::is_editable() defaults to true only for pending/on-hold/
+ * auto-draft orders -- none of which a quote order ever is -- and it's
+ * what gates the "Add item(s)"/"Add fee"/"Add shipping" buttons and the
+ * editable price/qty fields on the native order-edit screen (see
+ * WooCommerce's admin/meta-boxes/views/html-order-items.php). Without
+ * this, the admin has no way to actually price a quote.
+ *
+ * @param bool          $is_editable Whether WooCommerce considers the order editable.
+ * @param WC_Order|bool $order       The order in question.
+ * @return bool
+ */
+function alrenas_quote_orders_are_editable( $is_editable, $order ) {
+	if ( $order instanceof WC_Order && array_key_exists( $order->get_status(), alrenas_get_quote_statuses() ) ) {
+		return true;
+	}
+	return $is_editable;
+}
+add_filter( 'wc_order_is_editable', 'alrenas_quote_orders_are_editable', 10, 2 );
