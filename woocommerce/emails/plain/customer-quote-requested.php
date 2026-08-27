@@ -9,9 +9,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$items         = $order->get_items();
-$first_item    = $items ? reset( $items ) : null;
-$customer_note = $order->get_customer_note();
+$items           = $order->get_items();
+$first_item      = $items ? reset( $items ) : null;
+$customer_note   = $order->get_customer_note();
+$product_summary = '';
+
+if ( $first_item ) {
+	$qty             = $first_item->get_quantity();
+	$product_summary = $qty > 1 ? $qty . ' x ' . $first_item->get_name() : $first_item->get_name();
+}
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n";
 echo esc_html( wp_strip_all_tags( $email_heading ) );
@@ -24,9 +30,9 @@ if ( $order->get_billing_first_name() ) {
 	echo esc_html__( 'Hi,', 'alrenas' ) . "\n\n";
 }
 
-if ( $first_item ) {
-	/* translators: %s: Product name. */
-	echo sprintf( esc_html__( 'Thanks for your interest in %s. We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' ), esc_html( $first_item->get_name() ) ) . "\n\n";
+if ( $product_summary ) {
+	/* translators: %s: Product name, optionally prefixed with a quantity. */
+	echo sprintf( esc_html__( 'Thanks for your interest in %s. We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' ), esc_html( $product_summary ) ) . "\n\n";
 } else {
 	echo esc_html__( 'We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' ) . "\n\n";
 }

@@ -49,6 +49,7 @@ if ( $document_url ) {
 
 $image_id  = $product->get_image_id();
 $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_placeholder_img_src( 'large' );
+$quote_modal_image = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbnail' ) : wc_placeholder_img_src( 'thumbnail' );
 ?>
 <section class="product-hero">
 	<div class="container product-hero-grid">
@@ -63,7 +64,7 @@ $image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : wc_
 			<?php if ( $lead ) : ?><p class="product-hero-lead"><?php echo esc_html( wp_strip_all_tags( $lead ) ); ?></p><?php endif; ?>
 
 			<div class="product-hero-actions">
-				<a href="#inquiry" class="btn btn-primary" data-quote-trigger data-product-id="<?php echo esc_attr( $product_id ); ?>" data-product-name="<?php echo esc_attr( $title ); ?>"><?php echo esc_html( $primary_label ); ?></a>
+				<a href="#inquiry" class="btn btn-primary" data-quote-trigger data-product-id="<?php echo esc_attr( $product_id ); ?>" data-product-name="<?php echo esc_attr( $title ); ?>" data-product-image="<?php echo esc_url( $quote_modal_image ); ?>"><?php echo esc_html( $primary_label ); ?></a>
 				<a href="<?php echo esc_url( $secondary_url ); ?>" class="btn btn-secondary" <?php echo $secondary_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed attribute string, not user input. ?>><?php echo esc_html( $secondary_label ); ?></a>
 			</div>
 

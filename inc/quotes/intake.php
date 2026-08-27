@@ -33,6 +33,7 @@ function alrenas_handle_quote_request() {
 	$company    = isset( $_POST['company'] ) ? sanitize_text_field( wp_unslash( $_POST['company'] ) ) : '';
 	$notes      = isset( $_POST['notes'] ) ? sanitize_textarea_field( wp_unslash( $_POST['notes'] ) ) : '';
 	$product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+	$quantity   = isset( $_POST['quantity'] ) ? min( 999, max( 1, absint( $_POST['quantity'] ) ) ) : 1;
 
 	if ( '' === $name || ! is_email( $email ) ) {
 		wp_send_json_error( array( 'message' => esc_html__( 'Please share your name and a valid email address.', 'alrenas' ) ) );
@@ -60,7 +61,7 @@ function alrenas_handle_quote_request() {
 	$order->set_billing_phone( $phone );
 	$order->set_billing_company( $company );
 	$order->set_created_via( 'alrenas_quote' );
-	$order->add_product( $product, 1 );
+	$order->add_product( $product, $quantity );
 
 	if ( $notes ) {
 		$order->set_customer_note( $notes );

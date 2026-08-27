@@ -70,15 +70,77 @@
   font-size: clamp(24px, 3vw, 28px);
 }
 
-.quote-modal-product {
-  margin: 0 0 20px;
-  color: var(--ink-600);
-  font-size: 14px;
-  font-weight: 600;
+.quote-product-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 6px 0 22px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
 }
 
-.quote-modal-product:empty {
+.quote-product-card[hidden] {
   display: none;
+}
+
+.quote-product-thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.quote-product-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.quote-product-name {
+  font-family: Manrope, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quote-product-qty {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Manrope, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-600);
+}
+
+.quote-product-qty input {
+  width: 56px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-900);
+  background: var(--surface);
+  text-align: center;
+}
+
+.quote-product-qty input:focus {
+  outline: none;
+  border-color: var(--blue-600);
 }
 
 .quote-field-row {
@@ -191,5 +253,15 @@
 
   .quote-field-row {
     grid-template-columns: 1fr;
+  }
+
+  .quote-product-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .quote-product-name {
+    white-space: normal;
   }
 }

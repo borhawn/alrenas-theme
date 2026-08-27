@@ -16,11 +16,21 @@
 		<div class="quote-modal-panel" data-quote-modal-panel="form">
 			<span class="eyebrow"><?php esc_html_e( 'Request pricing', 'alrenas' ); ?></span>
 			<h2 id="quote-modal-title"><?php esc_html_e( 'Get a Quote', 'alrenas' ); ?></h2>
-			<p class="quote-modal-product" data-quote-modal-product></p>
 
 			<form data-quote-form novalidate>
 				<?php // The AJAX nonce is supplied via wp_localize_script() in inc/quotes/frontend.php, not a form field. ?>
 				<input type="hidden" name="product_id" data-quote-product-id value="">
+
+				<div class="quote-product-card" data-quote-modal-product hidden>
+					<img class="quote-product-thumb" data-quote-modal-image src="" alt="">
+					<div class="quote-product-info">
+						<span class="quote-product-name" data-quote-modal-product-name></span>
+						<label class="quote-product-qty">
+							<span><?php esc_html_e( 'Quantity', 'alrenas' ); ?></span>
+							<input type="number" name="quantity" min="1" max="999" step="1" value="1" inputmode="numeric">
+						</label>
+					</div>
+				</div>
 
 				<div class="quote-field-row">
 					<label class="quote-field">

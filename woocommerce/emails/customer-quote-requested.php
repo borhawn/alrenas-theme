@@ -13,9 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$items       = $order->get_items();
-$first_item  = $items ? reset( $items ) : null;
-$customer_note = $order->get_customer_note();
+$items           = $order->get_items();
+$first_item      = $items ? reset( $items ) : null;
+$customer_note   = $order->get_customer_note();
+$product_summary = '';
+
+if ( $first_item ) {
+	$qty             = $first_item->get_quantity();
+	$product_summary = $qty > 1 ? $qty . ' × ' . $first_item->get_name() : $first_item->get_name();
+}
 
 /* This action is documented in woocommerce/templates/emails/customer-processing-order.php */
 do_action( 'woocommerce_email_header', $email_heading, $email );
@@ -34,9 +40,9 @@ if ( $order->get_billing_first_name() ) {
 
 <p>
 <?php
-if ( $first_item ) {
-	/* translators: %s: Product name. */
-	printf( esc_html__( 'Thanks for your interest in %s. We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' ), esc_html( $first_item->get_name() ) );
+if ( $product_summary ) {
+	/* translators: %s: Product name, optionally prefixed with a quantity. */
+	printf( esc_html__( 'Thanks for your interest in %s. We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' ), esc_html( $product_summary ) );
 } else {
 	esc_html_e( 'We\'ve received your quote request and will follow up shortly with pricing tailored to your needs.', 'alrenas' );
 }

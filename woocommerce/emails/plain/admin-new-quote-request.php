@@ -22,6 +22,7 @@ echo sprintf( esc_html__( '%s just submitted a quote request.', 'alrenas' ), esc
 
 if ( $first_item ) {
 	echo esc_html__( 'Product:', 'alrenas' ) . ' ' . esc_html( $first_item->get_name() ) . "\n";
+	echo esc_html__( 'Quantity:', 'alrenas' ) . ' ' . esc_html( $first_item->get_quantity() ) . "\n";
 }
 echo esc_html__( 'Email:', 'alrenas' ) . ' ' . esc_html( $order->get_billing_email() ) . "\n";
 if ( $order->get_billing_phone() ) {

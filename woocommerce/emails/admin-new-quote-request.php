@@ -27,6 +27,7 @@ printf( esc_html__( '%s just submitted a quote request.', 'alrenas' ), esc_html(
 <div class="email-note-box">
 	<?php if ( $first_item ) : ?>
 		<p style="margin:0 0 8px;"><strong><?php esc_html_e( 'Product:', 'alrenas' ); ?></strong> <?php echo esc_html( $first_item->get_name() ); ?></p>
+		<p style="margin:0 0 8px;"><strong><?php esc_html_e( 'Quantity:', 'alrenas' ); ?></strong> <?php echo esc_html( $first_item->get_quantity() ); ?></p>
 	<?php endif; ?>
 	<p style="margin:0 0 8px;"><strong><?php esc_html_e( 'Email:', 'alrenas' ); ?></strong> <?php echo esc_html( $order->get_billing_email() ); ?></p>
 	<?php if ( $order->get_billing_phone() ) : ?>

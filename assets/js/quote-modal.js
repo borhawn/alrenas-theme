@@ -4,7 +4,10 @@ if (quoteModal) {
   const card = quoteModal.querySelector('.quote-modal-card');
   const form = quoteModal.querySelector('[data-quote-form]');
   const productIdField = quoteModal.querySelector('[data-quote-product-id]');
-  const productLabel = quoteModal.querySelector('[data-quote-modal-product]');
+  const productCard = quoteModal.querySelector('[data-quote-modal-product]');
+  const productImage = quoteModal.querySelector('[data-quote-modal-image]');
+  const productNameEl = quoteModal.querySelector('[data-quote-modal-product-name]');
+  const quantityField = form?.querySelector('input[name="quantity"]');
   const formPanel = quoteModal.querySelector('[data-quote-modal-panel="form"]');
   const successPanel = quoteModal.querySelector('[data-quote-modal-panel="success"]');
   const successMessage = quoteModal.querySelector('[data-quote-success-message]');
@@ -38,20 +41,29 @@ if (quoteModal) {
   const openModal = trigger => {
     lastFocused = document.activeElement;
 
-    if (productIdField) {
-      productIdField.value = trigger?.dataset.productId || '';
-    }
-    if (productLabel) {
-      const name = trigger?.dataset.productName || '';
-      productLabel.textContent = name ? `For: ${name}` : '';
-      productLabel.hidden = !name;
-    }
-
     if (formPanel) formPanel.hidden = false;
     if (successPanel) successPanel.hidden = true;
     clearError();
     form?.reset();
-    if (productIdField) productIdField.value = trigger?.dataset.productId || '';
+
+    if (productIdField) {
+      productIdField.value = trigger?.dataset.productId || '';
+    }
+    if (quantityField) {
+      quantityField.value = '1';
+    }
+
+    const name = trigger?.dataset.productName || '';
+    const image = trigger?.dataset.productImage || '';
+
+    if (productNameEl) productNameEl.textContent = name;
+    if (productImage) {
+      productImage.src = image;
+      productImage.alt = name;
+    }
+    if (productCard) {
+      productCard.hidden = !name;
+    }
 
     quoteModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
