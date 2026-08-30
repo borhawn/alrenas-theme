@@ -1,26 +1,22 @@
 <?php
 /** About values. @package Alrenas */
 
-$eyebrow = alrenas_get_site_content( 'about_values_eyebrow', esc_html__( 'Why Alrenas', 'alrenas' ) );
-$heading = alrenas_get_site_content( 'about_values_heading', esc_html__( 'A rehabilitation technology partner for clinical professionals.', 'alrenas' ) );
-$lead    = alrenas_get_site_content( 'about_values_lead', esc_html__( 'Alrenas develops balance assessment and rehabilitation systems with a focus on practical clinical use, patient-specific progression and measurable information.', 'alrenas' ) );
+$eyebrow = alrenas_get_site_content( 'about_values_eyebrow', esc_html__( 'What guides our work', 'alrenas' ) );
+$heading = alrenas_get_site_content( 'about_values_heading', esc_html__( 'Clinical value before technical spectacle.', 'alrenas' ) );
+$lead    = alrenas_get_site_content( 'about_values_lead', esc_html__( 'The best rehabilitation technology should quietly make care better. These principles shape how we think about products, software and support.', 'alrenas' ) );
 
 $card_defaults = array(
 	1 => array(
-		'title'       => esc_html__( 'Safety-Focused Rehabilitation', 'alrenas' ),
-		'description' => esc_html__( 'Supportive structures, adjustable configurations and controlled progression help professionals create appropriate environments for supervised balance rehabilitation.', 'alrenas' ),
+		'title'       => esc_html__( 'Safety and confidence', 'alrenas' ),
+		'description' => esc_html__( 'Patients may be working at the edge of their current ability. Equipment should create a controlled environment where progress can happen without unnecessary fear.', 'alrenas' ),
 	),
 	2 => array(
-		'title'       => esc_html__( 'Patient-Specific Progression', 'alrenas' ),
-		'description' => esc_html__( 'Move from assessment to increasingly challenging exercises according to the patient\'s abilities rather than using the same training conditions for every patient.', 'alrenas' ),
+		'title'       => esc_html__( 'Personalized rehabilitation', 'alrenas' ),
+		'description' => esc_html__( 'Recovery differs from patient to patient. Adjustable difficulty and individualized programs help clinicians meet people where they are.', 'alrenas' ),
 	),
 	3 => array(
-		'title'       => esc_html__( 'Objective Assessment & Progress Review', 'alrenas' ),
-		'description' => esc_html__( 'Use repeatable measurements, assessment results and rehabilitation records to complement clinical observation and make changes over time easier to evaluate.', 'alrenas' ),
-	),
-	4 => array(
-		'title'       => esc_html__( 'Clinical Research & Professional Support', 'alrenas' ),
-		'description' => esc_html__( 'We welcome collaboration with hospitals, clinicians, universities and research teams studying balance, postural control, rehabilitation and human performance. Research access, product evaluation, technical documentation, staff training and implementation requirements can be discussed directly with the Alrenas team.', 'alrenas' ),
+		'title'       => esc_html__( 'Measurable progress', 'alrenas' ),
+		'description' => esc_html__( 'Repeatable assessment and reporting make change easier to understand, communicate and use in treatment planning.', 'alrenas' ),
 	),
 );
 
