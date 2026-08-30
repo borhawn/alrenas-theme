@@ -9,7 +9,9 @@
  * @package Alrenas
  */
 
-$eyebrow      = alrenas_get_site_content( 'home_products_eyebrow', esc_html__( 'Rehabilitation systems', 'alrenas' ) );
+$eyebrow       = alrenas_get_site_content( 'home_products_eyebrow', esc_html__( 'Rehabilitation systems', 'alrenas' ) );
+$heading       = alrenas_get_site_content( 'home_products_heading', esc_html__( 'Purpose-built devices for balance, mobility and recovery.', 'alrenas' ) );
+$lead          = alrenas_get_site_content( 'home_products_lead', esc_html__( 'Choose a system based on the patient group, treatment goals and level of support required.', 'alrenas' ) );
 $product_slots = alrenas_get_site_content( 'home_products', array() );
 
 $variants = array(
@@ -60,9 +62,9 @@ if ( ! $rows ) {
 	<div class="container products-head reveal">
 		<div>
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
-			<h2 id="home-products-title"><?php esc_html_e( 'Purpose-built devices for balance, mobility and recovery.', 'alrenas' ); ?></h2>
+			<h2 id="home-products-title"><?php echo esc_html( $heading ); ?></h2>
 		</div>
-		<p><?php esc_html_e( 'Choose a system based on the patient group, treatment goals and level of support required.', 'alrenas' ); ?></p>
+		<?php if ( $lead ) : ?><p><?php echo esc_html( $lead ); ?></p><?php endif; ?>
 	</div>
 
 	<div class="container product-stack">

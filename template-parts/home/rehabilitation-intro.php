@@ -13,16 +13,19 @@ $link_url   = alrenas_get_site_content( 'process_link_url', '#products' );
 
 $step_defaults = array(
 	1 => array(
+		'kicker'      => esc_html__( 'Step 01', 'alrenas' ),
 		'title'       => esc_html__( 'Assess', 'alrenas' ),
 		'description' => esc_html__( 'Objective balance and postural measurements give clinicians a clearer baseline for treatment planning.', 'alrenas' ),
 		'variant'     => '',
 	),
 	2 => array(
+		'kicker'      => esc_html__( 'Step 02', 'alrenas' ),
 		'title'       => esc_html__( 'Train', 'alrenas' ),
 		'description' => esc_html__( 'Adaptable exercises and interactive rehabilitation activities support safe, patient-specific training.', 'alrenas' ),
 		'variant'     => 'care-card--teal',
 	),
 	3 => array(
+		'kicker'      => esc_html__( 'Step 03', 'alrenas' ),
 		'title'       => esc_html__( 'Follow progress', 'alrenas' ),
 		'description' => esc_html__( 'Repeatable tests and reporting help make improvement visible to clinicians, patients and care teams.', 'alrenas' ),
 		'variant'     => 'care-card--warm',
@@ -49,12 +52,14 @@ $saved_steps = alrenas_get_site_content( 'care_steps', array() );
 		<?php foreach ( $step_defaults as $index => $default ) : ?>
 			<?php
 			$saved       = isset( $saved_steps[ $index ] ) ? $saved_steps[ $index ] : array();
+			$kicker      = ! empty( $saved['kicker'] ) ? $saved['kicker'] : $default['kicker'];
 			$title       = ! empty( $saved['title'] ) ? $saved['title'] : $default['title'];
 			$description = ! empty( $saved['description'] ) ? $saved['description'] : $default['description'];
 			$media_id    = ! empty( $saved['media_id'] ) ? (int) $saved['media_id'] : 0;
 			?>
 			<article class="care-card <?php echo esc_attr( $default['variant'] ); ?> reveal">
 				<div class="care-card-body">
+					<?php if ( $kicker ) : ?><span class="care-card-kicker"><?php echo esc_html( $kicker ); ?></span><?php endif; ?>
 					<h3><?php echo esc_html( $title ); ?></h3>
 					<p><?php echo esc_html( $description ); ?></p>
 				</div>

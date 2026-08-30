@@ -7,6 +7,7 @@
 
 $eyebrow = alrenas_get_site_content( 'discipline_eyebrow', esc_html__( 'Across rehabilitation specialties', 'alrenas' ) );
 $heading = alrenas_get_site_content( 'discipline_heading', esc_html__( 'Built for different patients. One goal: better movement.', 'alrenas' ) );
+$lead    = alrenas_get_site_content( 'discipline_lead', esc_html__( 'Every specialty below draws on the same systems, configured around the assessments, exercises and progress tracking that patient group relies on most.', 'alrenas' ) );
 
 $tab_defaults = array(
 	1 => array(
@@ -55,6 +56,7 @@ foreach ( $tab_defaults as $index => $default ) {
 	<div class="container disciplines-head reveal">
 		<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 		<h2 id="disciplines-title"><?php echo esc_html( $heading ); ?></h2>
+		<?php if ( $lead ) : ?><p><?php echo esc_html( $lead ); ?></p><?php endif; ?>
 	</div>
 
 	<div class="container discipline-layout reveal" data-tabs>

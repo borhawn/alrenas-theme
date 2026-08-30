@@ -54,7 +54,7 @@ $saved_points = alrenas_get_site_content( 'story_points', array() );
 					$title = ! empty( $saved['title'] ) ? $saved['title'] : $default['title'];
 					$text  = ! empty( $saved['text'] ) ? $saved['text'] : $default['text'];
 					?>
-					<div><strong><?php echo esc_html( $title ); ?></strong><span><?php echo esc_html( $text ); ?></span></div>
+					<div><strong><?php echo esc_html( $title ); ?></strong><span><?php echo wp_kses( $text, array( 'strong' => array(), 'b' => array(), 'em' => array(), 'i' => array() ) ); ?></span></div>
 				<?php endforeach; ?>
 			</div>
 		</div>

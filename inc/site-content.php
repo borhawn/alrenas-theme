@@ -274,6 +274,8 @@ function alrenas_site_content_settings() {
 	add_settings_section( 'alrenas_site_content_home_products', esc_html__( 'Products section', 'alrenas' ), 'alrenas_section_home_products_intro', 'alrenas-content-home-products' );
 
 	add_settings_field( 'home_products_eyebrow', esc_html__( 'Subtitle (above heading)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-products', 'alrenas_site_content_home_products', array( 'key' => 'home_products_eyebrow', 'placeholder' => esc_html__( 'Rehabilitation systems', 'alrenas' ) ) );
+	add_settings_field( 'home_products_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-products', 'alrenas_site_content_home_products', array( 'key' => 'home_products_heading', 'placeholder' => esc_html__( 'Purpose-built devices for balance, mobility and recovery.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'home_products_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-home-products', 'alrenas_site_content_home_products', array( 'key' => 'home_products_lead', 'placeholder' => esc_html__( 'Choose a system based on the patient group, treatment goals and level of support required.', 'alrenas' ) ) );
 
 	for ( $i = 1; $i <= 3; $i++ ) {
 		add_settings_field(
@@ -321,6 +323,7 @@ function alrenas_site_content_settings() {
 
 	add_settings_field( 'discipline_eyebrow', esc_html__( 'Eyebrow (small label)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-discipline', 'alrenas_discipline_text', array( 'key' => 'discipline_eyebrow', 'placeholder' => esc_html__( 'Across rehabilitation specialties', 'alrenas' ) ) );
 	add_settings_field( 'discipline_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-discipline', 'alrenas_discipline_text', array( 'key' => 'discipline_heading', 'placeholder' => esc_html__( 'Built for different patients. One goal: better movement.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'discipline_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-home-discipline', 'alrenas_discipline_text', array( 'key' => 'discipline_lead', 'placeholder' => esc_html__( 'Every specialty below draws on the same systems, configured around the assessments, exercises and progress tracking that patient group relies on most.', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_discipline_tabs', esc_html__( 'Tabs', 'alrenas' ), 'alrenas_section_discipline_tabs_intro', 'alrenas-content-home-discipline' );
 
@@ -851,6 +854,7 @@ function alrenas_field_story_point( $args ) {
 		<p>
 			<label class="alrenas-field-label"><?php esc_html_e( 'Text', 'alrenas' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $name ); ?>[text]" value="<?php echo esc_attr( $text ); ?>" class="large-text" placeholder="<?php esc_attr_e( 'e.g. Adapt treatment to different abilities and rehabilitation stages.', 'alrenas' ); ?>">
+			<span class="description"><?php esc_html_e( 'Supports <strong> and <em> tags to make part of the sentence bold or italic.', 'alrenas' ); ?></span>
 		</p>
 	</fieldset>
 	<hr>
@@ -1089,6 +1093,7 @@ function alrenas_field_care_step( $args ) {
 	$steps = alrenas_get_site_content( 'care_steps', array() );
 	$step  = isset( $steps[ $index ] ) ? $steps[ $index ] : array();
 
+	$kicker      = isset( $step['kicker'] ) ? $step['kicker'] : '';
 	$title       = isset( $step['title'] ) ? $step['title'] : '';
 	$description = isset( $step['description'] ) ? $step['description'] : '';
 	$media_id    = isset( $step['media_id'] ) ? (int) $step['media_id'] : 0;
@@ -1097,6 +1102,10 @@ function alrenas_field_care_step( $args ) {
 	$media_url = $media_id ? alrenas_admin_media_preview_url( $media_id ) : '';
 	?>
 	<fieldset class="alrenas-slide-fieldset">
+		<p>
+			<label class="alrenas-field-label"><?php esc_html_e( 'Kicker (above title)', 'alrenas' ); ?></label>
+			<input type="text" name="<?php echo esc_attr( $name ); ?>[kicker]" value="<?php echo esc_attr( $kicker ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Step 01', 'alrenas' ); ?>">
+		</p>
 		<p>
 			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Assess', 'alrenas' ); ?>">
@@ -1213,6 +1222,7 @@ function alrenas_sanitize_site_content( $input ) {
 		'hero_secondary_url',
 		'hero_tags',
 		'home_products_eyebrow',
+		'home_products_heading',
 		'care_strip_text',
 		'care_strip_tags',
 		'process_eyebrow',
@@ -1299,6 +1309,14 @@ function alrenas_sanitize_site_content( $input ) {
 
 	$output['story_lead'] = isset( $input['story_lead'] )
 		? sanitize_textarea_field( wp_unslash( $input['story_lead'] ) )
+		: '';
+
+	$output['home_products_lead'] = isset( $input['home_products_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['home_products_lead'] ) )
+		: '';
+
+	$output['discipline_lead'] = isset( $input['discipline_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['discipline_lead'] ) )
 		: '';
 
 	$output['story_main_image_id']  = isset( $input['story_main_image_id'] ) ? absint( $input['story_main_image_id'] ) : 0;
@@ -1396,9 +1414,12 @@ function alrenas_sanitize_site_content( $input ) {
 				continue;
 			}
 
+			// wp_kses() (not sanitize_text_field(), which strips all tags) so
+			// the admin can wrap part of the sentence in <strong>/<em> for
+			// emphasis -- the template outputs this with wp_kses() too.
 			$output['story_points'][ $index ] = array(
 				'title' => isset( $point['title'] ) ? sanitize_text_field( wp_unslash( $point['title'] ) ) : '',
-				'text'  => isset( $point['text'] ) ? sanitize_text_field( wp_unslash( $point['text'] ) ) : '',
+				'text'  => isset( $point['text'] ) ? wp_kses( wp_unslash( $point['text'] ), array( 'strong' => array(), 'b' => array(), 'em' => array(), 'i' => array() ) ) : '',
 			);
 		}
 	}
@@ -1433,6 +1454,7 @@ function alrenas_sanitize_site_content( $input ) {
 			}
 
 			$output['care_steps'][ $index ] = array(
+				'kicker'      => isset( $step['kicker'] ) ? sanitize_text_field( wp_unslash( $step['kicker'] ) ) : '',
 				'title'       => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
 				'description' => isset( $step['description'] ) ? sanitize_textarea_field( wp_unslash( $step['description'] ) ) : '',
 				'media_id'    => isset( $step['media_id'] ) ? absint( $step['media_id'] ) : 0,
