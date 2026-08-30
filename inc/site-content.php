@@ -28,6 +28,7 @@ define( 'ALRENAS_ABOUT_MISSION_POINT_COUNT', 4 );
 define( 'ALRENAS_ABOUT_VALUE_COUNT', 3 );
 define( 'ALRENAS_ABOUT_STORY_POINT_COUNT', 3 );
 define( 'ALRENAS_ABOUT_QUALITY_BADGE_COUNT', 4 );
+define( 'ALRENAS_WHY_ITEM_COUNT', 4 );
 
 /**
  * Get a single site content value.
@@ -63,6 +64,7 @@ function alrenas_site_content_tabs() {
 		'home-discipline' => esc_html__( 'Home — Disciplines', 'alrenas' ),
 		'home-story'      => esc_html__( 'Home — Clinical Story', 'alrenas' ),
 		'home-care-strip' => esc_html__( 'Home — Care Strip', 'alrenas' ),
+		'home-why'        => esc_html__( 'Home — Why Alrenas', 'alrenas' ),
 		'products-page'   => esc_html__( 'Products Page', 'alrenas' ),
 		'contact-page'    => esc_html__( 'Contact Page', 'alrenas' ),
 		'about-page'      => esc_html__( 'About Page', 'alrenas' ),
@@ -376,6 +378,33 @@ function alrenas_site_content_settings() {
 
 	add_settings_field( 'care_strip_text', esc_html__( 'Intro text', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_text', 'placeholder' => esc_html__( 'Supporting rehabilitation across the continuum of care', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'care_strip_tags', esc_html__( 'Tags (comma-separated)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-care-strip', 'alrenas_site_content_care_strip', array( 'key' => 'care_strip_tags', 'placeholder' => esc_html__( 'Balance rehabilitation, Fall-risk assessment, Postural control, Mobility training, Muscle strengthening', 'alrenas' ), 'wide' => true ) );
+
+	// --- Home -- Why Alrenas ------------------------------------------------
+	add_settings_section( 'alrenas_why_text', esc_html__( 'Section text', 'alrenas' ), '__return_false', 'alrenas-content-home-why' );
+
+	add_settings_field( 'why_eyebrow', esc_html__( 'Eyebrow (small label)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-why', 'alrenas_why_text', array( 'key' => 'why_eyebrow', 'placeholder' => esc_html__( 'Why Alrenas', 'alrenas' ) ) );
+	add_settings_field( 'why_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-home-why', 'alrenas_why_text', array( 'key' => 'why_heading', 'placeholder' => esc_html__( 'A rehabilitation technology partner for clinical professionals.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'why_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-home-why', 'alrenas_why_text', array( 'key' => 'why_lead', 'placeholder' => esc_html__( 'Alrenas develops balance assessment and rehabilitation systems with a focus on practical clinical use, patient-specific progression and measurable information.', 'alrenas' ) ) );
+
+	add_settings_section( 'alrenas_why_items', esc_html__( 'Reasons list', 'alrenas' ), '__return_false', 'alrenas-content-home-why' );
+
+	for ( $i = 1; $i <= ALRENAS_WHY_ITEM_COUNT; $i++ ) {
+		add_settings_field(
+			'why_item_' . $i,
+			sprintf( /* translators: %d: reason slot number. */ esc_html__( 'Reason %d', 'alrenas' ), $i ),
+			'alrenas_field_repeater_item',
+			'alrenas-content-home-why',
+			'alrenas_why_items',
+			array(
+				'index'      => $i,
+				'option_key' => 'why_items',
+				'fields'     => array(
+					'title'       => array( 'label' => esc_html__( 'Title', 'alrenas' ), 'type' => 'text', 'placeholder' => esc_html__( 'e.g. Safety-Focused Rehabilitation', 'alrenas' ) ),
+					'description' => array( 'label' => esc_html__( 'Description', 'alrenas' ), 'type' => 'textarea', 'placeholder' => esc_html__( 'e.g. Supportive structures, adjustable configurations and controlled progression help professionals create appropriate environments for supervised balance rehabilitation.', 'alrenas' ) ),
+				),
+			)
+		);
+	}
 
 	// --- Products Page -----------------------------------------------------
 	add_settings_section( 'alrenas_products_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
@@ -1225,6 +1254,8 @@ function alrenas_sanitize_site_content( $input ) {
 		'home_products_heading',
 		'care_strip_text',
 		'care_strip_tags',
+		'why_eyebrow',
+		'why_heading',
 		'process_eyebrow',
 		'process_heading',
 		'process_link_label',
@@ -1318,6 +1349,12 @@ function alrenas_sanitize_site_content( $input ) {
 	$output['discipline_lead'] = isset( $input['discipline_lead'] )
 		? sanitize_textarea_field( wp_unslash( $input['discipline_lead'] ) )
 		: '';
+
+	$output['why_lead'] = isset( $input['why_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['why_lead'] ) )
+		: '';
+
+	$output['why_items'] = alrenas_sanitize_repeater_field( $input['why_items'] ?? null, ALRENAS_WHY_ITEM_COUNT, array( 'title' => 'text', 'description' => 'textarea' ) );
 
 	$output['story_main_image_id']  = isset( $input['story_main_image_id'] ) ? absint( $input['story_main_image_id'] ) : 0;
 	$output['story_small_image_id'] = isset( $input['story_small_image_id'] ) ? absint( $input['story_small_image_id'] ) : 0;
