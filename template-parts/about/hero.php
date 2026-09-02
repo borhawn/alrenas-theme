@@ -11,8 +11,8 @@ $secondary_label = alrenas_get_site_content( 'about_hero_secondary_label', esc_h
 
 $image_id = (int) alrenas_get_site_content( 'about_hero_image_id', 0 );
 $image    = $image_id
-	? wp_get_attachment_image( $image_id, 'full', false, array( 'class' => 'about-main-img' ) )
-	: sprintf( '<img class="about-main-img" src="%s" alt="%s">', esc_url( get_theme_file_uri( 'assets/images/blog-devices.webp' ) ), esc_attr__( 'Alrenas rehabilitation systems in a clinical environment', 'alrenas' ) );
+	? wp_get_attachment_image( $image_id, 'full' )
+	: sprintf( '<img src="%s" alt="%s">', esc_url( get_theme_file_uri( 'assets/images/blog-devices.webp' ) ), esc_attr__( 'Alrenas rehabilitation systems in a clinical environment', 'alrenas' ) );
 ?>
 <section class="page-hero about-hero"><div class="container page-hero-grid"><div class="page-hero-copy reveal">
 	<?php get_template_part( 'template-parts/global/breadcrumbs', null, array( 'current_label' => get_the_title() ) ); ?>
