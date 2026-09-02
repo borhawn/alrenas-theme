@@ -492,6 +492,7 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'contact_hero_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_heading', 'placeholder' => esc_html__( 'Start with the rehabilitation need.', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'contact_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_lead', 'placeholder' => esc_html__( 'Whether you are evaluating a device for a hospital, physiotherapy clinic, rehabilitation center or research project, tell us what you need to achieve. We\'ll help you take the next step.', 'alrenas' ) ) );
 	add_settings_field( 'contact_hero_primary_label', esc_html__( 'Primary button label (links to the form below)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_primary_label', 'placeholder' => esc_html__( 'Send an Inquiry', 'alrenas' ) ) );
+	add_settings_field( 'contact_hero_image', esc_html__( 'Hero image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-contact-page', 'alrenas_contact_hero', array( 'key' => 'contact_hero_image_id', 'title' => esc_html__( 'Select hero image', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_contact_options', esc_html__( 'Inquiry options', 'alrenas' ), 'alrenas_section_contact_options_intro', 'alrenas-content-contact-page' );
 
@@ -533,7 +534,7 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'about_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_lead', 'placeholder' => esc_html__( 'We develop rehabilitation systems to help healthcare professionals assess movement, guide therapy and support patients toward greater stability, mobility and independence.', 'alrenas' ) ) );
 	add_settings_field( 'about_hero_primary_label', esc_html__( 'Primary button label (links to Products)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_primary_label', 'placeholder' => esc_html__( 'Explore Our Systems', 'alrenas' ) ) );
 	add_settings_field( 'about_hero_secondary_label', esc_html__( 'Secondary button label (links to Contact)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_secondary_label', 'placeholder' => esc_html__( 'Meet Our Team', 'alrenas' ) ) );
-	add_settings_field( 'about_hero_small_image', esc_html__( 'Small overlapping image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_small_image_id', 'title' => esc_html__( 'Select small image', 'alrenas' ) ) );
+	add_settings_field( 'about_hero_image', esc_html__( 'Hero image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-about-page', 'alrenas_about_hero', array( 'key' => 'about_hero_image_id', 'title' => esc_html__( 'Select hero image', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_about_mission', esc_html__( 'Mission', 'alrenas' ), '__return_false', 'alrenas-content-about-page' );
 
@@ -1415,7 +1416,8 @@ function alrenas_sanitize_site_content( $input ) {
 
 	$output['site_cta_lead'] = isset( $input['site_cta_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['site_cta_lead'] ) ) : '';
 
-	$output['about_hero_small_image_id'] = isset( $input['about_hero_small_image_id'] ) ? absint( $input['about_hero_small_image_id'] ) : 0;
+	$output['about_hero_image_id']    = isset( $input['about_hero_image_id'] ) ? absint( $input['about_hero_image_id'] ) : 0;
+	$output['contact_hero_image_id']  = isset( $input['contact_hero_image_id'] ) ? absint( $input['contact_hero_image_id'] ) : 0;
 	$output['about_story_image_id']      = isset( $input['about_story_image_id'] ) ? absint( $input['about_story_image_id'] ) : 0;
 
 	$output['contact_options_items'] = alrenas_sanitize_repeater_field( $input['contact_options_items'] ?? null, ALRENAS_CONTACT_OPTION_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
