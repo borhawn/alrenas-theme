@@ -95,7 +95,12 @@ if ('IntersectionObserver' in window) {
   revealItems.forEach(item => item.classList.add('is-visible'));
 }
 
-// Generic tab system used by both the homepage specialties and product workflow.
+// Generic tab system used by the homepage specialties, product workflow,
+// and the product software showcase. A key can have more than one
+// trigger pointing at it (e.g. a thumbnail and a dot both for the same
+// slide) -- matched by data-tab value, not by identity, so every
+// trigger sharing that value stays in sync regardless of which one was
+// actually clicked.
 document.querySelectorAll('[data-tabs]').forEach(tabRoot => {
   const tabs = [...tabRoot.querySelectorAll('[data-tab]')];
   const panels = [...tabRoot.querySelectorAll('[data-panel]')];
@@ -103,7 +108,7 @@ document.querySelectorAll('[data-tabs]').forEach(tabRoot => {
     tab.addEventListener('click', () => {
       const key = tab.dataset.tab;
       tabs.forEach(item => {
-        const active = item === tab;
+        const active = item.dataset.tab === key;
         item.classList.toggle('is-active', active);
         item.setAttribute('aria-selected', String(active));
       });
