@@ -1116,10 +1116,9 @@ function alrenas_field_care_step( $args ) {
 	$steps = alrenas_get_site_content( 'care_steps', array() );
 	$step  = isset( $steps[ $index ] ) ? $steps[ $index ] : array();
 
-	$kicker      = isset( $step['kicker'] ) ? $step['kicker'] : '';
-	$title       = isset( $step['title'] ) ? $step['title'] : '';
-	$description = isset( $step['description'] ) ? $step['description'] : '';
-	$media_id    = isset( $step['media_id'] ) ? (int) $step['media_id'] : 0;
+	$kicker   = isset( $step['kicker'] ) ? $step['kicker'] : '';
+	$title    = isset( $step['title'] ) ? $step['title'] : '';
+	$media_id = isset( $step['media_id'] ) ? (int) $step['media_id'] : 0;
 
 	$name      = ALRENAS_SITE_CONTENT_OPTION . '[care_steps][' . $index . ']';
 	$media_url = $media_id ? alrenas_admin_media_preview_url( $media_id ) : '';
@@ -1132,10 +1131,6 @@ function alrenas_field_care_step( $args ) {
 		<p>
 			<label class="alrenas-field-label"><?php esc_html_e( 'Title', 'alrenas' ); ?></label>
 			<input type="text" name="<?php echo esc_attr( $name ); ?>[title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. Assess', 'alrenas' ); ?>">
-		</p>
-		<p>
-			<label class="alrenas-field-label"><?php esc_html_e( 'Description', 'alrenas' ); ?></label>
-			<textarea name="<?php echo esc_attr( $name ); ?>[description]" rows="2" class="large-text"><?php echo esc_textarea( $description ); ?></textarea>
 		</p>
 		<p class="alrenas-image-field">
 			<span class="alrenas-field-label"><?php esc_html_e( 'Media (image, SVG, or .webm video)', 'alrenas' ); ?></span>
@@ -1492,10 +1487,9 @@ function alrenas_sanitize_site_content( $input ) {
 			}
 
 			$output['care_steps'][ $index ] = array(
-				'kicker'      => isset( $step['kicker'] ) ? sanitize_text_field( wp_unslash( $step['kicker'] ) ) : '',
-				'title'       => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
-				'description' => isset( $step['description'] ) ? sanitize_textarea_field( wp_unslash( $step['description'] ) ) : '',
-				'media_id'    => isset( $step['media_id'] ) ? absint( $step['media_id'] ) : 0,
+				'kicker'   => isset( $step['kicker'] ) ? sanitize_text_field( wp_unslash( $step['kicker'] ) ) : '',
+				'title'    => isset( $step['title'] ) ? sanitize_text_field( wp_unslash( $step['title'] ) ) : '',
+				'media_id' => isset( $step['media_id'] ) ? absint( $step['media_id'] ) : 0,
 			);
 		}
 	}

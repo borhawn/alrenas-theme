@@ -152,8 +152,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .care-card-body{position:relative;z-index:1;padding:31px 31px 26px}
 .care-card-kicker{display:block;margin-bottom:8px;color:var(--blue-700);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .care-card h3{font-size:26px}
-.care-card p{margin-top:11px;max-width:320px;font-size:15px}
-.care-card-media{position:relative;z-index:1;flex:1;min-height:160px;margin-top:20px;overflow:hidden;background:rgba(19,64,83,.04)}
+.care-card-media{position:relative;z-index:1;margin-top:20px;overflow:hidden;background:rgba(19,64,83,.04);aspect-ratio:3/4}
 .care-card-media-el{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
 /* Products */
