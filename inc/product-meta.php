@@ -117,7 +117,11 @@ function alrenas_product_meta_inline_footer() {
 		.alrenas-pm-row { display: flex; gap: 20px; flex-wrap: wrap; }
 		.alrenas-pm-row .alrenas-pm-field { flex: 1 1 260px; }
 		.alrenas-pm-repeater-item { margin: 0 0 18px; padding: 14px 16px; border: 1px solid #dcdcde; border-radius: 6px; background: #fbfbfc; }
-		.alrenas-pm-repeater-item h4 { margin: 0 0 10px; display: flex; align-items: center; justify-content: space-between; }
+		.alrenas-pm-repeater-item.is-dragging { opacity: .4; }
+		.alrenas-pm-repeater-item h4 { margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+		.alrenas-pm-repeater-item h4 .alrenas-pm-repeater-title { flex: 1; }
+		.alrenas-pm-repeater-handle { cursor: grab; padding: 2px 6px; color: #787c82; font-size: 16px; line-height: 1; user-select: none; }
+		.alrenas-pm-repeater-handle:active { cursor: grabbing; }
 		.alrenas-pm-media-preview { display: block; width: 120px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #dcdcde; background: #f0f0f1; margin-bottom: 8px; }
 		.alrenas-pm-media-preview[hidden] { display: none; }
 		.alrenas-pm-file-name { display: inline-block; margin-right: 10px; font-style: italic; }
@@ -174,10 +178,41 @@ function alrenas_product_meta_inline_footer() {
 		document.querySelectorAll( '.alrenas-pm-media-field' ).forEach( initMediaPicker );
 
 		document.querySelectorAll( '.alrenas-pm-dynamic-repeater' ).forEach( function ( repeaterRoot ) {
-			var rows     = repeaterRoot.querySelector( '.alrenas-pm-repeater-rows' );
-			var addBtn   = repeaterRoot.querySelector( '.alrenas-pm-repeater-add' );
-			var template = repeaterRoot.querySelector( 'template' );
-			var counter  = rows.querySelectorAll( '.alrenas-pm-repeater-item' ).length;
+			var rows        = repeaterRoot.querySelector( '.alrenas-pm-repeater-rows' );
+			var addBtn      = repeaterRoot.querySelector( '.alrenas-pm-repeater-add' );
+			var template    = repeaterRoot.querySelector( 'template' );
+			var counter     = rows.querySelectorAll( '.alrenas-pm-repeater-item' ).length;
+			var draggingRow = null;
+
+			// Reordering is purely a client-side drag of the row elements --
+			// the save routine (alrenas_sanitize_pm_dynamic_repeater()) already
+			// re-keys everything 1..N in the order fields are submitted,
+			// ignoring whatever [index] each field's name carries. So moving
+			// the DOM nodes here is the entire feature; nothing server-side
+			// needs to change and no data can be lost by reordering.
+			function getRowAfterPointer( y ) {
+				var candidates = [].slice.call( rows.querySelectorAll( '.alrenas-pm-repeater-item:not(.is-dragging)' ) );
+				var result = { offset: -Infinity, element: null };
+				candidates.forEach( function ( candidate ) {
+					var box = candidate.getBoundingClientRect();
+					var offset = y - box.top - box.height / 2;
+					if ( offset < 0 && offset > result.offset ) {
+						result = { offset: offset, element: candidate };
+					}
+				} );
+				return result.element;
+			}
+
+			rows.addEventListener( 'dragover', function ( e ) {
+				if ( ! draggingRow ) return;
+				e.preventDefault();
+				var afterRow = getRowAfterPointer( e.clientY );
+				if ( null === afterRow ) {
+					rows.appendChild( draggingRow );
+				} else {
+					rows.insertBefore( draggingRow, afterRow );
+				}
+			} );
 
 			function wireRow( row ) {
 				var removeBtn = row.querySelector( '.alrenas-pm-repeater-remove' );
@@ -187,6 +222,20 @@ function alrenas_product_meta_inline_footer() {
 					} );
 				}
 				row.querySelectorAll( '.alrenas-pm-media-field' ).forEach( initMediaPicker );
+
+				var handle = row.querySelector( '.alrenas-pm-repeater-handle' );
+				if ( handle ) {
+					handle.addEventListener( 'dragstart', function ( e ) {
+						draggingRow = row;
+						row.classList.add( 'is-dragging' );
+						e.dataTransfer.effectAllowed = 'move';
+						e.dataTransfer.setData( 'text/plain', '' );
+					} );
+					handle.addEventListener( 'dragend', function () {
+						row.classList.remove( 'is-dragging' );
+						draggingRow = null;
+					} );
+				}
 			}
 
 			rows.querySelectorAll( '.alrenas-pm-repeater-item' ).forEach( wireRow );
@@ -328,7 +377,11 @@ function alrenas_pm_dynamic_repeater_row( $meta_key, $index, $row, $fields ) {
 	ob_start();
 	?>
 	<div class="alrenas-pm-repeater-item">
-		<h4><?php esc_html_e( 'Item', 'alrenas' ); ?> <button type="button" class="button-link-delete alrenas-pm-repeater-remove"><?php esc_html_e( 'Remove', 'alrenas' ); ?></button></h4>
+		<h4>
+			<span class="alrenas-pm-repeater-handle" draggable="true" title="<?php esc_attr_e( 'Drag to reorder', 'alrenas' ); ?>" aria-hidden="true">⠿</span>
+			<span class="alrenas-pm-repeater-title"><?php esc_html_e( 'Item', 'alrenas' ); ?></span>
+			<button type="button" class="button-link-delete alrenas-pm-repeater-remove"><?php esc_html_e( 'Remove', 'alrenas' ); ?></button>
+		</h4>
 		<?php foreach ( $fields as $key => $field ) : ?>
 			<?php $value = isset( $row[ $key ] ) ? $row[ $key ] : ''; ?>
 			<?php if ( 'media' === $field['type'] ) : ?>
