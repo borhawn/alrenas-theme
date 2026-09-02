@@ -63,9 +63,8 @@ if ( ! $items ) {
 				<div class="software-thumb-list reveal" role="tablist" aria-label="<?php echo esc_attr( $product->get_name() ); ?> software">
 					<?php foreach ( $items as $i => $item ) : ?>
 						<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
-						<button class="software-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $i ? 'true' : 'false'; ?>" data-tab="sw-<?php echo esc_attr( $i ); ?>">
+						<button class="software-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $i ? 'true' : 'false'; ?>" aria-label="<?php echo esc_attr( $item['title'] ); ?>" data-tab="sw-<?php echo esc_attr( $i ); ?>">
 							<span class="software-thumb-media"><?php echo $image_id ? wp_get_attachment_image( $image_id, 'thumbnail' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></span>
-							<span class="software-thumb-label"><?php echo esc_html( $item['title'] ); ?></span>
 						</button>
 					<?php endforeach; ?>
 				</div>
