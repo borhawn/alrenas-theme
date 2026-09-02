@@ -36,15 +36,10 @@ if ( ! $items ) {
 ?>
 <section class="section product-software" id="software">
 	<div class="container">
-		<?php if ( $eyebrow ) : ?>
-			<div class="workflow-heading reveal">
-				<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
-			</div>
-		<?php endif; ?>
-
-		<div class="showcase-tabs" data-tabs>
+		<div class="showcase-tabs" data-tabs data-software-autoplay="5000">
 			<div class="showcase-layout reveal">
 				<div class="showcase-copy">
+					<?php if ( $eyebrow ) : ?><span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span><?php endif; ?>
 					<?php foreach ( $items as $i => $item ) : ?>
 						<div class="showcase-fade" data-panel="sw-<?php echo esc_attr( $i ); ?>" <?php echo 0 === $i ? '' : 'hidden'; ?>>
 							<h2><?php echo esc_html( $item['title'] ); ?></h2>

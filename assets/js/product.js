@@ -152,3 +152,44 @@ document.querySelectorAll('[data-faq]').forEach(faqRoot => {
   });
 });
 
+// Software showcase autoplay: advances to the next thumbnail/dot every
+// [data-software-autoplay] milliseconds. Pauses on hover/focus so a
+// visitor reading a description doesn't have it change under them, and
+// every click (the user's or autoplay's own) restarts the wait so a
+// manual choice never gets undone a moment later by a timer that was
+// already halfway through its countdown. Skipped for
+// prefers-reduced-motion, same as the rest of this theme's animation.
+document.querySelectorAll('[data-software-autoplay]').forEach(root => {
+  const interval = parseInt(root.dataset.softwareAutoplay, 10);
+  const tabs = [...root.querySelectorAll('[data-tab]')];
+  const keys = [...new Set(tabs.map(tab => tab.dataset.tab))];
+
+  if (!interval || keys.length < 2) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let timer = null;
+  let paused = false;
+
+  const activeIndex = () => {
+    const activeTab = tabs.find(tab => tab.classList.contains('is-active'));
+    return keys.indexOf(activeTab ? activeTab.dataset.tab : keys[0]);
+  };
+
+  const restart = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => {
+      if (paused) return;
+      const nextKey = keys[(activeIndex() + 1) % keys.length];
+      tabs.find(tab => tab.dataset.tab === nextKey)?.click();
+    }, interval);
+  };
+
+  tabs.forEach(tab => tab.addEventListener('click', restart));
+  root.addEventListener('mouseenter', () => { paused = true; });
+  root.addEventListener('mouseleave', () => { paused = false; });
+  root.addEventListener('focusin', () => { paused = true; });
+  root.addEventListener('focusout', () => { paused = false; });
+
+  restart();
+});
+
