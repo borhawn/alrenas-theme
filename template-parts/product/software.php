@@ -1,13 +1,13 @@
 <?php
 /**
  * Single-product software showcase: an admin-managed, add/remove-able set
- * of software screens (title, description, 16:9 screenshot). One screen
- * is shown large at a time -- big screenshot beside its title/description
- * -- with a row of small screenshot thumbnails below to switch between
- * screens. Reuses the theme's existing generic [data-tabs] handler (the
- * same one driving the homepage specialties and Clinical Workflow tabs)
- * for the switching + fade transition, so no extra JS is needed here --
- * and it renders fine with just one screen and no thumbnail row at all.
+ * of software screens (title, description, 16:9 screenshot), shown as a
+ * pinned-scroll narrative on desktop -- a single sticky image on the
+ * right while the titles/descriptions scroll past on the left, swapping
+ * to match whichever step is centered in the viewport (IntersectionObserver
+ * in assets/js/product.js, no scroll-position math, no added library). On
+ * narrower screens the pin is dropped in favor of a plain stacked list --
+ * each screenshot directly above its own title/description.
  *
  * @package Alrenas
  */
@@ -42,33 +42,35 @@ if ( ! $items ) {
 			<?php if ( $heading ) : ?><h2><?php echo esc_html( $heading ); ?></h2><?php endif; ?>
 			<?php if ( $lead ) : ?><p><?php echo esc_html( $lead ); ?></p><?php endif; ?>
 		</div>
+	</div>
 
-		<div class="software-tabs" data-tabs>
-			<div class="software-panels reveal">
-				<?php foreach ( $items as $i => $item ) : ?>
-					<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
-					<article class="software-panel" data-panel="sw-<?php echo esc_attr( $i ); ?>" <?php echo 0 === $i ? '' : 'hidden'; ?>>
-						<?php if ( $image_id ) : ?>
-							<div class="software-panel-media"><?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></div>
-						<?php endif; ?>
-						<div class="software-panel-copy">
-							<h3><?php echo esc_html( $item['title'] ); ?></h3>
-							<?php if ( ! empty( $item['description'] ) ) : ?><p><?php echo esc_html( $item['description'] ); ?></p><?php endif; ?>
-						</div>
-					</article>
-				<?php endforeach; ?>
-			</div>
+	<div class="container software-scroll-grid" data-software-scroll>
+		<div class="software-scroll-copy">
+			<?php foreach ( $items as $i => $item ) : ?>
+				<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
+				<div class="software-step<?php echo 0 === $i ? ' is-active' : ''; ?>" data-software-step data-step-index="<?php echo esc_attr( $i ); ?>">
+					<?php if ( $image_id ) : ?>
+						<div class="software-step-media"><?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></div>
+					<?php endif; ?>
+					<h3><?php echo esc_html( $item['title'] ); ?></h3>
+					<?php if ( ! empty( $item['description'] ) ) : ?><p><?php echo esc_html( $item['description'] ); ?></p><?php endif; ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
 
-			<?php if ( count( $items ) > 1 ) : ?>
-				<div class="software-thumb-list reveal" role="tablist" aria-label="<?php echo esc_attr( $product->get_name() ); ?> software">
+		<?php if ( count( $items ) > 1 ) : ?>
+			<div class="software-scroll-visual">
+				<div class="software-visual-sticky">
 					<?php foreach ( $items as $i => $item ) : ?>
 						<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
-						<button class="software-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $i ? 'true' : 'false'; ?>" aria-label="<?php echo esc_attr( $item['title'] ); ?>" data-tab="sw-<?php echo esc_attr( $i ); ?>">
-							<span class="software-thumb-media"><?php echo $image_id ? wp_get_attachment_image( $image_id, 'thumbnail' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></span>
-						</button>
+						<?php if ( $image_id ) : ?>
+							<div class="software-visual-frame<?php echo 0 === $i ? ' is-active' : ''; ?>" data-step-index="<?php echo esc_attr( $i ); ?>">
+								<?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?>
+							</div>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
-			<?php endif; ?>
-		</div>
+			</div>
+		<?php endif; ?>
 	</div>
 </section>

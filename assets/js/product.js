@@ -151,3 +151,37 @@ document.querySelectorAll('[data-faq]').forEach(faqRoot => {
     });
   });
 });
+
+// Software showcase pinned-scroll: as each step scrolls through the
+// vertical center of the viewport, mark it (and its matching image)
+// active. rootMargin shrinks the observed viewport to a thin band at
+// 50% height, so "intersecting" means "crossing the center" rather than
+// "any part visible" -- the standard IntersectionObserver technique for
+// this, and lighter than driving it off scroll position directly. Only
+// runs where the CSS actually pins the visual (see the 900px breakpoint
+// in product.css, which drops the pin and shows a plain stacked list).
+const softwareScroll = document.querySelector('[data-software-scroll]');
+if (softwareScroll && 'IntersectionObserver' in window) {
+  const steps = [...softwareScroll.querySelectorAll('[data-software-step]')];
+  const frames = [...softwareScroll.querySelectorAll('.software-visual-frame')];
+
+  if (steps.length > 1) {
+    const setActiveStep = index => {
+      steps.forEach(step => step.classList.toggle('is-active', step.dataset.stepIndex === index));
+      frames.forEach(frame => frame.classList.toggle('is-active', frame.dataset.stepIndex === index));
+    };
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveStep(entry.target.dataset.stepIndex);
+          }
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    );
+
+    steps.forEach(step => observer.observe(step));
+  }
+}
