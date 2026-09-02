@@ -91,6 +91,18 @@ if (quoteModal) {
     });
   });
 
+  // "Request a quote" links elsewhere on the site (e.g. the /products
+  // archive) point here as `<product-url>#get-a-quote` so they land on
+  // the product page with the modal already open, instead of just
+  // dropping the visitor on the page to go find the button themselves.
+  if (window.location.hash === '#get-a-quote') {
+    const defaultTrigger = document.querySelector('[data-quote-trigger]');
+    if (defaultTrigger) {
+      openModal(defaultTrigger);
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+
   quoteModal.querySelectorAll('[data-quote-modal-close]').forEach(closer => {
     closer.addEventListener('click', closeModal);
   });
