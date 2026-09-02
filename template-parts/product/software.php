@@ -1,11 +1,11 @@
 <?php
 /**
  * Single-product software showcase: an admin-managed, add/remove-able set
- * of software screens (title, description, 16:9 screenshot). Switches
- * between screens via the theme's existing generic [data-tabs] handler
- * (same one driving the Clinical Workflow tabs), so no extra JS is
- * needed here -- and it renders fine with just one screen and no tab
- * list at all.
+ * of software screens (title, description, 16:9 screenshot), shown as
+ * alternating full-size image/copy rows -- the same "big focused image"
+ * pattern used for the homepage's product rows and the /products systems
+ * list -- rather than a tag/tab switcher. Needs no JS: every screen is
+ * simply on the page, in order.
  *
  * @package Alrenas
  */
@@ -41,28 +41,20 @@ if ( ! $items ) {
 			<?php if ( $lead ) : ?><p><?php echo esc_html( $lead ); ?></p><?php endif; ?>
 		</div>
 
-		<div class="software-tabs" data-tabs>
-			<?php if ( count( $items ) > 1 ) : ?>
-				<div class="software-tab-list reveal" role="tablist" aria-label="<?php echo esc_attr( $product->get_name() ); ?> software">
-					<?php foreach ( $items as $i => $item ) : ?>
-						<button class="software-tab<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $i ? 'true' : 'false'; ?>" data-tab="sw-<?php echo esc_attr( $i ); ?>"><?php echo esc_html( $item['title'] ); ?></button>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
-			<div class="software-panels reveal">
-				<?php foreach ( $items as $i => $item ) : ?>
-					<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
-					<article class="software-panel" data-panel="sw-<?php echo esc_attr( $i ); ?>" <?php echo 0 === $i ? '' : 'hidden'; ?>>
-						<div class="software-panel-copy">
-							<h3><?php echo esc_html( $item['title'] ); ?></h3>
-							<?php if ( ! empty( $item['description'] ) ) : ?><p><?php echo esc_html( $item['description'] ); ?></p><?php endif; ?>
-						</div>
-						<?php if ( $image_id ) : ?>
-							<div class="software-panel-media"><?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></div>
-						<?php endif; ?>
-					</article>
-				<?php endforeach; ?>
-			</div>
+		<div class="software-showcase">
+			<?php foreach ( $items as $i => $item ) : ?>
+				<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
+				<article class="software-row<?php echo 1 === $i % 2 ? ' software-row--reverse' : ''; ?> reveal">
+					<div class="software-row-media">
+						<?php if ( $image_id ) : ?><?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?><?php endif; ?>
+					</div>
+					<div class="software-row-copy">
+						<span class="software-row-index"><?php echo esc_html( str_pad( $i + 1, 2, '0', STR_PAD_LEFT ) ); ?></span>
+						<h3><?php echo esc_html( $item['title'] ); ?></h3>
+						<?php if ( ! empty( $item['description'] ) ) : ?><p><?php echo esc_html( $item['description'] ); ?></p><?php endif; ?>
+					</div>
+				</article>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>
