@@ -131,7 +131,6 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 
 /* Products archive */
 .products-hero .hero-panel-soft img{height:88%;bottom:-4%;right:13%}
-.products-hero .mini-device{height:51%!important;right:auto!important;left:8%;bottom:4%!important;opacity:.92}
 .products-intro{background:#fff}.products-intro-grid{display:grid;grid-template-columns:1fr .78fr;gap:84px;align-items:end}.products-intro-grid p{font-size:19px}.products-intro-grid .text-link{margin-top:24px}
 .solutions{background:var(--canvas)}.solutions-head{display:flex;justify-content:space-between;align-items:end;gap:60px;margin-bottom:54px}.solutions-head>div{max-width:760px}.solutions-head p{max-width:370px}
 .solution-list{display:grid;gap:28px}.solution-card{min-height:520px;background:#fff;border:1px solid var(--line);border-radius:28px;display:grid;grid-template-columns:minmax(400px,.9fr) minmax(0,1.1fr);overflow:hidden;box-shadow:var(--shadow-card)}
@@ -200,7 +199,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 @media(max-width:600px){
   :root{--container:calc(100% - 28px)}
   .section{padding:70px 0}.page-hero{padding:44px 0 36px}h1{font-size:clamp(46px,13vw,62px)}h2{font-size:38px}.lead{font-size:18px}
-  .hero-panel-soft{min-height:360px}.products-hero .hero-panel-soft img{height:78%;right:8%}.products-hero .mini-device{height:42%!important}.blog-hero-art{padding:18px;gap:10px}.blog-hero .hero-panel-soft{min-height:330px}
+  .hero-panel-soft{min-height:360px}.products-hero .hero-panel-soft img{height:78%;right:8%}.blog-hero-art{padding:18px;gap:10px}.blog-hero .hero-panel-soft{min-height:330px}
   .footer-grid{grid-template-columns:1fr}.footer-brand{grid-column:auto}.footer-bottom{flex-direction:column}.footer-bottom div{flex-wrap:wrap}
   .site-cta{padding-bottom:68px}.site-cta-card{padding:38px 24px;min-height:430px}.site-cta-actions{flex-direction:column;align-items:stretch}
   .solution-media{min-height:390px}.solution-media img{max-height:360px}.solution-copy{padding:32px 25px}.solution-actions{align-items:flex-start;flex-direction:column}.solution-capabilities{grid-template-columns:1fr}.selector-item{padding:26px}

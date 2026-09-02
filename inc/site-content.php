@@ -414,8 +414,7 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'products_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_lead', 'placeholder' => esc_html__( 'Clinical systems for balance assessment, guided physiotherapy and supported mobility — selected according to the patient, treatment goal and level of assistance required.', 'alrenas' ) ) );
 	add_settings_field( 'products_hero_primary_label', esc_html__( 'Primary button label (links to the systems section)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_primary_label', 'placeholder' => esc_html__( 'Explore Systems', 'alrenas' ) ) );
 	add_settings_field( 'products_hero_secondary_label', esc_html__( 'Secondary button label (links to Contact)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_secondary_label', 'placeholder' => esc_html__( 'Get Product Guidance', 'alrenas' ) ) );
-	add_settings_field( 'products_hero_main_product_id', esc_html__( 'Large hero image (product)', 'alrenas' ), 'alrenas_field_products_hero_image', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_main_product_id' ) );
-	add_settings_field( 'products_hero_mini_product_id', esc_html__( 'Small overlapping hero image (product)', 'alrenas' ), 'alrenas_field_products_hero_image', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_mini_product_id' ) );
+	add_settings_field( 'products_hero_image', esc_html__( 'Hero image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-products-page', 'alrenas_products_hero', array( 'key' => 'products_hero_image_id', 'title' => esc_html__( 'Select hero image', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_products_intro', esc_html__( 'Introduction', 'alrenas' ), '__return_false', 'alrenas-content-products-page' );
 
@@ -891,21 +890,6 @@ function alrenas_field_story_point( $args ) {
 }
 
 /**
- * Render a product-select field for a Products-page hero image slot.
- *
- * @param array $args Contains 'key' (site-content key).
- */
-function alrenas_field_products_hero_image( $args ) {
-	$selected = (int) alrenas_get_site_content( $args['key'], 0 );
-	?>
-	<p>
-		<?php alrenas_render_product_select( ALRENAS_SITE_CONTENT_OPTION . '[' . $args['key'] . ']', $selected ); ?>
-		<span class="description"><?php esc_html_e( 'Uses that product\'s image. Leave unset to fall back to the most recent products.', 'alrenas' ); ?></span>
-	</p>
-	<?php
-}
-
-/**
  * Intro text for the Products-page Systems settings section.
  */
 function alrenas_section_products_systems_intro() {
@@ -1364,8 +1348,7 @@ function alrenas_sanitize_site_content( $input ) {
 	$output['products_systems_lead'] = isset( $input['products_systems_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_systems_lead'] ) ) : '';
 	$output['products_quote_lead']  = isset( $input['products_quote_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['products_quote_lead'] ) ) : '';
 
-	$output['products_hero_main_product_id'] = isset( $input['products_hero_main_product_id'] ) ? absint( $input['products_hero_main_product_id'] ) : 0;
-	$output['products_hero_mini_product_id'] = isset( $input['products_hero_mini_product_id'] ) ? absint( $input['products_hero_mini_product_id'] ) : 0;
+	$output['products_hero_image_id'] = isset( $input['products_hero_image_id'] ) ? absint( $input['products_hero_image_id'] ) : 0;
 
 	$output['product_capabilities'] = array();
 
