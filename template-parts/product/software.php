@@ -4,11 +4,12 @@
  * of software screens (title, description, 16:9 screenshot). Only the
  * section's own eyebrow is fixed; its title and description come from
  * whichever screen is currently selected. Title/description sit on the
- * left, with the image, a thumbnail strip and dot navigation on the
- * right -- switching via the theme's existing generic [data-tabs]
- * handler (same one driving the homepage specialties and Clinical
- * Workflow tabs), so no bespoke JS is needed here. Renders fine with
- * just one screen and no thumbnails/dots at all.
+ * left, with the image, a thumbnail strip (capped to the first 5 --
+ * dots below it cover the rest) and dot navigation on the right --
+ * switching via the theme's existing generic [data-tabs] handler (same
+ * one driving the homepage specialties and Clinical Workflow tabs), so
+ * no bespoke JS is needed here beyond the autoplay in product.js.
+ * Renders fine with just one screen and no thumbnails/dots at all.
  *
  * @package Alrenas
  */
@@ -33,6 +34,10 @@ foreach ( $raw_items as $item ) {
 if ( ! $items ) {
 	return;
 }
+
+// Dots (below) cover every screen regardless of count; the thumbnail
+// row is a visual preview only and stays capped to one row.
+$thumb_items = array_slice( $items, 0, 5, true );
 ?>
 <section class="section product-software" id="software">
 	<div class="container">
@@ -62,7 +67,7 @@ if ( ! $items ) {
 
 					<?php if ( count( $items ) > 1 ) : ?>
 						<div class="showcase-thumb-list" role="tablist" aria-label="<?php echo esc_attr( $product->get_name() ); ?> software">
-							<?php foreach ( $items as $i => $item ) : ?>
+							<?php foreach ( $thumb_items as $i => $item ) : ?>
 								<?php $image_id = ! empty( $item['image_id'] ) ? (int) $item['image_id'] : 0; ?>
 								<button class="showcase-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $i ? 'true' : 'false'; ?>" aria-label="<?php echo esc_attr( $item['title'] ); ?>" data-tab="sw-<?php echo esc_attr( $i ); ?>">
 									<span class="showcase-thumb-media"><?php echo $image_id ? wp_get_attachment_image( $image_id, 'thumbnail' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?></span>
