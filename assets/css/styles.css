@@ -143,17 +143,21 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .intro-copy p{font-size:19px;max-width:560px}
 .intro-copy .text-link{margin-top:24px}
 .care-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px}
-.care-card{position:relative;display:flex;flex-direction:column;min-height:310px;padding:0;border-radius:23px;background:var(--blue-050);border:1px solid #DCEAF0;overflow:hidden}
-.care-card::after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-80px;bottom:-100px;background:rgba(23,116,183,.05)}
+.care-card{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:310px;padding:0;border-radius:23px;background:var(--blue-050);border:1px solid #DCEAF0;overflow:hidden}
 .care-card--teal{background:#F1FAF7;border-color:#D8EBE6}
-.care-card--teal::after{background:rgba(62,143,131,.05)}
 .care-card--warm{background:var(--warm);border-color:#E6E1D7}
-.care-card--warm::after{background:rgba(120,103,76,.04)}
-.care-card-body{position:relative;z-index:1;padding:31px 31px 26px}
-.care-card-kicker{display:block;margin-bottom:8px;color:var(--blue-700);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.care-card h3{font-size:26px}
-.care-card-media{position:relative;z-index:1;margin-top:20px;overflow:hidden;background:rgba(19,64,83,.04);aspect-ratio:4/3}
-.care-card-media-el{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* The image is a full-bleed background (position:absolute, filling the
+   card) with the title/kicker overlaid at the bottom over a blurred
+   dark gradient for legibility -- both the gradient and the image zoom
+   strengthen slightly on hover. */
+.care-card::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(23,50,65,.88) 0%,rgba(23,50,65,.55) 42%,rgba(23,50,65,0) 78%);transition:background .35s ease;pointer-events:none}
+.care-card:hover::before{background:linear-gradient(to top,rgba(23,50,65,.94) 0%,rgba(23,50,65,.68) 48%,rgba(23,50,65,.08) 82%)}
+.care-card-media{position:absolute;inset:0;z-index:0;overflow:hidden;background:rgba(19,64,83,.04)}
+.care-card-media-el{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.care-card:hover .care-card-media-el{transform:scale(1.05)}
+.care-card-body{position:relative;z-index:2;padding:31px 31px 26px}
+.care-card-kicker{display:block;margin-bottom:8px;color:rgba(255,255,255,.85);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.care-card h3{font-size:26px;color:#fff}
 
 /* Products */
 .products{background:var(--canvas)}
