@@ -94,9 +94,25 @@ function alrenas_register_assets() {
 	);
 
 	wp_register_script(
+		'gsap',
+		'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js',
+		array(),
+		'3.15.0',
+		true
+	);
+
+	wp_register_script(
+		'gsap-scrolltrigger',
+		'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js',
+		array( 'gsap' ),
+		'3.15.0',
+		true
+	);
+
+	wp_register_script(
 		'alrenas-product-script',
 		get_theme_file_uri( 'assets/js/product.js' ),
-		array( 'alrenas-shared-script' ),
+		array( 'alrenas-shared-script', 'gsap-scrolltrigger' ),
 		alrenas_asset_version( 'assets/js/product.js' ),
 		true
 	);

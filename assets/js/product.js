@@ -152,36 +152,103 @@ document.querySelectorAll('[data-faq]').forEach(faqRoot => {
   });
 });
 
-// Software showcase pinned-scroll: as each step scrolls through the
-// vertical center of the viewport, mark it (and its matching image)
-// active. rootMargin shrinks the observed viewport to a thin band at
-// 50% height, so "intersecting" means "crossing the center" rather than
-// "any part visible" -- the standard IntersectionObserver technique for
-// this, and lighter than driving it off scroll position directly. Only
-// runs where the CSS actually pins the visual (see the 900px breakpoint
-// in product.css, which drops the pin and shows a plain stacked list).
-const softwareScroll = document.querySelector('[data-software-scroll]');
-if (softwareScroll && 'IntersectionObserver' in window) {
-  const steps = [...softwareScroll.querySelectorAll('[data-software-step]')];
-  const frames = [...softwareScroll.querySelectorAll('.software-visual-frame')];
+// Software showcase pinned-scroll (desktop only -- see the 900px
+// breakpoint in product.css for the plain stacked fallback below that,
+// which needs none of this). GSAP ScrollTrigger locks the section once
+// it reaches the center of the viewport, then steps the title/
+// description/image through each software screen as the visitor keeps
+// scrolling, starting from the section's own intro copy.
+const softwarePin = document.querySelector('[data-software-pin]');
+const softwareStepsScript = document.querySelector('[data-software-steps]');
 
-  if (steps.length > 1) {
-    const setActiveStep = index => {
-      steps.forEach(step => step.classList.toggle('is-active', step.dataset.stepIndex === index));
-      frames.forEach(frame => frame.classList.toggle('is-active', frame.dataset.stepIndex === index));
+if (softwarePin && softwareStepsScript && window.gsap && window.ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const titleEl = softwarePin.querySelector('[data-software-title]');
+  const descriptionEl = softwarePin.querySelector('[data-software-description]');
+  const imageEl = softwarePin.querySelector('[data-software-image]');
+
+  let steps = [];
+  try {
+    steps = JSON.parse(softwareStepsScript.textContent);
+  } catch (error) {
+    steps = [];
+  }
+
+  if (titleEl && descriptionEl && imageEl && steps.length) {
+    const introState = {
+      title: titleEl.textContent,
+      description: descriptionEl.textContent,
+      image: imageEl.getAttribute('src'),
+      alt: imageEl.getAttribute('alt'),
     };
 
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setActiveStep(entry.target.dataset.stepIndex);
-          }
-        });
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    const states = [introState].concat(
+      steps.map(step => ({
+        title: step.title || '',
+        description: step.description || '',
+        image: step.image || introState.image,
+        alt: step.alt || step.title || '',
+      }))
     );
 
-    steps.forEach(step => observer.observe(step));
+    let activeIndex = 0;
+
+    const applyState = index => {
+      const state = states[index];
+      if (!state) return;
+
+      gsap
+        .timeline()
+        .to([titleEl, descriptionEl, imageEl], { opacity: 0, duration: 0.18, ease: 'power1.out' })
+        .call(() => {
+          titleEl.textContent = state.title;
+          descriptionEl.textContent = state.description;
+          if (state.image) {
+            imageEl.setAttribute('src', state.image);
+            imageEl.setAttribute('alt', state.alt);
+          }
+        })
+        .to([titleEl, descriptionEl, imageEl], { opacity: 1, duration: 0.28, ease: 'power1.in' });
+    };
+
+    ScrollTrigger.matchMedia({
+      '(min-width: 901px)': function () {
+        const distancePerStep = window.innerHeight * 0.9;
+
+        const trigger = ScrollTrigger.create({
+          trigger: softwarePin,
+          start: 'center center',
+          end: '+=' + Math.max(1, states.length - 1) * distancePerStep,
+          pin: true,
+          anticipatePin: 1,
+          onUpdate(self) {
+            const index = Math.min(states.length - 1, Math.floor(self.progress * states.length));
+            if (index !== activeIndex) {
+              activeIndex = index;
+              applyState(index);
+            }
+          },
+          onLeaveBack() {
+            if (activeIndex !== 0) {
+              activeIndex = 0;
+              applyState(0);
+            }
+          },
+        });
+
+        // Runs when this matchMedia query stops matching (resized below
+        // 901px) -- ScrollTrigger's own cleanup for that case.
+        return () => {
+          trigger.kill();
+          activeIndex = 0;
+          titleEl.textContent = introState.title;
+          descriptionEl.textContent = introState.description;
+          imageEl.setAttribute('src', introState.image);
+          imageEl.setAttribute('alt', introState.alt);
+          gsap.set([titleEl, descriptionEl, imageEl], { clearProps: 'opacity' });
+        };
+      },
+    });
   }
 }
