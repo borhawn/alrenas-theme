@@ -119,7 +119,7 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 .page-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);gap:80px;align-items:center}
 .page-hero-copy{max-width:720px}.page-hero-copy .eyebrow{margin-bottom:22px}.page-hero-copy p{max-width:660px;margin-top:24px}.page-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 .breadcrumbs{margin-bottom:24px;display:flex;flex-wrap:wrap;gap:8px;color:#879AA4;font-size:13px}.breadcrumbs a:hover{color:var(--blue-700)}.breadcrumbs strong{color:var(--ink-700);font-weight:600}
-.hero-panel-soft{position:relative;min-height:440px;border-radius:30px;background:linear-gradient(145deg,var(--blue-100),var(--teal-100));border:1px solid #D9E9EE;overflow:hidden}
+.hero-panel-soft{position:relative;align-self:stretch;min-height:440px;border-radius:30px;background:linear-gradient(145deg,var(--blue-100),var(--teal-100));border:1px solid #D9E9EE;overflow:hidden}
 .hero-panel-soft img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* CTA */
