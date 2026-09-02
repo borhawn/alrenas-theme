@@ -68,6 +68,7 @@ function alrenas_site_content_tabs() {
 		'products-page'   => esc_html__( 'Products Page', 'alrenas' ),
 		'contact-page'    => esc_html__( 'Contact Page', 'alrenas' ),
 		'about-page'      => esc_html__( 'About Page', 'alrenas' ),
+		'blog-page'       => esc_html__( 'Blog Page', 'alrenas' ),
 		'site-cta'        => esc_html__( 'Site CTA', 'alrenas' ),
 		'single-product'  => esc_html__( 'Single Product Page', 'alrenas' ),
 		'footer'          => esc_html__( 'Footer', 'alrenas' ),
@@ -634,6 +635,14 @@ function alrenas_site_content_settings() {
 			)
 		);
 	}
+
+	// --- Blog Page -----------------------------------------------------
+	add_settings_section( 'alrenas_blog_hero', esc_html__( 'Hero', 'alrenas' ), '__return_false', 'alrenas-content-blog-page' );
+
+	add_settings_field( 'blog_hero_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-blog-page', 'alrenas_blog_hero', array( 'key' => 'blog_hero_eyebrow', 'placeholder' => esc_html__( 'Rehabilitation resources', 'alrenas' ) ) );
+	add_settings_field( 'blog_hero_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-blog-page', 'alrenas_blog_hero', array( 'key' => 'blog_hero_heading', 'placeholder' => esc_html__( 'Practical thinking for better movement and recovery.', 'alrenas' ), 'wide' => true ) );
+	add_settings_field( 'blog_hero_lead', esc_html__( 'Lead paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-blog-page', 'alrenas_blog_hero', array( 'key' => 'blog_hero_lead', 'placeholder' => esc_html__( 'Articles on balance assessment, physiotherapy, mobility, fall risk and the role of rehabilitation technology in clinical care.', 'alrenas' ) ) );
+	add_settings_field( 'blog_hero_image', esc_html__( 'Hero image', 'alrenas' ), 'alrenas_field_story_image', 'alrenas-content-blog-page', 'alrenas_blog_hero', array( 'key' => 'blog_hero_image_id', 'title' => esc_html__( 'Select hero image', 'alrenas' ) ) );
 
 	// --- Site CTA (shared component: home, blog index, single post, ---
 	// --- products page, about page) -------------------------------------
@@ -1272,6 +1281,8 @@ function alrenas_sanitize_site_content( $input ) {
 		'about_hero_heading',
 		'about_hero_primary_label',
 		'about_hero_secondary_label',
+		'blog_hero_eyebrow',
+		'blog_hero_heading',
 		'about_mission_eyebrow',
 		'about_mission_heading',
 		'about_values_eyebrow',
@@ -1418,6 +1429,11 @@ function alrenas_sanitize_site_content( $input ) {
 
 	$output['about_hero_image_id']    = isset( $input['about_hero_image_id'] ) ? absint( $input['about_hero_image_id'] ) : 0;
 	$output['contact_hero_image_id']  = isset( $input['contact_hero_image_id'] ) ? absint( $input['contact_hero_image_id'] ) : 0;
+	$output['blog_hero_image_id']     = isset( $input['blog_hero_image_id'] ) ? absint( $input['blog_hero_image_id'] ) : 0;
+
+	$output['blog_hero_lead'] = isset( $input['blog_hero_lead'] )
+		? sanitize_textarea_field( wp_unslash( $input['blog_hero_lead'] ) )
+		: '';
 	$output['about_story_image_id']      = isset( $input['about_story_image_id'] ) ? absint( $input['about_story_image_id'] ) : 0;
 
 	$output['contact_options_items'] = alrenas_sanitize_repeater_field( $input['contact_options_items'] ?? null, ALRENAS_CONTACT_OPTION_COUNT, array( 'title' => 'text', 'description' => 'text' ) );
