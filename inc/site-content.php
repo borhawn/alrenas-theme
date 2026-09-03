@@ -521,7 +521,6 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'contact_details_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_heading', 'placeholder' => esc_html__( 'We\'ll route your request to the right person.', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'contact_details_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_lead', 'placeholder' => esc_html__( 'Share the clinical or practical context rather than trying to fit your question into a generic sales form.', 'alrenas' ) ) );
 	add_settings_field( 'contact_map_embed_url', esc_html__( 'Google Maps embed URL (Share > Embed a map > copy the src="..." URL)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_embed_url', 'wide' => true, 'placeholder' => esc_html__( 'https://www.google.com/maps/embed?pb=...', 'alrenas' ) ) );
-	add_settings_field( 'contact_map_note', esc_html__( 'Note (below the map)', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_note', 'placeholder' => esc_html__( 'For urgent technical assistance, calling the team directly is the fastest route.', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_contact_form_head', esc_html__( 'Form card', 'alrenas' ), '__return_false', 'alrenas-content-contact-page' );
 
@@ -1411,7 +1410,6 @@ function alrenas_sanitize_site_content( $input ) {
 	// --- Contact / About pages ------------------------------------------
 	$output['contact_hero_lead']    = isset( $input['contact_hero_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_hero_lead'] ) ) : '';
 	$output['contact_details_lead'] = isset( $input['contact_details_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_details_lead'] ) ) : '';
-	$output['contact_map_note']     = isset( $input['contact_map_note'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_map_note'] ) ) : '';
 	$output['contact_form_lead']    = isset( $input['contact_form_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['contact_form_lead'] ) ) : '';
 
 	$output['about_hero_lead']         = isset( $input['about_hero_lead'] ) ? sanitize_textarea_field( wp_unslash( $input['about_hero_lead'] ) ) : '';
