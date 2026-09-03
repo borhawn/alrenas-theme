@@ -520,7 +520,8 @@ function alrenas_site_content_settings() {
 	add_settings_field( 'contact_details_eyebrow', esc_html__( 'Eyebrow', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_eyebrow', 'placeholder' => esc_html__( 'Talk to our team', 'alrenas' ) ) );
 	add_settings_field( 'contact_details_heading', esc_html__( 'Heading', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_heading', 'placeholder' => esc_html__( 'We\'ll route your request to the right person.', 'alrenas' ), 'wide' => true ) );
 	add_settings_field( 'contact_details_lead', esc_html__( 'Paragraph', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_details_lead', 'placeholder' => esc_html__( 'Share the clinical or practical context rather than trying to fit your question into a generic sales form.', 'alrenas' ) ) );
-	add_settings_field( 'contact_map_note', esc_html__( 'Note (below the contact details)', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_note', 'placeholder' => esc_html__( 'For urgent technical assistance, calling the team directly is the fastest route.', 'alrenas' ) ) );
+	add_settings_field( 'contact_map_embed_url', esc_html__( 'Google Maps embed URL (Share > Embed a map > copy the src="..." URL)', 'alrenas' ), 'alrenas_field_text', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_embed_url', 'wide' => true, 'placeholder' => esc_html__( 'https://www.google.com/maps/embed?pb=...', 'alrenas' ) ) );
+	add_settings_field( 'contact_map_note', esc_html__( 'Note (below the map)', 'alrenas' ), 'alrenas_field_textarea', 'alrenas-content-contact-page', 'alrenas_contact_details', array( 'key' => 'contact_map_note', 'placeholder' => esc_html__( 'For urgent technical assistance, calling the team directly is the fastest route.', 'alrenas' ) ) );
 
 	add_settings_section( 'alrenas_contact_form_head', esc_html__( 'Form card', 'alrenas' ), '__return_false', 'alrenas-content-contact-page' );
 
@@ -1271,6 +1272,7 @@ function alrenas_sanitize_site_content( $input ) {
 		'contact_hero_primary_label',
 		'contact_details_eyebrow',
 		'contact_details_heading',
+		'contact_map_embed_url',
 		'contact_form_heading',
 		'about_hero_eyebrow',
 		'about_hero_heading',

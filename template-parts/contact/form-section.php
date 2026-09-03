@@ -7,6 +7,7 @@ $details_eyebrow = alrenas_get_site_content( 'contact_details_eyebrow', esc_html
 $details_heading = alrenas_get_site_content( 'contact_details_heading', esc_html__( 'We\'ll route your request to the right person.', 'alrenas' ) );
 $details_lead     = alrenas_get_site_content( 'contact_details_lead', esc_html__( 'Share the clinical or practical context rather than trying to fit your question into a generic sales form.', 'alrenas' ) );
 $map_note         = alrenas_get_site_content( 'contact_map_note', esc_html__( 'For urgent technical assistance, calling the team directly is the fastest route.', 'alrenas' ) );
+$map_embed_url    = alrenas_get_site_content( 'contact_map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3007.8593075641065!2d28.79895727665433!3d41.07206791549381!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caaffeeb36df9b%3A0x9d9cfbe2c8d62259!2sAlrenas%20Teknoloji%20A.%C5%9E.!5e0!3m2!1sen!2str!4v1788445118996!5m2!1sen!2str' );
 $form_heading      = alrenas_get_site_content( 'contact_form_heading', esc_html__( 'Tell us how we can help.', 'alrenas' ) );
 $form_lead         = alrenas_get_site_content( 'contact_form_lead', esc_html__( 'For quotations and demos, include the facility type, product of interest and intended clinical use where possible.', 'alrenas' ) );
 
@@ -28,6 +29,7 @@ $default_intent_badge = ! empty( $first_option[1]['title'] ) ? $first_option[1][
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
+	<?php if ( $map_embed_url ) : ?><div class="contact-map"><iframe src="<?php echo esc_url( $map_embed_url ); ?>" title="<?php esc_attr_e( 'Alrenas location map', 'alrenas' ); ?>" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><?php endif; ?>
 	<div class="contact-map-note"><?php echo esc_html( $map_note ); ?></div></aside>
 	<?php if ( is_active_sidebar( 'contact-page-form' ) ) : ?><div class="contact-form-card reveal"><div class="contact-form-head"><div><h3><?php echo esc_html( $form_heading ); ?></h3><p><?php echo esc_html( $form_lead ); ?></p></div><span class="intent-badge" data-intent-badge><?php echo esc_html( $default_intent_badge ); ?></span></div><?php dynamic_sidebar( 'contact-page-form' ); ?></div><?php endif; ?>
 </div></section>
