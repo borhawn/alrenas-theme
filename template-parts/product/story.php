@@ -33,7 +33,7 @@ if ( ! $heading && ! $image_id ) {
 <section class="section software-story">
 	<div class="container software-story-grid">
 		<?php if ( $image_id ) : ?>
-			<div class="software-media software-media--contain reveal">
+			<div class="software-media reveal">
 				<?php echo wp_get_attachment_image( $image_id, 'large' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?>
 			</div>
 		<?php endif; ?>
