@@ -63,7 +63,7 @@ if ( ! $slides ) {
 <section class="hero">
 	<div class="container hero-grid">
 		<div class="hero-soft-shape" aria-hidden="true"></div>
-		<div class="hero-copy reveal">
+		<div class="hero-copy">
 			<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
 			<h1><?php echo esc_html( $headline ); ?> <span><?php echo esc_html( $headline_highlight ); ?></span></h1>
 			<p class="hero-lead"><?php echo esc_html( $lead ); ?></p>
@@ -84,10 +84,10 @@ if ( ! $slides ) {
 			<?php endif; ?>
 		</div>
 
-		<div class="hero-media reveal" data-hero-slider>
+		<div class="hero-media" data-hero-slider>
 			<?php foreach ( $slides as $i => $slide ) : ?>
 				<div class="hero-photo<?php echo 0 === $i ? ' is-active' : ''; ?>" data-hero-slide="<?php echo esc_attr( $i ); ?>">
-					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
+					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full', false, 0 === $i ? array( 'fetchpriority' => 'high', 'loading' => 'eager' ) : array( 'fetchpriority' => 'low', 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
 					<?php if ( $slide['caption_title'] || $slide['caption_subtext'] ) : ?>
 						<div class="hero-photo-caption">
 							<span class="hero-status-dot" aria-hidden="true"></span>

@@ -12,8 +12,8 @@ $image    = $image_id
 	? wp_get_attachment_image( $image_id, 'full' )
 	: sprintf( '<img src="%s" alt="%s">', esc_url( get_theme_file_uri( 'assets/images/contact-device.webp' ) ), esc_attr__( 'Patient using Alrenas rehabilitation equipment', 'alrenas' ) );
 ?>
-<section class="page-hero contact-hero"><div class="container page-hero-grid"><div class="page-hero-copy reveal">
+<section class="page-hero contact-hero"><div class="container page-hero-grid"><div class="page-hero-copy">
 	<?php get_template_part( 'template-parts/global/breadcrumbs', null, array( 'current_label' => get_the_title() ) ); ?>
 	<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span><h1><?php echo esc_html( $heading ); ?></h1><p class="lead"><?php echo esc_html( $lead ); ?></p><div class="page-hero-actions"><a href="#inquiry" class="btn btn-primary"><?php echo esc_html( $primary_label ); ?></a><?php if ( $phone ) : ?><a href="<?php echo esc_url( $phone['url'] ); ?>" class="btn btn-secondary"><?php echo esc_html( sprintf( /* translators: %s: phone number. */ __( 'Call %s', 'alrenas' ), $phone['value'] ) ); ?></a><?php endif; ?></div>
-</div><div class="hero-panel-soft reveal"><?php echo wp_kses_post( $image ); ?></div></div></section>
+</div><div class="hero-panel-soft"><?php echo wp_kses_post( $image ); ?></div></div></section>
 

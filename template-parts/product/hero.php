@@ -53,7 +53,7 @@ $quote_modal_image = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbn
 ?>
 <section class="product-hero">
 	<div class="container product-hero-grid">
-		<div class="product-hero-copy reveal">
+		<div class="product-hero-copy">
 			<?php get_template_part( 'template-parts/global/breadcrumbs', null, array(
 				'current_label' => $title,
 				'parent_label'  => esc_html__( 'Products', 'alrenas' ),
@@ -79,10 +79,14 @@ $quote_modal_image = $image_id ? wp_get_attachment_image_url( $image_id, 'thumbn
 			<?php endif; ?>
 		</div>
 
-		<div class="product-hero-media reveal">
+		<div class="product-hero-media">
 			<div class="product-hero-visual">
 				<div class="product-hero-halo" aria-hidden="true"></div>
-				<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>">
+				<?php if ( $image_id ) : ?>
+					<?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'alt' => $title, 'fetchpriority' => 'high', 'loading' => 'eager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() is self-escaping. ?>
+				<?php else : ?>
+					<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $title ); ?>">
+				<?php endif; ?>
 				<?php if ( $badge_title ) : ?>
 					<div class="clinical-badge clinical-badge--top">
 						<span class="status-dot" aria-hidden="true"></span>
