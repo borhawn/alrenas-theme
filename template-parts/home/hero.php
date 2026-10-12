@@ -99,7 +99,7 @@ if ( ! $slides ) {
 					<?php endif; ?>
 					<?php if ( $slide['product'] ) : ?>
 						<a class="hero-product-chip" href="<?php echo esc_url( $slide['product']->get_permalink() ); ?>">
-							<?php echo wp_kses_post( $slide['product']->get_image( 'woocommerce_thumbnail' ) ); ?>
+							<?php echo wp_kses_post( $slide['product']->get_image( 'thumbnail' ) ); ?>
 							<span class="hero-product-chip-text">
 								<em><?php esc_html_e( 'Featured system', 'alrenas' ); ?></em>
 								<strong><?php echo esc_html( $slide['product']->get_name() ); ?></strong>
