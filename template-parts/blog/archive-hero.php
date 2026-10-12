@@ -9,8 +9,8 @@ $image    = $image_id
 	? wp_get_attachment_image( $image_id, 'large' )
 	: sprintf( '<img src="%s" alt="%s">', esc_url( get_theme_file_uri( 'assets/images/blog-devices.webp' ) ), esc_attr__( 'Alrenas rehabilitation systems in a clinical environment', 'alrenas' ) );
 ?>
-<section class="page-hero blog-hero"><div class="container page-hero-grid"><div class="page-hero-copy reveal">
+<section class="page-hero blog-hero"><div class="container page-hero-grid"><div class="page-hero-copy">
 	<?php get_template_part( 'template-parts/global/breadcrumbs', null, array( 'current_label' => single_post_title( '', false ) ) ); ?>
 	<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span><h1><?php echo esc_html( $heading ); ?></h1><p class="lead"><?php echo esc_html( $lead ); ?></p>
-</div><div class="hero-panel-soft reveal"><?php echo wp_kses_post( $image ); ?></div></div></section>
+</div><div class="hero-panel-soft"><?php echo wp_kses_post( $image ); ?></div></div></section>
 
