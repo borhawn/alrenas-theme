@@ -47,13 +47,27 @@ $main    = $images[0];
 	</div>
 	<div class="container product-gallery reveal" data-product-gallery>
 		<button class="gallery-main" type="button" data-gallery-main aria-label="<?php esc_attr_e( 'Open selected image', 'alrenas' ); ?>">
-			<img src="<?php echo esc_url( $main['url'] ); ?>" alt="<?php echo esc_attr( $main['alt'] ? $main['alt'] : $product->get_name() ); ?>">
+			<img src="<?php echo esc_url( $main['url'] ); ?>" alt="<?php echo esc_attr( $main['alt'] ? $main['alt'] : $product->get_name() ); ?>" loading="lazy" decoding="async">
 		</button>
 		<?php if ( count( $images ) > 1 ) : ?>
 			<div class="gallery-thumbs">
 				<?php foreach ( $images as $i => $image ) : ?>
 					<?php $thumb_alt = $image['alt'] ? $image['alt'] : $product->get_name(); ?>
-					<button class="gallery-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" aria-label="<?php echo esc_attr( sprintf( /* translators: 1: image number, 2: image description */ __( 'Show image %1$d: %2$s', 'alrenas' ), $i + 1, $thumb_alt ) ); ?>" data-gallery-src="<?php echo esc_url( $image['url'] ); ?>" data-gallery-alt="<?php echo esc_attr( $thumb_alt ); ?>"><img src="<?php echo esc_url( $image['url'] ); ?>" alt=""></button>
+					<button class="gallery-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" aria-label="<?php echo esc_attr( sprintf( /* translators: 1: image number, 2: image description */ __( 'Show image %1$d: %2$s', 'alrenas' ), $i + 1, $thumb_alt ) ); ?>" data-gallery-src="<?php echo esc_url( $image['url'] ); ?>" data-gallery-alt="<?php echo esc_attr( $thumb_alt ); ?>"><?php
+						// The first (product) shot is shown uncropped via object-fit:contain,
+						// so it uses the uncropped medium size; the rest are cropped to
+						// squares anyway and use the much lighter cropped thumbnail size.
+						echo wp_get_attachment_image(
+							$image['id'],
+							0 === $i ? 'medium' : 'thumbnail',
+							false,
+							array(
+								'alt'     => '',
+								'sizes'   => '106px',
+								'loading' => 'lazy',
+							)
+						); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping.
+					?></button>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>

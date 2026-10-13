@@ -68,7 +68,15 @@ function alrenas_nav_menu_item_title( $title, $item, $args, $depth ) {
 		return $title;
 	}
 
-	$image = $product->get_image( 'woocommerce_thumbnail', array( 'class' => 'menu-product-thumb-img' ) );
+	// Explicit sizes: the default "(max-width: 480px) 100vw" makes phones pick
+	// a near-full-size srcset candidate for what is a 56px icon there.
+	$image = $product->get_image(
+		'woocommerce_thumbnail',
+		array(
+			'class' => 'menu-product-thumb-img',
+			'sizes' => '(max-width: 860px) 56px, 200px',
+		)
+	);
 
 	return '<span class="menu-product-thumb">' . wp_kses_post( $image ) . '</span><span class="menu-product-name">' . esc_html( $title ) . '</span>';
 }
