@@ -35,11 +35,13 @@ function alrenas_asset_version( $relative_path ) {
  * Register every stylesheet and script referenced by the static template.
  */
 function alrenas_register_assets() {
+	// Self-hosted variable fonts (woff2). Loading from Google Fonts let the
+	// cache plugin inline its CSS server-side, which served large .ttf files.
 	wp_register_style(
 		'alrenas-fonts',
-		'https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap',
+		get_theme_file_uri( 'assets/css/fonts.css' ),
 		array(),
-		null
+		alrenas_asset_version( 'assets/css/fonts.css' )
 	);
 
 	wp_register_style(
@@ -206,23 +208,13 @@ function alrenas_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'alrenas_enqueue_assets' );
 
 /**
- * Restore the font preconnect hints used by the static template.
- *
- * @param array  $urls          Resource-hint URLs.
- * @param string $relation_type Hint relation type.
- * @return array
+ * Preload the Latin Manrope file: it renders the hero H1, which is the
+ * homepage LCP element.
  */
-function alrenas_resource_hints( $urls, $relation_type ) {
-	if ( 'preconnect' !== $relation_type ) {
-		return $urls;
-	}
-
-	$urls[] = 'https://fonts.googleapis.com';
-	$urls[] = array(
-		'href'        => 'https://fonts.gstatic.com',
-		'crossorigin' => 'anonymous',
+function alrenas_preload_fonts() {
+	printf(
+		'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
+		esc_url( get_theme_file_uri( 'assets/fonts/manrope-latin.woff2' ) )
 	);
-
-	return $urls;
 }
-add_filter( 'wp_resource_hints', 'alrenas_resource_hints', 10, 2 );
+add_action( 'wp_head', 'alrenas_preload_fonts', 1 );
