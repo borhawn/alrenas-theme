@@ -29,6 +29,6 @@ $saved_steps = alrenas_get_site_content( 'products_quote_steps', array() );
 		$title       = ! empty( $saved['title'] ) ? $saved['title'] : $default['title'];
 		$description = ! empty( $saved['description'] ) ? $saved['description'] : $default['description'];
 		?>
-		<div class="quote-step"><span><?php echo esc_html( str_pad( $index, 2, '0', STR_PAD_LEFT ) ); ?></span><div><h4><?php echo esc_html( $title ); ?></h4><p><?php echo esc_html( $description ); ?></p></div></div>
+		<div class="quote-step"><span><?php echo esc_html( str_pad( $index, 2, '0', STR_PAD_LEFT ) ); ?></span><div><h3><?php echo esc_html( $title ); ?></h3><p><?php echo esc_html( $description ); ?></p></div></div>
 	<?php endforeach; ?>
 </div></div></section>
