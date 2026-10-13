@@ -10,15 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Build a logo <img> tag without width/height HTML attributes.
+ * Build a logo <img> tag with width/height attributes that carry the logo's
+ * real aspect ratio.
  *
- * wp_get_attachment_image() normally adds width/height attributes read from
- * attachment metadata. For SVGs, WordPress core often has no recorded
- * dimensions and emits width="0" height="0" instead — some browsers derive
- * a 0/0 intrinsic aspect-ratio from that, which can make the image render
- * at 0x0 even though CSS sets an explicit height, because "width: auto"
- * has no valid ratio to compute from. Sizing is fully CSS-driven here
- * (.brand-image), so the attributes are just omitted entirely.
+ * wp_get_attachment_image() isn't used because for SVGs WordPress core often
+ * has no recorded dimensions and emits width="0" height="0" -- some browsers
+ * derive a 0/0 intrinsic aspect-ratio from that and render the logo at 0x0.
+ * Instead the dimensions are read from the SVG itself (or the attachment
+ * metadata for raster logos). The rendered size is still CSS-driven
+ * (.brand-image); the attributes just let the browser reserve the right
+ * space before the file loads, avoiding layout shift. If no dimensions can
+ * be found, they're omitted rather than guessed.
  *
  * @param int    $attachment_id Attachment ID.
  * @param string $alt           Alt text.
@@ -32,12 +34,94 @@ function alrenas_logo_image_html( $attachment_id, $alt, $class = 'brand-image' )
 		return '';
 	}
 
+	$size_attrs = '';
+	$dimensions = alrenas_get_logo_dimensions( $attachment_id );
+
+	if ( $dimensions ) {
+		$size_attrs = sprintf( ' width="%d" height="%d"', $dimensions[0], $dimensions[1] );
+	}
+
 	return sprintf(
-		'<img src="%s" class="%s" alt="%s" decoding="async">',
+		'<img src="%s" class="%s" alt="%s"%s decoding="async">',
 		esc_url( $src ),
 		esc_attr( $class ),
-		esc_attr( $alt )
+		esc_attr( $alt ),
+		$size_attrs
 	);
+}
+
+/**
+ * Intrinsic width/height of a logo attachment, rounded to whole pixels.
+ *
+ * Raster images use the attachment metadata. SVGs are read from the file's
+ * root <svg> element: its width/height attributes when both are plain
+ * numbers (or px), otherwise its viewBox. Cached per attachment + file
+ * modification time, since this runs on every page.
+ *
+ * @param int $attachment_id Attachment ID.
+ * @return int[]|null [ width, height ], or null if unknown.
+ */
+function alrenas_get_logo_dimensions( $attachment_id ) {
+	if ( 'image/svg+xml' !== get_post_mime_type( $attachment_id ) ) {
+		$meta = wp_get_attachment_metadata( $attachment_id );
+
+		if ( ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
+			return array( (int) $meta['width'], (int) $meta['height'] );
+		}
+
+		return null;
+	}
+
+	$file = get_attached_file( $attachment_id );
+
+	if ( ! $file || ! is_readable( $file ) ) {
+		return null;
+	}
+
+	$cache_key = 'alrenas_logo_dims_' . $attachment_id . '_' . filemtime( $file );
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return $cached ? $cached : null;
+	}
+
+	$dimensions = null;
+	// The root <svg> tag is near the top; no need to read a large file whole.
+	$head = file_get_contents( $file, false, null, 0, 8192 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local file.
+
+	if ( $head && preg_match( '/<svg\b[^>]*>/i', $head, $tag ) ) {
+		$attr = static function ( $name ) use ( $tag ) {
+			return preg_match( '/\s' . $name . '\s*=\s*["\']([^"\']*)["\']/i', $tag[0], $m ) ? trim( $m[1] ) : '';
+		};
+
+		$width  = $attr( 'width' );
+		$height = $attr( 'height' );
+
+		if ( preg_match( '/^[\d.]+(px)?$/', $width ) && preg_match( '/^[\d.]+(px)?$/', $height ) ) {
+			$dimensions = array( (float) $width, (float) $height );
+		} else {
+			$view_box = preg_split( '/[\s,]+/', $attr( 'viewBox' ) );
+
+			if ( 4 === count( $view_box ) ) {
+				$dimensions = array( (float) $view_box[2], (float) $view_box[3] );
+			}
+		}
+
+		if ( $dimensions && ( $dimensions[0] <= 0 || $dimensions[1] <= 0 ) ) {
+			$dimensions = null;
+		}
+
+		if ( $dimensions ) {
+			// Only the ratio matters (CSS sets the rendered size), so scale tiny
+			// viewBoxes up first to keep it accurate after rounding.
+			$scale      = $dimensions[1] < 100 ? 100 / $dimensions[1] : 1;
+			$dimensions = array( max( 1, (int) round( $dimensions[0] * $scale ) ), max( 1, (int) round( $dimensions[1] * $scale ) ) );
+		}
+	}
+
+	set_transient( $cache_key, $dimensions ? $dimensions : 0, MONTH_IN_SECONDS );
+
+	return $dimensions;
 }
 
 /**

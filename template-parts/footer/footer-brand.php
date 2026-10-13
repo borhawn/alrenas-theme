@@ -17,7 +17,7 @@ $footer_description = alrenas_get_site_content( 'footer_description', get_blogin
 			<?php if ( $logo_id ) : ?>
 				<?php echo alrenas_logo_image_html( $logo_id, $site_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?>
 			<?php else : ?>
-				<img class="brand-image" src="<?php echo esc_url( $site_icon ); ?>" alt="<?php echo esc_attr( $site_name ); ?>">
+				<img class="brand-image" src="<?php echo esc_url( $site_icon ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" width="260" height="260">
 			<?php endif; ?>
 		</a>
 	<?php endif; ?>
