@@ -50,9 +50,10 @@ $main    = $images[0];
 			<img src="<?php echo esc_url( $main['url'] ); ?>" alt="<?php echo esc_attr( $main['alt'] ? $main['alt'] : $product->get_name() ); ?>">
 		</button>
 		<?php if ( count( $images ) > 1 ) : ?>
-			<div class="gallery-thumbs" role="list">
+			<div class="gallery-thumbs">
 				<?php foreach ( $images as $i => $image ) : ?>
-					<button class="gallery-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" data-gallery-src="<?php echo esc_url( $image['url'] ); ?>" data-gallery-alt="<?php echo esc_attr( $image['alt'] ? $image['alt'] : $product->get_name() ); ?>"><img src="<?php echo esc_url( $image['url'] ); ?>" alt=""></button>
+					<?php $thumb_alt = $image['alt'] ? $image['alt'] : $product->get_name(); ?>
+					<button class="gallery-thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" type="button" aria-label="<?php echo esc_attr( sprintf( /* translators: 1: image number, 2: image description */ __( 'Show image %1$d: %2$s', 'alrenas' ), $i + 1, $thumb_alt ) ); ?>" data-gallery-src="<?php echo esc_url( $image['url'] ); ?>" data-gallery-alt="<?php echo esc_attr( $thumb_alt ); ?>"><img src="<?php echo esc_url( $image['url'] ); ?>" alt=""></button>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
