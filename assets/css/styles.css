@@ -150,8 +150,13 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
    card) with the title/kicker overlaid at the bottom over a blurred
    dark gradient for legibility -- both the gradient and the image zoom
    strengthen slightly on hover. */
-.care-card::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(23,50,65,.88) 0%,rgba(23,50,65,.55) 42%,rgba(23,50,65,0) 78%);transition:background .35s ease;pointer-events:none}
-.care-card:hover::before{background:linear-gradient(to top,rgba(23,50,65,.94) 0%,rgba(23,50,65,.68) 48%,rgba(23,50,65,.08) 82%)}
+/* Overlay stops are in px from the bottom so it covers only the text block,
+   whatever the card's height. Gradients can't be transitioned directly, so the
+   hover overlay is a second layer (::after) that fades in over the base one. */
+.care-card::before,.care-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}
+.care-card::before{background:linear-gradient(to top,rgba(23,50,65,.86) 0,rgba(23,50,65,.5) 90px,rgba(23,50,65,0) 170px)}
+.care-card::after{background:linear-gradient(to top,rgba(23,50,65,.92) 0,rgba(23,50,65,.62) 100px,rgba(23,50,65,0) 200px);opacity:0;transition:opacity .45s ease}
+.care-card:hover::after{opacity:1}
 .care-card-media{position:absolute;inset:0;z-index:0;overflow:hidden;background:rgba(19,64,83,.04)}
 .care-card-media-el{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .care-card:hover .care-card-media-el{transform:scale(1.05)}
