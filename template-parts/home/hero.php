@@ -87,7 +87,7 @@ if ( ! $slides ) {
 		<div class="hero-media" data-hero-slider>
 			<?php foreach ( $slides as $i => $slide ) : ?>
 				<div class="hero-photo<?php echo 0 === $i ? ' is-active' : ''; ?>" data-hero-slide="<?php echo esc_attr( $i ); ?>">
-					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full', false, 0 === $i ? array( 'fetchpriority' => 'high', 'loading' => 'eager' ) : array( 'fetchpriority' => 'low', 'loading' => 'lazy' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
+					<?php echo ! empty( $slide['image_html'] ) ? $slide['image_html'] : wp_get_attachment_image( $slide['image_id'], 'full', false, array_merge( array( 'sizes' => '(max-width: 700px) 100vw, (max-width: 900px) 700px, 600px' ), 0 === $i ? array( 'fetchpriority' => 'high', 'loading' => 'eager' ) : array( 'fetchpriority' => 'low', 'loading' => 'lazy' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- image_html is built with esc_url()/esc_attr() above; wp_get_attachment_image() is self-escaping. ?>
 					<?php if ( $slide['caption_title'] || $slide['caption_subtext'] ) : ?>
 						<div class="hero-photo-caption">
 							<span class="hero-status-dot" aria-hidden="true"></span>
