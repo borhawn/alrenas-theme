@@ -2,11 +2,13 @@
 /**
  * Native theme updates from GitHub Releases — no plugin required.
  *
- * To ship an update: bump `Version` in style.css, commit, then publish a
- * GitHub Release tagged `vX.Y.Z` (or `X.Y.Z`) matching that version. Sites
- * running this theme will see "Update available" in Appearance > Themes
- * within ALRENAS_GITHUB_UPDATE_CACHE and can update with the normal
- * one-click WP updater.
+ * To ship an update: bump `Version` in style.css and merge to main. The
+ * "Release theme" GitHub Action (.github/workflows/release.yml) then
+ * publishes a GitHub Release tagged `vX.Y.Z`. Sites running this theme see
+ * "Update available" within ALRENAS_GITHUB_UPDATE_CACHE -- or immediately
+ * after clicking "Check again" in Dashboard > Updates -- and can update with
+ * the normal one-click WP updater (or automatically, if auto-updates are
+ * enabled for the theme).
  *
  * @package Alrenas
  */
@@ -24,12 +26,26 @@ define( 'ALRENAS_GITHUB_UPDATE_CACHE', 12 * HOUR_IN_SECONDS );
  * @return object|false Decoded release object, or false on failure.
  */
 function alrenas_get_latest_github_release() {
+	static $fetched_this_request = false;
+
 	$cache_key = 'alrenas_github_latest_release';
-	$cached    = get_transient( $cache_key );
+
+	// "Check again" in Dashboard > Updates should really check GitHub, not
+	// return a release cached up to ALRENAS_GITHUB_UPDATE_CACHE ago. Only
+	// refetch once per request, since WordPress may run the update filter
+	// more than once.
+	$force_check = ! $fetched_this_request
+		&& is_admin()
+		&& ! empty( $_GET['force-check'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only cache bypass, same as core's own check.
+		&& current_user_can( 'update_themes' );
+
+	$cached = $force_check ? false : get_transient( $cache_key );
 
 	if ( false !== $cached ) {
 		return $cached;
 	}
+
+	$fetched_this_request = true;
 
 	$response = wp_remote_get(
 		'https://api.github.com/repos/' . ALRENAS_GITHUB_REPO . '/releases/latest',

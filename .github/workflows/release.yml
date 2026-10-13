@@ -1,0 +1,46 @@
+# Publishes a GitHub Release whenever main carries a theme version that
+# hasn't been released yet. The theme's built-in updater
+# (inc/github-updater.php) reads the latest release, so sites see
+# "Update available" in WordPress and can update with one click.
+#
+# To ship: bump `Version` in style.css and merge to main. Nothing else.
+name: Release theme
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read theme version
+        id: version
+        run: |
+          version=$(sed -n 's/^Version:[[:space:]]*//p' style.css | tr -d '\r[:space:]')
+          if [ -z "$version" ]; then
+            echo "::error::No Version line found in style.css"
+            exit 1
+          fi
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release if this version is new
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; nothing to do."
+            exit 0
+          fi
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --generate-notes --latest
