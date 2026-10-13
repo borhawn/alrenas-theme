@@ -4,6 +4,10 @@
 .brand-image{display:block!important;width:auto!important;max-width:260px!important;height:40px!important;object-fit:contain!important}
 .brand--footer .brand-image{filter:brightness(0) invert(1)}
 .site-header .brand-image{height:34px!important}
+/* Flex, not block: a block wrapper around the inline-flex .brand reserves
+   text descender space under it, which pushed the logo ~9px off-center. */
+.site-branding{display:flex;align-items:center}
+@media(max-width:860px){.site-header .brand-image{height:28px!important}}
 .article-card,.feature-article,.related-card,.product-row{position:relative;cursor:pointer}
 .stretched-link::after{content:"";position:absolute;inset:0;z-index:1}
 .product-row .stretched-link::after{z-index:4}

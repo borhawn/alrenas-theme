@@ -288,9 +288,9 @@ p{margin:0;color:var(--ink-600);font-size:17px;line-height:1.67}
 
 @media(max-width:860px){
   .section{padding:84px 0}
-  .header-inner{grid-template-columns:1fr auto;min-height:70px}.header-cta{display:none}
-  .nav-toggle{display:grid;justify-self:end;place-content:center;gap:6px;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;z-index:70}
-  .nav-toggle span{width:18px;height:2px}
+  .header-inner{grid-template-columns:1fr auto;min-height:64px}.header-cta{display:none}
+  .nav-toggle{display:grid;justify-self:end;place-content:center;gap:6px;width:42px;height:42px;margin-right:-9px;border:0;border-radius:11px;background:transparent;z-index:70}
+  .nav-toggle span{width:24px;height:2px}
   .nav-toggle[aria-expanded="true"] span:first-child{transform:translateY(4px) rotate(45deg)}
   .nav-toggle[aria-expanded="true"] span:last-child{transform:translateY(-4px) rotate(-45deg)}
   body.menu-open{overflow:hidden}
