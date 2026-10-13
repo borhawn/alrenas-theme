@@ -15,7 +15,7 @@ $site_icon = get_site_icon_url( 260 );
 		<?php if ( $logo_id ) : ?>
 			<?php echo alrenas_logo_image_html( $logo_id, $site_name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self-escaping. ?>
 		<?php elseif ( $site_icon ) : ?>
-			<img class="brand-image" src="<?php echo esc_url( $site_icon ); ?>" alt="<?php echo esc_attr( $site_name ); ?>">
+			<img class="brand-image" src="<?php echo esc_url( $site_icon ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" width="260" height="260">
 		<?php else : ?>
 			<span class="brand-name"><?php echo esc_html( $site_name ); ?></span>
 		<?php endif; ?>
